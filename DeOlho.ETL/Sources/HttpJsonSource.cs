@@ -3,11 +3,11 @@ using System.Net.Http.Headers;
 
 namespace DeOlho.ETL.Sources
 {
-    public class HttpStringSource : Source<string>
+    public class HttpJsonSource : Source<string>
     {
         readonly string _uri;
         readonly dynamic uriParameters;
-        public HttpStringSource(string uri, dynamic uriParameters = null)
+        public HttpJsonSource(string uri, dynamic uriParameters = null)
         {
             this._uri = uri;
             this.uriParameters = uriParameters;

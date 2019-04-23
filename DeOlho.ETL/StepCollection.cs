@@ -5,7 +5,6 @@ namespace DeOlho.ETL
 {
     public abstract class StepCollection<T> : IStep<T>
     {
-        public IEnumerable<T> Itens { get; private set;}
 
         public StepCollection<TOut> Transform<TOut>(Func<T, TOut> transform)
         {
@@ -20,9 +19,9 @@ namespace DeOlho.ETL
             
         }
 
-        public StepCollection<T> Destination(Func<Destination<T>> destination)
+        public IEnumerable<T> Load(Func<Destination> destination)
         {
-            return new StepCollectionTransform<T, T>(this, (_) => { destination().Execute(_); return _; });
+            return destination().Execute(this);
         }
 
         public abstract IEnumerable<T> Execute(); 

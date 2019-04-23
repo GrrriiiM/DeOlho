@@ -1,18 +1,11 @@
 using System;
+using System.Collections.Generic;
 
 namespace DeOlho.ETL
 {
-    public class Destination<T>
+    public abstract class Destination
     {
-        readonly Action<T> _destination;
-        public Destination(Action<T> destination)
-        {
-            _destination = destination;
-        }
-
-        public void Execute(T @in)
-        {
-            _destination(@in);
-        }
+        public abstract IEnumerable<T> Execute<T>(StepCollection<T> stepIn);
+        public abstract T Execute<T>(Step<T> stepIn);
     }
 }

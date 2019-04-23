@@ -21,9 +21,9 @@ namespace DeOlho.ETL
             return new StepTransform<T, TOut>(this, (_) => extract(_).Execute());
         }
 
-        public Step<T> Destination(Func<Destination<T>> destination)
+        public T Load(Func<Destination> destination)
         {
-            return new StepTransform<T, T>(this, (_) => { destination().Execute(_); return _; });
+            return destination().Execute(this);
         }
 
         public abstract T Execute(); 
