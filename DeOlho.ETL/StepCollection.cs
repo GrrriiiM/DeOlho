@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace DeOlho.ETL
 {
@@ -8,22 +9,30 @@ namespace DeOlho.ETL
 
         public StepCollection<TOut> Transform<TOut>(Func<T, TOut> transform)
         {
+            return new StepCollectionTransform<T, TOut>(this, async (_) =>
+            { 
+                return await Task.Run<TOut>(() => transform(_));
+            });
+        }
+
+        public StepCollection<TOut> TransformAsync<TOut>(Func<T, Task<TOut>> transform)
+        {
             return new StepCollectionTransform<T, TOut>(this, transform);
         }
 
         public StepCollection<TOut> Extract<TOut>(Func<T, Source<TOut>> extract)
         {
-            return new StepCollectionTransform<T, TOut>(this, (_) => {
-                return extract(_).Execute();
+            return new StepCollectionTransform<T, TOut>(this, async (_) => {
+                return await extract(_).Execute();
             });
             
         }
 
-        public IEnumerable<T> Load(Func<Destination> destination)
+        public async Task<IEnumerable<T>> Load(Func<Destination> destination)
         {
-            return destination().Execute(this);
+            return await destination().Execute(this);
         }
 
-        public abstract IEnumerable<T> Execute(); 
+        public abstract Task<IEnumerable<T>> Execute(); 
     }
 }

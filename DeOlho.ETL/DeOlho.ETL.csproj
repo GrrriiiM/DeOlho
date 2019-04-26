@@ -1,14 +1,12 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <OutputType>Exe</OutputType>
-    <TargetFramework>netcoreapp2.1</TargetFramework>
+    <TargetFramework>netstandard2.0</TargetFramework>
   </PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="Dynamitey" Version="2.0.9.136" />
-    <PackageReference Include="Microsoft.CSharp" Version="4.5.0" />
-    <PackageReference Include="mysql.data" Version="8.0.15" />
+    <PackageReference Include="Microsoft.CSharp" Version="4.5.0" />    
     <PackageReference Include="newtonsoft.json" Version="12.0.1" />
   </ItemGroup>
 

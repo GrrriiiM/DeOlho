@@ -1,26 +1,29 @@
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
-using MySql.Data.MySqlClient;
+using System.Threading.Tasks;
 
 namespace DeOlho.ETL.Destinations
 {
-    public class MySqlDestination : Destination
+    public class DbDestination : Destination
     {
         readonly string _tableName;
 
-        readonly MySqlConnection _mySqlConnection;
+        readonly IDbConnection _dbConnection;
+        readonly IDbTransaction _dbTransaction;
 
-        public MySqlDestination(MySqlConnection mySqlConnection, string tableName)
+        public DbDestination(IDbConnection dbConnection, IDbTransaction dbTransaction, string tableName)
         {
             this._tableName = tableName;
-            this._mySqlConnection = mySqlConnection;
+            this._dbConnection = dbConnection;
+            this._dbTransaction = dbTransaction;
         }
 
 
-        public override IEnumerable<T> Execute<T>(StepCollection<T> stepIn)
+        public async override Task<IEnumerable<T>> Execute<T>(StepCollection<T> stepIn)
         {
-            var @in = stepIn.Execute();
+            var @in = await stepIn.Execute();
     
             var varcharTypes = new Type[] { typeof(string) };
             var intTypes = new Type[] { typeof(int), typeof(long), typeof(short) };
@@ -55,7 +58,7 @@ namespace DeOlho.ETL.Destinations
                     {
                         if (varcharTypes.Contains(propertyType))
                         {
-                            sqlColumnInserts.Add($"'{value}'");
+                            sqlColumnInserts.Add($"'{value.ToString().Replace('\'','`')}'");
                         }
                         else if (intTypes.Contains(propertyType))
                         {
@@ -76,16 +79,17 @@ namespace DeOlho.ETL.Destinations
                     }
                 }
 
-                sqlInserts.Add($"({string.Join(',', sqlColumnInserts)})");
+                sqlInserts.Add($"({string.Join(",", sqlColumnInserts)})");
 
             }
 
             if (sqlInserts.Any())
             {
-                var sql = $"INSERT INTO {this._tableName} ({string.Join(',', propertyInfos.Select(_ => _.Name))}) VALUES {string.Join(',', sqlInserts)}";
+                var sql = $"INSERT INTO {this._tableName} ({string.Join(",", propertyInfos.Select(_ => _.Name))}) VALUES {string.Join(",", sqlInserts)}";
                 
-                using (var command = this._mySqlConnection.CreateCommand())
+                using (var command = this._dbConnection.CreateCommand())
                 {
+                    command.Transaction = this._dbTransaction;
                     command.CommandText = sql;
                     command.ExecuteNonQuery();
                 }
@@ -93,9 +97,9 @@ namespace DeOlho.ETL.Destinations
 
             return @in;
         }
-        public override T Execute<T>(Step<T> stepIn)
+        public async override Task<T> Execute<T>(Step<T> stepIn)
         {
-            return stepIn.Execute();
+            return await stepIn.Execute();
         }
     }
 }

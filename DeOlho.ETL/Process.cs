@@ -8,7 +8,7 @@ namespace DeOlho.ETL
 
         public Step<T> Extract<T>(Func<Source<T>> source)
         {
-            return new StepSource<T>(() => source().Execute());
+            return new StepSource<T>(async () => await source().Execute());
         }
     }
 

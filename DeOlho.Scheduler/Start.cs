@@ -3,6 +3,7 @@
 
 using System;
 using System.Threading.Tasks;
+using DeOlho.Scheduler.Jobs;
 using Hangfire;
 using Hangfire.MySql;
 
@@ -10,6 +11,7 @@ namespace DeOlho.Scheduler
 {
     public class Start
     {
+
         public Start(Configuration config)
         {
             GlobalConfiguration.Configuration
@@ -18,15 +20,14 @@ namespace DeOlho.Scheduler
                 .UseColouredConsoleLogProvider()
                 .UseStorage(config.Storage);
 
-            var jobs = new Jobs();
 
+            ETL_dadosabertos_camara_leg_br_Jobs.SetConfiguration(config.ETL_dadosabertos_camara_leg_br);
+            
+            RecurringJob.AddOrUpdate<ETL_dadosabertos_camara_leg_br_Jobs>(_ => _.ExecutePartido(), () => Cron.Monthly());
 
-            RecurringJob.AddOrUpdate(() => jobs.MethodMinutely(), () => Cron.Minutely());
+            RecurringJob.AddOrUpdate<ETL_dadosabertos_camara_leg_br_Jobs>(_ => _.ExecuteLegislatura(), () => Cron.Monthly());
 
-            var m1 = BackgroundJob.Enqueue(() => jobs.Method1());
-
-            var m2 = BackgroundJob.ContinueJobWith(m1, () => jobs.Method2());
-            var m3 = BackgroundJob.ContinueJobWith(m2, () => jobs.Method3());
+            RecurringJob.AddOrUpdate<ETL_dadosabertos_camara_leg_br_Jobs>(_ => _.ExecuteDeputado(), () => Cron.Monthly());
 
             using (var server = new BackgroundJobServer())
             {
@@ -38,29 +39,4 @@ namespace DeOlho.Scheduler
 
     }
 
-
-    public class Jobs
-    {
-        public async Task Method1()
-        {
-            await Task.Delay(2000);
-            System.Console.WriteLine("Metodo 1 Esperou 2 segundos");
-        }
-
-        public async Task Method2()
-        {
-            await Task.Delay(2000);
-            System.Console.WriteLine("Metodo 2 Esperou 2 segundos");
-        }
-        public async Task Method3()
-        {
-            await Task.Delay(5000);
-            System.Console.WriteLine("Metodo 2 Esperou 5 segundos");
-        }
-
-        public void MethodMinutely()
-        {
-            System.Console.WriteLine($"Metodo minuto {DateTime.Now}");
-        }
-    }
 }

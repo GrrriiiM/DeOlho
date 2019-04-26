@@ -1,12 +1,13 @@
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace DeOlho.ETL
 {
     public abstract class Step<T> : IStep<T>
     {
         
-        public Step<TOut> Transform<TOut>(Func<T, TOut> transform)
+        public Step<TOut> Transform<TOut>(Func<T, Task<TOut>> transform)
         {
             return new StepTransform<T, TOut>(this, transform);
         }
@@ -18,19 +19,19 @@ namespace DeOlho.ETL
 
         public Step<TOut> Extract<TOut>(Func<T, Source<TOut>> extract)
         {
-            return new StepTransform<T, TOut>(this, (_) => extract(_).Execute());
+            return new StepTransform<T, TOut>(this, async (_) => await extract(_).Execute());
         }
 
-        public T Load(Func<Destination> destination)
+        public async Task<T> Load(Func<Destination> destination)
         {
-            return destination().Execute(this);
+            return await destination().Execute(this);
         }
 
-        public abstract T Execute(); 
+        public abstract Task<T> Execute(); 
 
-        public T Load()
+        public async Task<T> Load()
         {
-            return (T)this.Execute();
+            return (T)await this.Execute();
         }
     }
 }

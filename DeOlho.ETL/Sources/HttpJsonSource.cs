@@ -1,5 +1,6 @@
 using System.Net.Http;
 using System.Net.Http.Headers;
+using System.Threading.Tasks;
 
 namespace DeOlho.ETL.Sources
 {
@@ -13,7 +14,7 @@ namespace DeOlho.ETL.Sources
             this.uriParameters = uriParameters;
         }
 
-        public override string Execute()
+        public async override Task<string> Execute()
         {
             using (var client = new HttpClient())
             {
@@ -21,10 +22,10 @@ namespace DeOlho.ETL.Sources
                 client.DefaultRequestHeaders.Accept.Add(
                     new MediaTypeWithQualityHeaderValue("application/json"));
 
-                HttpResponseMessage response = client.GetAsync(this._uri).Result;
+                HttpResponseMessage response = await client.GetAsync(this._uri);
 
                 response.EnsureSuccessStatusCode();
-                return response.Content.ReadAsStringAsync().Result;
+                return await response.Content.ReadAsStringAsync();
             }
         }
     }

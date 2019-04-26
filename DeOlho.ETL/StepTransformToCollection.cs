@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace DeOlho.ETL
 {
@@ -15,9 +16,9 @@ namespace DeOlho.ETL
             this._transform = _transform;
         }
 
-        public override IEnumerable<TOut> Execute()
+        public async override Task<IEnumerable<TOut>> Execute()
         {
-            var @in = (TIn)this._stepIn.Execute();
+            var @in = await this._stepIn.Execute();
             var @out = this._transform(@in);
             return @out;
         }

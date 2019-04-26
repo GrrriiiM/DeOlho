@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Dynamic;
 using System.Linq;
+using System.Threading.Tasks;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
@@ -16,9 +17,9 @@ namespace DeOlho.ETL.Transforms
             this._stepIn = stepIn;
         }
 
-        public override dynamic Execute()
+        public async override Task<dynamic> Execute()
         {
-            var @in = this._stepIn.Execute();
+            var @in = await this._stepIn.Execute();
             var @out = JValue.Parse(@in).ToObject<dynamic>();
             return @out;
         }
@@ -34,10 +35,14 @@ namespace DeOlho.ETL.Transforms
             this._stepIn = stepIn;
         }
 
-        public override IEnumerable<dynamic> Execute()
+        public async override Task<IEnumerable<dynamic>> Execute()
         {
-            var @in = this._stepIn.Execute();
-            var @out = @in.Select(_ => JValue.Parse(_).ToObject<dynamic>()).ToList();
+            var @in = await this._stepIn.Execute();
+            var @out = new List<dynamic>(); 
+            foreach(var i in @in)
+            {
+                @out.Add(JValue.Parse(i).ToObject<dynamic>());
+            }
             return @out;
         }
     }
