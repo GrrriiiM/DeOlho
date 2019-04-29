@@ -10,7 +10,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\DeOlho.ETL.dadosabertos_camara_leg_br\DeOlho.ETL.dadosabertos_camara_leg_br.csproj" />
+    <ProjectReference Include="..\..\ETL\DeOlho.ETL.dadosabertos_camara_leg_br\DeOlho.ETL.dadosabertos_camara_leg_br.csproj" />
   </ItemGroup>
-
+  
 </Project>

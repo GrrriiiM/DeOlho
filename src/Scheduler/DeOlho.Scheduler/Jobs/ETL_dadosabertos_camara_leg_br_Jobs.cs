@@ -46,17 +46,17 @@ namespace DeOlho.Scheduler.Jobs
 
         public void ExecutePartido()
         {
-            Task.WaitAll(execute(async (dbConnection, dbTransaction) => await new IntegrationService(configuration).ExecutePartido(dbConnection, dbTransaction)));
+            Task.WaitAll(execute(async (dbConnection, dbTransaction) => await new IntegrationService(new System.Net.Http.HttpClient(), configuration).ExecutePartido(dbConnection, dbTransaction)));
         }
 
         public void ExecuteLegislatura()
         {
-            Task.WaitAll(execute(async (dbConnection, dbTransaction) => await new IntegrationService(configuration).ExecuteLegislatura(dbConnection, dbTransaction)));
+            Task.WaitAll(execute(async (dbConnection, dbTransaction) => await new IntegrationService(new System.Net.Http.HttpClient(), configuration).ExecuteLegislatura(dbConnection, dbTransaction)));
         }
 
         public void ExecuteDeputado()
         {
-            Task.WaitAll(execute(async (dbConnection, dbTransaction) => await new IntegrationService(configuration).ExecuteDeputado(dbConnection, dbTransaction)));
+            Task.WaitAll(execute(async (dbConnection, dbTransaction) => await new IntegrationService(new System.Net.Http.HttpClient(), configuration).ExecuteDeputado(dbConnection, dbTransaction)));
         }
     }
 }
