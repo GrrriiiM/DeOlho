@@ -7,7 +7,7 @@
             "type": "process",
             "args": [
                 "build",
-                "${workspaceFolder}/DeOlho.ETL.UnitTests/DeOlho.ETL.Test.csproj"
+                "${workspaceFolder}/DeOlho.ETL.UnitTests/DeOlho.ETL.UnitTests.csproj"
             ],
             "problemMatcher": "$tsc"
         },
@@ -17,7 +17,7 @@
             "type": "process",
             "args": [
                 "publish",
-                "${workspaceFolder}/DeOlho.ETL.UnitTests/DeOlho.ETL.Test.csproj"
+                "${workspaceFolder}/DeOlho.ETL.UnitTests/DeOlho.ETL.UnitTests.csproj"
             ],
             "problemMatcher": "$tsc"
         },
@@ -28,9 +28,27 @@
             "args": [
                 "watch",
                 "run",
-                "${workspaceFolder}/DeOlho.ETL.UnitTests/DeOlho.ETL.Test.csproj"
+                "${workspaceFolder}/DeOlho.ETL.UnitTests/DeOlho.ETL.UnitTests.csproj"
             ],
             "problemMatcher": "$tsc"
+        },
+        {
+            "label": "test with coverage",
+            "command": "dotnet",
+            "type": "process",
+            "args": [
+             "test",
+             "/p:CollectCoverage=true",
+             "/p:Exclude=\"[xunit*]*\"",
+             "/p:CoverletOutputFormat=lcov",
+             "/p:CoverletOutput=./lcov",
+             "${workspaceFolder}/ETL.sln"
+            ],
+            "problemMatcher": "$msCompile",
+            "group": {
+             "kind": "test",
+             "isDefault": true
+            }
         }
     ]
 }

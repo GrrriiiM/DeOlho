@@ -1,0 +1,2044 @@
+{
+  "DeOlho.ETL.dll": {
+    "C:\\Allison\\Projetos\\Exemplos\\DeOlho\\src\\ETL\\DeOlho.ETL\\Process.cs": {
+      "DeOlho.ETL.Process": {
+        "DeOlho.ETL.Step`1<T> DeOlho.ETL.Process::Extract(System.Func`1<DeOlho.ETL.Source`1<T>>)": {
+          "Lines": {
+            "9": 0,
+            "10": 0,
+            "11": 0
+          },
+          "Branches": []
+        }
+      },
+      "DeOlho.ETL.Process/<>c__DisplayClass0_0`1/<<Extract>b__0>d": {
+        "System.Void DeOlho.ETL.Process/<>c__DisplayClass0_0`1/<<Extract>b__0>d::MoveNext()": {
+          "Lines": {},
+          "Branches": [
+            {
+              "Line": 10,
+              "Offset": 8,
+              "EndOffset": 14,
+              "Path": 0,
+              "Ordinal": 0,
+              "Hits": 0
+            },
+            {
+              "Line": 10,
+              "Offset": 48,
+              "EndOffset": 50,
+              "Path": 0,
+              "Ordinal": 2,
+              "Hits": 0
+            },
+            {
+              "Line": 10,
+              "Offset": 8,
+              "EndOffset": 86,
+              "Path": 1,
+              "Ordinal": 1,
+              "Hits": 0
+            },
+            {
+              "Line": 10,
+              "Offset": 48,
+              "EndOffset": 114,
+              "Path": 1,
+              "Ordinal": 3,
+              "Hits": 0
+            }
+          ]
+        }
+      }
+    },
+    "C:\\Allison\\Projetos\\Exemplos\\DeOlho\\src\\ETL\\DeOlho.ETL\\Source.cs": {
+      "DeOlho.ETL.Source`1": {
+        "DeOlho.ETL.Process DeOlho.ETL.Source`1::get_Process()": {
+          "Lines": {
+            "10": 0
+          },
+          "Branches": []
+        }
+      }
+    },
+    "C:\\Allison\\Projetos\\Exemplos\\DeOlho\\src\\ETL\\DeOlho.ETL\\Step.cs": {
+      "DeOlho.ETL.Step`1": {
+        "DeOlho.ETL.IStep`1<TOut> DeOlho.ETL.Step`1::Transform(System.Func`2<T,System.Threading.Tasks.Task`1<TOut>>)": {
+          "Lines": {
+            "11": 1,
+            "12": 1,
+            "13": 1
+          },
+          "Branches": []
+        },
+        "DeOlho.ETL.IStepCollection`1<TOut> DeOlho.ETL.Step`1::TransformToList(System.Func`2<T,System.Collections.Generic.IEnumerable`1<TOut>>)": {
+          "Lines": {
+            "16": 0,
+            "17": 0,
+            "18": 0
+          },
+          "Branches": []
+        },
+        "DeOlho.ETL.IStep`1<TOut> DeOlho.ETL.Step`1::Extract(System.Func`2<T,DeOlho.ETL.Source`1<TOut>>)": {
+          "Lines": {
+            "21": 0,
+            "22": 0,
+            "23": 0
+          },
+          "Branches": []
+        }
+      },
+      "DeOlho.ETL.Step`1/<Load>d__3": {
+        "System.Void DeOlho.ETL.Step`1/<Load>d__3::MoveNext()": {
+          "Lines": {
+            "26": 0,
+            "27": 0,
+            "28": 0
+          },
+          "Branches": [
+            {
+              "Line": 27,
+              "Offset": 50,
+              "EndOffset": 52,
+              "Path": 0,
+              "Ordinal": 0,
+              "Hits": 0
+            },
+            {
+              "Line": 27,
+              "Offset": 50,
+              "EndOffset": 116,
+              "Path": 1,
+              "Ordinal": 1,
+              "Hits": 0
+            }
+          ]
+        }
+      },
+      "DeOlho.ETL.Step`1/<Load>d__5": {
+        "System.Void DeOlho.ETL.Step`1/<Load>d__5::MoveNext()": {
+          "Lines": {
+            "33": 0,
+            "34": 0,
+            "35": 0
+          },
+          "Branches": [
+            {
+              "Line": 34,
+              "Offset": 39,
+              "EndOffset": 41,
+              "Path": 0,
+              "Ordinal": 0,
+              "Hits": 0
+            },
+            {
+              "Line": 34,
+              "Offset": 39,
+              "EndOffset": 105,
+              "Path": 1,
+              "Ordinal": 1,
+              "Hits": 0
+            }
+          ]
+        }
+      },
+      "DeOlho.ETL.Step`1/<>c__DisplayClass2_0`1/<<Extract>b__0>d": {
+        "System.Void DeOlho.ETL.Step`1/<>c__DisplayClass2_0`1/<<Extract>b__0>d::MoveNext()": {
+          "Lines": {},
+          "Branches": [
+            {
+              "Line": 22,
+              "Offset": 8,
+              "EndOffset": 14,
+              "Path": 0,
+              "Ordinal": 0,
+              "Hits": 0
+            },
+            {
+              "Line": 22,
+              "Offset": 54,
+              "EndOffset": 56,
+              "Path": 0,
+              "Ordinal": 2,
+              "Hits": 0
+            },
+            {
+              "Line": 22,
+              "Offset": 8,
+              "EndOffset": 92,
+              "Path": 1,
+              "Ordinal": 1,
+              "Hits": 0
+            },
+            {
+              "Line": 22,
+              "Offset": 54,
+              "EndOffset": 120,
+              "Path": 1,
+              "Ordinal": 3,
+              "Hits": 0
+            }
+          ]
+        }
+      }
+    },
+    "C:\\Allison\\Projetos\\Exemplos\\DeOlho\\src\\ETL\\DeOlho.ETL\\StepCollection.cs": {
+      "DeOlho.ETL.StepCollection`1": {
+        "DeOlho.ETL.IStepCollection`1<TOut> DeOlho.ETL.StepCollection`1::Transform(System.Func`2<T,TOut>)": {
+          "Lines": {
+            "11": 0,
+            "12": 0,
+            "13": 0,
+            "14": 0,
+            "15": 0,
+            "16": 0
+          },
+          "Branches": []
+        },
+        "DeOlho.ETL.IStepCollection`1<TOut> DeOlho.ETL.StepCollection`1::TransformAsync(System.Func`2<T,System.Threading.Tasks.Task`1<TOut>>)": {
+          "Lines": {
+            "19": 0,
+            "20": 0,
+            "21": 0
+          },
+          "Branches": []
+        },
+        "DeOlho.ETL.IStepCollection`1<TOut> DeOlho.ETL.StepCollection`1::Extract(System.Func`2<T,DeOlho.ETL.Source`1<TOut>>)": {
+          "Lines": {
+            "24": 0,
+            "25": 0,
+            "26": 0,
+            "27": 0,
+            "29": 0
+          },
+          "Branches": []
+        }
+      },
+      "DeOlho.ETL.StepCollection`1/<Load>d__3": {
+        "System.Void DeOlho.ETL.StepCollection`1/<Load>d__3::MoveNext()": {
+          "Lines": {
+            "32": 0,
+            "33": 0,
+            "34": 0
+          },
+          "Branches": [
+            {
+              "Line": 33,
+              "Offset": 50,
+              "EndOffset": 52,
+              "Path": 0,
+              "Ordinal": 0,
+              "Hits": 0
+            },
+            {
+              "Line": 33,
+              "Offset": 50,
+              "EndOffset": 116,
+              "Path": 1,
+              "Ordinal": 1,
+              "Hits": 0
+            }
+          ]
+        }
+      },
+      "DeOlho.ETL.StepCollection`1/<>c__DisplayClass0_0`1/<<Transform>b__0>d": {
+        "System.Void DeOlho.ETL.StepCollection`1/<>c__DisplayClass0_0`1/<<Transform>b__0>d::MoveNext()": {
+          "Lines": {},
+          "Branches": [
+            {
+              "Line": 13,
+              "Offset": 8,
+              "EndOffset": 14,
+              "Path": 0,
+              "Ordinal": 0,
+              "Hits": 0
+            },
+            {
+              "Line": 14,
+              "Offset": 95,
+              "EndOffset": 97,
+              "Path": 0,
+              "Ordinal": 2,
+              "Hits": 0
+            },
+            {
+              "Line": 13,
+              "Offset": 8,
+              "EndOffset": 133,
+              "Path": 1,
+              "Ordinal": 1,
+              "Hits": 0
+            },
+            {
+              "Line": 14,
+              "Offset": 95,
+              "EndOffset": 161,
+              "Path": 1,
+              "Ordinal": 3,
+              "Hits": 0
+            }
+          ]
+        }
+      },
+      "DeOlho.ETL.StepCollection`1/<>c__DisplayClass2_0`1/<<Extract>b__0>d": {
+        "System.Void DeOlho.ETL.StepCollection`1/<>c__DisplayClass2_0`1/<<Extract>b__0>d::MoveNext()": {
+          "Lines": {},
+          "Branches": [
+            {
+              "Line": 25,
+              "Offset": 8,
+              "EndOffset": 14,
+              "Path": 0,
+              "Ordinal": 0,
+              "Hits": 0
+            },
+            {
+              "Line": 26,
+              "Offset": 55,
+              "EndOffset": 57,
+              "Path": 0,
+              "Ordinal": 2,
+              "Hits": 0
+            },
+            {
+              "Line": 25,
+              "Offset": 8,
+              "EndOffset": 93,
+              "Path": 1,
+              "Ordinal": 1,
+              "Hits": 0
+            },
+            {
+              "Line": 26,
+              "Offset": 55,
+              "EndOffset": 121,
+              "Path": 1,
+              "Ordinal": 3,
+              "Hits": 0
+            }
+          ]
+        }
+      }
+    },
+    "C:\\Allison\\Projetos\\Exemplos\\DeOlho\\src\\ETL\\DeOlho.ETL\\StepCollectionTransform.cs": {
+      "DeOlho.ETL.StepCollectionTransform`2": {
+        "System.Void DeOlho.ETL.StepCollectionTransform`2::.ctor(DeOlho.ETL.IStepCollection`1<TIn>,System.Func`2<TIn,System.Threading.Tasks.Task`1<TOut>>)": {
+          "Lines": {
+            "13": 0,
+            "14": 0,
+            "15": 0,
+            "16": 0,
+            "17": 0
+          },
+          "Branches": []
+        }
+      },
+      "DeOlho.ETL.StepCollectionTransform`2/<Execute>d__3": {
+        "System.Void DeOlho.ETL.StepCollectionTransform`2/<Execute>d__3::MoveNext()": {
+          "Lines": {
+            "21": 0,
+            "22": 0,
+            "23": 0,
+            "24": 0,
+            "25": 0,
+            "26": 0,
+            "27": 0,
+            "28": 0,
+            "29": 0
+          },
+          "Branches": [
+            {
+              "Line": 21,
+              "Offset": 14,
+              "EndOffset": 25,
+              "Path": 0,
+              "Ordinal": 0,
+              "Hits": 0
+            },
+            {
+              "Line": 22,
+              "Offset": 55,
+              "EndOffset": 57,
+              "Path": 0,
+              "Ordinal": 2,
+              "Hits": 0
+            },
+            {
+              "Line": 22,
+              "Offset": 55,
+              "EndOffset": 124,
+              "Path": 1,
+              "Ordinal": 3,
+              "Hits": 0
+            },
+            {
+              "Line": 21,
+              "Offset": 14,
+              "EndOffset": 185,
+              "Path": 1,
+              "Ordinal": 1,
+              "Hits": 0
+            },
+            {
+              "Line": 24,
+              "Offset": 410,
+              "EndOffset": 199,
+              "Path": 1,
+              "Ordinal": 9,
+              "Hits": 0
+            },
+            {
+              "Line": 26,
+              "Offset": 265,
+              "EndOffset": 267,
+              "Path": 0,
+              "Ordinal": 6,
+              "Hits": 0
+            },
+            {
+              "Line": 24,
+              "Offset": 188,
+              "EndOffset": 307,
+              "Path": 1,
+              "Ordinal": 5,
+              "Hits": 0
+            },
+            {
+              "Line": 26,
+              "Offset": 265,
+              "EndOffset": 336,
+              "Path": 1,
+              "Ordinal": 7,
+              "Hits": 0
+            },
+            {
+              "Line": 24,
+              "Offset": 188,
+              "EndOffset": 399,
+              "Path": 0,
+              "Ordinal": 4,
+              "Hits": 0
+            },
+            {
+              "Line": 24,
+              "Offset": 410,
+              "EndOffset": 415,
+              "Path": 0,
+              "Ordinal": 8,
+              "Hits": 0
+            }
+          ]
+        }
+      }
+    },
+    "C:\\Allison\\Projetos\\Exemplos\\DeOlho\\src\\ETL\\DeOlho.ETL\\StepSource.cs": {
+      "DeOlho.ETL.StepSource`1": {
+        "System.Void DeOlho.ETL.StepSource`1::.ctor(System.Func`1<System.Threading.Tasks.Task`1<TOut>>)": {
+          "Lines": {
+            "13": 0,
+            "14": 0,
+            "15": 0,
+            "16": 0
+          },
+          "Branches": []
+        }
+      },
+      "DeOlho.ETL.StepSource`1/<Execute>d__2": {
+        "System.Void DeOlho.ETL.StepSource`1/<Execute>d__2::MoveNext()": {
+          "Lines": {
+            "19": 0,
+            "20": 0,
+            "21": 0,
+            "22": 0
+          },
+          "Branches": [
+            {
+              "Line": 20,
+              "Offset": 44,
+              "EndOffset": 46,
+              "Path": 0,
+              "Ordinal": 0,
+              "Hits": 0
+            },
+            {
+              "Line": 20,
+              "Offset": 44,
+              "EndOffset": 110,
+              "Path": 1,
+              "Ordinal": 1,
+              "Hits": 0
+            }
+          ]
+        }
+      }
+    },
+    "C:\\Allison\\Projetos\\Exemplos\\DeOlho\\src\\ETL\\DeOlho.ETL\\StepTransform.cs": {
+      "DeOlho.ETL.StepTransform`2": {
+        "System.Void DeOlho.ETL.StepTransform`2::.ctor(DeOlho.ETL.IStep`1<TIn>,System.Func`2<TIn,System.Threading.Tasks.Task`1<TOut>>)": {
+          "Lines": {
+            "14": 2,
+            "15": 2,
+            "16": 2,
+            "17": 2,
+            "18": 2
+          },
+          "Branches": []
+        }
+      },
+      "DeOlho.ETL.StepTransform`2/<Execute>d__3": {
+        "System.Void DeOlho.ETL.StepTransform`2/<Execute>d__3::MoveNext()": {
+          "Lines": {
+            "21": 1,
+            "22": 1,
+            "23": 1,
+            "24": 1,
+            "25": 1
+          },
+          "Branches": [
+            {
+              "Line": 21,
+              "Offset": 14,
+              "EndOffset": 25,
+              "Path": 0,
+              "Ordinal": 0,
+              "Hits": 1
+            },
+            {
+              "Line": 22,
+              "Offset": 55,
+              "EndOffset": 124,
+              "Path": 1,
+              "Ordinal": 3,
+              "Hits": 1
+            },
+            {
+              "Line": 23,
+              "Offset": 197,
+              "EndOffset": 199,
+              "Path": 0,
+              "Ordinal": 4,
+              "Hits": 1
+            },
+            {
+              "Line": 21,
+              "Offset": 14,
+              "EndOffset": 236,
+              "Path": 1,
+              "Ordinal": 1,
+              "Hits": 1
+            },
+            {
+              "Line": 23,
+              "Offset": 197,
+              "EndOffset": 265,
+              "Path": 1,
+              "Ordinal": 5,
+              "Hits": 1
+            }
+          ]
+        }
+      }
+    },
+    "C:\\Allison\\Projetos\\Exemplos\\DeOlho\\src\\ETL\\DeOlho.ETL\\StepTransformToCollection.cs": {
+      "DeOlho.ETL.StepTransformToCollection`2": {
+        "System.Void DeOlho.ETL.StepTransformToCollection`2::.ctor(DeOlho.ETL.Step`1<TIn>,System.Func`2<TIn,System.Collections.Generic.IEnumerable`1<TOut>>)": {
+          "Lines": {
+            "13": 0,
+            "14": 0,
+            "15": 0,
+            "16": 0,
+            "17": 0
+          },
+          "Branches": []
+        }
+      },
+      "DeOlho.ETL.StepTransformToCollection`2/<Execute>d__3": {
+        "System.Void DeOlho.ETL.StepTransformToCollection`2/<Execute>d__3::MoveNext()": {
+          "Lines": {
+            "20": 0,
+            "21": 0,
+            "22": 0,
+            "23": 0,
+            "24": 0
+          },
+          "Branches": [
+            {
+              "Line": 21,
+              "Offset": 44,
+              "EndOffset": 46,
+              "Path": 0,
+              "Ordinal": 0,
+              "Hits": 0
+            },
+            {
+              "Line": 21,
+              "Offset": 44,
+              "EndOffset": 113,
+              "Path": 1,
+              "Ordinal": 1,
+              "Hits": 0
+            }
+          ]
+        }
+      }
+    },
+    "C:\\Allison\\Projetos\\Exemplos\\DeOlho\\src\\ETL\\DeOlho.ETL\\Transforms\\JsonToObjectTransform.cs": {
+      "DeOlho.ETL.Transforms.JsonToDynamicTransform": {
+        "System.Object DeOlho.ETL.Transforms.JsonToDynamicTransform::get_Dynamic()": {
+          "Lines": {
+            "15": 0
+          },
+          "Branches": []
+        },
+        "System.Void DeOlho.ETL.Transforms.JsonToDynamicTransform::.ctor(DeOlho.ETL.IStep`1<System.String>)": {
+          "Lines": {
+            "18": 1,
+            "19": 1,
+            "20": 1,
+            "21": 1
+          },
+          "Branches": []
+        }
+      },
+      "DeOlho.ETL.Transforms.JsonToDynamicTransform/<Execute>d__6": {
+        "System.Void DeOlho.ETL.Transforms.JsonToDynamicTransform/<Execute>d__6::MoveNext()": {
+          "Lines": {
+            "24": 1,
+            "25": 1,
+            "26": 1,
+            "27": 1,
+            "28": 1
+          },
+          "Branches": [
+            {
+              "Line": 25,
+              "Offset": 44,
+              "EndOffset": 113,
+              "Path": 1,
+              "Ordinal": 1,
+              "Hits": 1
+            }
+          ]
+        }
+      },
+      "DeOlho.ETL.Transforms.JsonToDynamicCollectionTransform": {
+        "System.Void DeOlho.ETL.Transforms.JsonToDynamicCollectionTransform::.ctor(DeOlho.ETL.IStepCollection`1<System.String>)": {
+          "Lines": {
+            "36": 0,
+            "37": 0,
+            "38": 0,
+            "39": 0
+          },
+          "Branches": []
+        }
+      },
+      "DeOlho.ETL.Transforms.JsonToDynamicCollectionTransform/<Execute>d__2": {
+        "System.Void DeOlho.ETL.Transforms.JsonToDynamicCollectionTransform/<Execute>d__2::MoveNext()": {
+          "Lines": {
+            "42": 0,
+            "43": 0,
+            "44": 0,
+            "45": 0,
+            "46": 0,
+            "47": 0,
+            "48": 0,
+            "49": 0,
+            "50": 0
+          },
+          "Branches": [
+            {
+              "Line": 43,
+              "Offset": 44,
+              "EndOffset": 46,
+              "Path": 0,
+              "Ordinal": 0,
+              "Hits": 0
+            },
+            {
+              "Line": 43,
+              "Offset": 44,
+              "EndOffset": 113,
+              "Path": 1,
+              "Ordinal": 1,
+              "Hits": 0
+            },
+            {
+              "Line": 45,
+              "Offset": 330,
+              "EndOffset": 179,
+              "Path": 1,
+              "Ordinal": 5,
+              "Hits": 0
+            },
+            {
+              "Line": 47,
+              "Offset": 202,
+              "EndOffset": 206,
+              "Path": 1,
+              "Ordinal": 3,
+              "Hits": 0
+            },
+            {
+              "Line": 47,
+              "Offset": 202,
+              "EndOffset": 268,
+              "Path": 0,
+              "Ordinal": 2,
+              "Hits": 0
+            },
+            {
+              "Line": 45,
+              "Offset": 330,
+              "EndOffset": 335,
+              "Path": 0,
+              "Ordinal": 4,
+              "Hits": 0
+            }
+          ]
+        }
+      },
+      "DeOlho.ETL.Transforms.JsonToDynamicTransformExtensions": {
+        "DeOlho.ETL.IStep`1<System.Object> DeOlho.ETL.Transforms.JsonToDynamicTransformExtensions::TransformJsonToDynamic(DeOlho.ETL.IStep`1<System.String>)": {
+          "Lines": {
+            "56": 1,
+            "57": 1,
+            "58": 1
+          },
+          "Branches": []
+        },
+        "DeOlho.ETL.IStepCollection`1<System.Object> DeOlho.ETL.Transforms.JsonToDynamicTransformExtensions::TransformJsonToDynamic(DeOlho.ETL.IStepCollection`1<System.String>)": {
+          "Lines": {
+            "61": 0,
+            "62": 0,
+            "63": 0
+          },
+          "Branches": []
+        }
+      }
+    },
+    "C:\\Allison\\Projetos\\Exemplos\\DeOlho\\src\\ETL\\DeOlho.ETL\\Steps\\DbCreateTableIfNotExistStepCollection.cs": {
+      "DeOlho.ETL.Steps.DbCreateTableIfNotExistStepCollection`1": {
+        "System.Void DeOlho.ETL.Steps.DbCreateTableIfNotExistStepCollection`1::.ctor(DeOlho.ETL.IStepCollection`1<T>,System.Data.IDbConnection,System.Data.IDbTransaction,System.String)": {
+          "Lines": {
+            "22": 1,
+            "23": 1,
+            "24": 1,
+            "25": 1,
+            "26": 1,
+            "27": 1,
+            "28": 1
+          },
+          "Branches": []
+        }
+      },
+      "DeOlho.ETL.Steps.DbCreateTableIfNotExistStepCollection`1/<>c": {
+        "System.String DeOlho.ETL.Steps.DbCreateTableIfNotExistStepCollection`1/<>c::<Execute>b__5_0(System.Reflection.PropertyInfo)": {
+          "Lines": {
+            "71": 35
+          },
+          "Branches": []
+        }
+      },
+      "DeOlho.ETL.Steps.DbCreateTableIfNotExistStepCollection`1/<Execute>d__5": {
+        "System.Void DeOlho.ETL.Steps.DbCreateTableIfNotExistStepCollection`1/<Execute>d__5::MoveNext()": {
+          "Lines": {
+            "31": 1,
+            "32": 1,
+            "34": 1,
+            "35": 0,
+            "37": 1,
+            "39": 1,
+            "41": 1,
+            "42": 1,
+            "43": 1,
+            "44": 1,
+            "47": 1,
+            "48": 1,
+            "49": 0,
+            "50": 0,
+            "51": 1,
+            "52": 1,
+            "54": 1,
+            "56": 1,
+            "58": 1,
+            "59": 1,
+            "60": 1,
+            "62": 1,
+            "63": 1,
+            "64": 1,
+            "65": 1,
+            "66": 1,
+            "68": 1,
+            "74": 37,
+            "75": 17,
+            "76": 17,
+            "78": 17,
+            "80": 17,
+            "81": 17,
+            "82": 8,
+            "83": 8,
+            "84": 8,
+            "85": 8,
+            "87": 17,
+            "89": 17,
+            "90": 1,
+            "91": 1,
+            "92": 1,
+            "93": 1,
+            "94": 16,
+            "95": 9,
+            "96": 9,
+            "97": 9,
+            "98": 7,
+            "99": 2,
+            "100": 2,
+            "101": 2,
+            "102": 5,
+            "103": 2,
+            "104": 2,
+            "105": 2,
+            "106": 3,
+            "107": 3,
+            "108": 3,
+            "109": 3,
+            "111": 17,
+            "112": 17,
+            "113": 17,
+            "114": 17,
+            "116": 17,
+            "118": 1,
+            "119": 1,
+            "120": 1,
+            "122": 1,
+            "123": 1,
+            "124": 1,
+            "125": 1,
+            "126": 1,
+            "127": 1,
+            "128": 1,
+            "129": 1,
+            "131": 1,
+            "132": 1
+          },
+          "Branches": [
+            {
+              "Line": 32,
+              "Offset": 44,
+              "EndOffset": 113,
+              "Path": 1,
+              "Ordinal": 1,
+              "Hits": 1
+            },
+            {
+              "Line": 34,
+              "Offset": 163,
+              "EndOffset": 177,
+              "Path": 1,
+              "Ordinal": 3,
+              "Hits": 1
+            },
+            {
+              "Line": 58,
+              "Offset": 376,
+              "EndOffset": 381,
+              "Path": 0,
+              "Ordinal": 4,
+              "Hits": 1
+            },
+            {
+              "Line": 71,
+              "Offset": 599,
+              "EndOffset": 601,
+              "Path": 0,
+              "Ordinal": 6,
+              "Hits": 1
+            },
+            {
+              "Line": 71,
+              "Offset": 599,
+              "EndOffset": 624,
+              "Path": 1,
+              "Ordinal": 7,
+              "Hits": 1
+            },
+            {
+              "Line": 71,
+              "Offset": 630,
+              "EndOffset": 632,
+              "Path": 0,
+              "Ordinal": 8,
+              "Hits": 1
+            },
+            {
+              "Line": 71,
+              "Offset": 630,
+              "EndOffset": 655,
+              "Path": 1,
+              "Ordinal": 9,
+              "Hits": 1
+            },
+            {
+              "Line": 74,
+              "Offset": 1167,
+              "EndOffset": 688,
+              "Path": 1,
+              "Ordinal": 29,
+              "Hits": 17
+            },
+            {
+              "Line": 80,
+              "Offset": 741,
+              "EndOffset": 743,
+              "Path": 0,
+              "Ordinal": 10,
+              "Hits": 8
+            },
+            {
+              "Line": 80,
+              "Offset": 741,
+              "EndOffset": 776,
+              "Path": 1,
+              "Ordinal": 11,
+              "Hits": 9
+            },
+            {
+              "Line": 80,
+              "Offset": 781,
+              "EndOffset": 783,
+              "Path": 0,
+              "Ordinal": 12,
+              "Hits": 8
+            },
+            {
+              "Line": 80,
+              "Offset": 781,
+              "EndOffset": 811,
+              "Path": 1,
+              "Ordinal": 13,
+              "Hits": 17
+            },
+            {
+              "Line": 89,
+              "Offset": 843,
+              "EndOffset": 845,
+              "Path": 0,
+              "Ordinal": 14,
+              "Hits": 1
+            },
+            {
+              "Line": 89,
+              "Offset": 843,
+              "EndOffset": 870,
+              "Path": 1,
+              "Ordinal": 15,
+              "Hits": 16
+            },
+            {
+              "Line": 94,
+              "Offset": 891,
+              "EndOffset": 893,
+              "Path": 0,
+              "Ordinal": 16,
+              "Hits": 9
+            },
+            {
+              "Line": 94,
+              "Offset": 891,
+              "EndOffset": 908,
+              "Path": 1,
+              "Ordinal": 17,
+              "Hits": 7
+            },
+            {
+              "Line": 98,
+              "Offset": 929,
+              "EndOffset": 931,
+              "Path": 0,
+              "Ordinal": 18,
+              "Hits": 2
+            },
+            {
+              "Line": 98,
+              "Offset": 929,
+              "EndOffset": 946,
+              "Path": 1,
+              "Ordinal": 19,
+              "Hits": 5
+            },
+            {
+              "Line": 102,
+              "Offset": 967,
+              "EndOffset": 969,
+              "Path": 0,
+              "Ordinal": 20,
+              "Hits": 2
+            },
+            {
+              "Line": 102,
+              "Offset": 967,
+              "EndOffset": 984,
+              "Path": 1,
+              "Ordinal": 21,
+              "Hits": 3
+            },
+            {
+              "Line": 106,
+              "Offset": 1005,
+              "EndOffset": 1007,
+              "Path": 0,
+              "Ordinal": 22,
+              "Hits": 3
+            },
+            {
+              "Line": 106,
+              "Offset": 1005,
+              "EndOffset": 1020,
+              "Path": 1,
+              "Ordinal": 23,
+              "Hits": 17
+            },
+            {
+              "Line": 111,
+              "Offset": 1040,
+              "EndOffset": 1042,
+              "Path": 0,
+              "Ordinal": 24,
+              "Hits": 17
+            },
+            {
+              "Line": 113,
+              "Offset": 1102,
+              "EndOffset": 1104,
+              "Path": 0,
+              "Ordinal": 26,
+              "Hits": 8
+            },
+            {
+              "Line": 113,
+              "Offset": 1102,
+              "EndOffset": 1111,
+              "Path": 1,
+              "Ordinal": 27,
+              "Hits": 9
+            },
+            {
+              "Line": 111,
+              "Offset": 1040,
+              "EndOffset": 1129,
+              "Path": 1,
+              "Ordinal": 25,
+              "Hits": 17
+            },
+            {
+              "Line": 74,
+              "Offset": 1167,
+              "EndOffset": 1172,
+              "Path": 0,
+              "Ordinal": 28,
+              "Hits": 1
+            },
+            {
+              "Line": 118,
+              "Offset": 1224,
+              "EndOffset": 1229,
+              "Path": 0,
+              "Ordinal": 30,
+              "Hits": 1
+            },
+            {
+              "Line": 118,
+              "Offset": 1224,
+              "EndOffset": 1423,
+              "Path": 1,
+              "Ordinal": 31,
+              "Hits": 1
+            },
+            {
+              "Line": 58,
+              "Offset": 376,
+              "EndOffset": 1473,
+              "Path": 1,
+              "Ordinal": 5,
+              "Hits": 1
+            }
+          ]
+        }
+      },
+      "DeOlho.ETL.Steps.DbCreateTableIfNotExistExtension": {
+        "DeOlho.ETL.StepCollection`1<T> DeOlho.ETL.Steps.DbCreateTableIfNotExistExtension::DbCreateTableIfNotExist(DeOlho.ETL.IStepCollection`1<T>,System.Data.IDbConnection,System.Data.IDbTransaction,System.String)": {
+          "Lines": {
+            "138": 1,
+            "139": 1,
+            "140": 1
+          },
+          "Branches": []
+        }
+      }
+    },
+    "C:\\Allison\\Projetos\\Exemplos\\DeOlho\\src\\ETL\\DeOlho.ETL\\Sources\\HttpJsonSource.cs": {
+      "DeOlho.ETL.Sources.HttpJsonSource": {
+        "System.Void DeOlho.ETL.Sources.HttpJsonSource::.ctor(System.Net.Http.HttpClient,System.String)": {
+          "Lines": {
+            "12": 1,
+            "13": 1,
+            "14": 1,
+            "15": 1,
+            "16": 1
+          },
+          "Branches": []
+        }
+      },
+      "DeOlho.ETL.Sources.HttpJsonSource/<Execute>d__3": {
+        "System.Void DeOlho.ETL.Sources.HttpJsonSource/<Execute>d__3::MoveNext()": {
+          "Lines": {
+            "19": 1,
+            "20": 1,
+            "21": 1,
+            "22": 1,
+            "24": 1,
+            "26": 1,
+            "27": 1,
+            "28": 1
+          },
+          "Branches": [
+            {
+              "Line": 19,
+              "Offset": 14,
+              "EndOffset": 28,
+              "Path": 0,
+              "Ordinal": 0,
+              "Hits": 1
+            },
+            {
+              "Line": 24,
+              "Offset": 133,
+              "EndOffset": 202,
+              "Path": 1,
+              "Ordinal": 3,
+              "Hits": 1
+            },
+            {
+              "Line": 27,
+              "Offset": 276,
+              "EndOffset": 344,
+              "Path": 1,
+              "Ordinal": 5,
+              "Hits": 1
+            }
+          ]
+        }
+      }
+    },
+    "C:\\Allison\\Projetos\\Exemplos\\DeOlho\\src\\ETL\\DeOlho.ETL\\Destinations\\DbDestinationCollection.cs": {
+      "DeOlho.ETL.Destinations.DbDestination": {
+        "System.Void DeOlho.ETL.Destinations.DbDestination::.ctor(System.Data.IDbConnection,System.Data.IDbTransaction,System.String)": {
+          "Lines": {
+            "16": 0,
+            "17": 0,
+            "18": 0,
+            "19": 0,
+            "20": 0,
+            "21": 0
+          },
+          "Branches": []
+        }
+      },
+      "DeOlho.ETL.Destinations.DbDestination/<>c__4`1": {
+        "System.String DeOlho.ETL.Destinations.DbDestination/<>c__4`1::<Execute>b__4_0(System.Reflection.PropertyInfo)": {
+          "Lines": {
+            "88": 0
+          },
+          "Branches": []
+        }
+      },
+      "DeOlho.ETL.Destinations.DbDestination/<Execute>d__4`1": {
+        "System.Void DeOlho.ETL.Destinations.DbDestination/<Execute>d__4`1::MoveNext()": {
+          "Lines": {
+            "25": 0,
+            "26": 0,
+            "28": 0,
+            "29": 0,
+            "30": 0,
+            "31": 0,
+            "32": 0,
+            "34": 0,
+            "36": 0,
+            "38": 0,
+            "39": 0,
+            "40": 0,
+            "41": 0,
+            "42": 0,
+            "43": 0,
+            "45": 0,
+            "46": 0,
+            "47": 0,
+            "48": 0,
+            "49": 0,
+            "51": 0,
+            "53": 0,
+            "54": 0,
+            "55": 0,
+            "56": 0,
+            "58": 0,
+            "59": 0,
+            "60": 0,
+            "61": 0,
+            "62": 0,
+            "63": 0,
+            "64": 0,
+            "65": 0,
+            "66": 0,
+            "67": 0,
+            "68": 0,
+            "69": 0,
+            "70": 0,
+            "71": 0,
+            "72": 0,
+            "73": 0,
+            "74": 0,
+            "75": 0,
+            "76": 0,
+            "77": 0,
+            "78": 0,
+            "79": 0,
+            "80": 0,
+            "82": 0,
+            "84": 0,
+            "86": 0,
+            "87": 0,
+            "90": 0,
+            "91": 0,
+            "92": 0,
+            "93": 0,
+            "94": 0,
+            "95": 0,
+            "96": 0,
+            "98": 0,
+            "99": 0
+          },
+          "Branches": [
+            {
+              "Line": 25,
+              "Offset": 8,
+              "EndOffset": 14,
+              "Path": 0,
+              "Ordinal": 0,
+              "Hits": 0
+            },
+            {
+              "Line": 26,
+              "Offset": 39,
+              "EndOffset": 41,
+              "Path": 0,
+              "Ordinal": 2,
+              "Hits": 0
+            },
+            {
+              "Line": 25,
+              "Offset": 8,
+              "EndOffset": 80,
+              "Path": 1,
+              "Ordinal": 1,
+              "Hits": 0
+            },
+            {
+              "Line": 26,
+              "Offset": 39,
+              "EndOffset": 108,
+              "Path": 1,
+              "Ordinal": 3,
+              "Hits": 0
+            },
+            {
+              "Line": 38,
+              "Offset": 1063,
+              "EndOffset": 372,
+              "Path": 1,
+              "Ordinal": 25,
+              "Hits": 0
+            },
+            {
+              "Line": 41,
+              "Offset": 977,
+              "EndOffset": 426,
+              "Path": 1,
+              "Ordinal": 23,
+              "Hits": 0
+            },
+            {
+              "Line": 45,
+              "Offset": 474,
+              "EndOffset": 476,
+              "Path": 0,
+              "Ordinal": 4,
+              "Hits": 0
+            },
+            {
+              "Line": 45,
+              "Offset": 474,
+              "EndOffset": 509,
+              "Path": 1,
+              "Ordinal": 5,
+              "Hits": 0
+            },
+            {
+              "Line": 45,
+              "Offset": 514,
+              "EndOffset": 516,
+              "Path": 0,
+              "Ordinal": 6,
+              "Hits": 0
+            },
+            {
+              "Line": 45,
+              "Offset": 514,
+              "EndOffset": 537,
+              "Path": 1,
+              "Ordinal": 7,
+              "Hits": 0
+            },
+            {
+              "Line": 53,
+              "Offset": 578,
+              "EndOffset": 580,
+              "Path": 0,
+              "Ordinal": 8,
+              "Hits": 0
+            },
+            {
+              "Line": 53,
+              "Offset": 578,
+              "EndOffset": 604,
+              "Path": 1,
+              "Ordinal": 9,
+              "Hits": 0
+            },
+            {
+              "Line": 59,
+              "Offset": 626,
+              "EndOffset": 628,
+              "Path": 0,
+              "Ordinal": 10,
+              "Hits": 0
+            },
+            {
+              "Line": 59,
+              "Offset": 626,
+              "EndOffset": 682,
+              "Path": 1,
+              "Ordinal": 11,
+              "Hits": 0
+            },
+            {
+              "Line": 63,
+              "Offset": 703,
+              "EndOffset": 705,
+              "Path": 0,
+              "Ordinal": 12,
+              "Hits": 0
+            },
+            {
+              "Line": 63,
+              "Offset": 703,
+              "EndOffset": 735,
+              "Path": 1,
+              "Ordinal": 13,
+              "Hits": 0
+            },
+            {
+              "Line": 67,
+              "Offset": 756,
+              "EndOffset": 758,
+              "Path": 0,
+              "Ordinal": 14,
+              "Hits": 0
+            },
+            {
+              "Line": 69,
+              "Offset": 776,
+              "EndOffset": 778,
+              "Path": 0,
+              "Ordinal": 16,
+              "Hits": 0
+            },
+            {
+              "Line": 69,
+              "Offset": 776,
+              "EndOffset": 785,
+              "Path": 1,
+              "Ordinal": 17,
+              "Hits": 0
+            },
+            {
+              "Line": 67,
+              "Offset": 756,
+              "EndOffset": 799,
+              "Path": 1,
+              "Ordinal": 15,
+              "Hits": 0
+            },
+            {
+              "Line": 71,
+              "Offset": 820,
+              "EndOffset": 822,
+              "Path": 0,
+              "Ordinal": 18,
+              "Hits": 0
+            },
+            {
+              "Line": 71,
+              "Offset": 820,
+              "EndOffset": 878,
+              "Path": 1,
+              "Ordinal": 19,
+              "Hits": 0
+            },
+            {
+              "Line": 75,
+              "Offset": 899,
+              "EndOffset": 901,
+              "Path": 0,
+              "Ordinal": 20,
+              "Hits": 0
+            },
+            {
+              "Line": 75,
+              "Offset": 899,
+              "EndOffset": 926,
+              "Path": 1,
+              "Ordinal": 21,
+              "Hits": 0
+            },
+            {
+              "Line": 41,
+              "Offset": 977,
+              "EndOffset": 982,
+              "Path": 0,
+              "Ordinal": 22,
+              "Hits": 0
+            },
+            {
+              "Line": 38,
+              "Offset": 1063,
+              "EndOffset": 1068,
+              "Path": 0,
+              "Ordinal": 24,
+              "Hits": 0
+            },
+            {
+              "Line": 86,
+              "Offset": 1117,
+              "EndOffset": 1122,
+              "Path": 0,
+              "Ordinal": 26,
+              "Hits": 0
+            },
+            {
+              "Line": 88,
+              "Offset": 1179,
+              "EndOffset": 1181,
+              "Path": 0,
+              "Ordinal": 28,
+              "Hits": 0
+            },
+            {
+              "Line": 88,
+              "Offset": 1179,
+              "EndOffset": 1204,
+              "Path": 1,
+              "Ordinal": 29,
+              "Hits": 0
+            },
+            {
+              "Line": 86,
+              "Offset": 1117,
+              "EndOffset": 1371,
+              "Path": 1,
+              "Ordinal": 27,
+              "Hits": 0
+            }
+          ]
+        }
+      },
+      "DeOlho.ETL.Destinations.DbDestination/<Execute>d__5`1": {
+        "System.Void DeOlho.ETL.Destinations.DbDestination/<Execute>d__5`1::MoveNext()": {
+          "Lines": {
+            "101": 0,
+            "102": 0,
+            "103": 0
+          },
+          "Branches": [
+            {
+              "Line": 101,
+              "Offset": 8,
+              "EndOffset": 14,
+              "Path": 0,
+              "Ordinal": 0,
+              "Hits": 0
+            },
+            {
+              "Line": 102,
+              "Offset": 39,
+              "EndOffset": 41,
+              "Path": 0,
+              "Ordinal": 2,
+              "Hits": 0
+            },
+            {
+              "Line": 101,
+              "Offset": 8,
+              "EndOffset": 77,
+              "Path": 1,
+              "Ordinal": 1,
+              "Hits": 0
+            },
+            {
+              "Line": 102,
+              "Offset": 39,
+              "EndOffset": 105,
+              "Path": 1,
+              "Ordinal": 3,
+              "Hits": 0
+            }
+          ]
+        }
+      }
+    }
+  },
+  "DeOlho.ETL.UnitTests.dll": {
+    "C:\\Allison\\Projetos\\Exemplos\\DeOlho\\src\\ETL\\DeOlho.ETL.UnitTests\\obj\\Debug\\netcoreapp2.1\\DeOlho.ETL.UnitTests.Program.cs": {
+      "AutoGeneratedProgram": {
+        "System.Void AutoGeneratedProgram::Main(System.String[])": {
+          "Lines": {
+            "4": 0
+          },
+          "Branches": []
+        }
+      }
+    },
+    "C:\\Allison\\Projetos\\Exemplos\\DeOlho\\src\\ETL\\DeOlho.ETL.UnitTests\\ETLTest.cs": {
+      "DeOlho.ETL.UnitTests.ETLTest/<Sources_HttpJsonSource>d__0": {
+        "System.Void DeOlho.ETL.UnitTests.ETLTest/<Sources_HttpJsonSource>d__0::MoveNext()": {
+          "Lines": {
+            "24": 1,
+            "25": 1,
+            "26": 1,
+            "27": 1,
+            "28": 1,
+            "29": 1,
+            "30": 1,
+            "31": 1,
+            "32": 1,
+            "33": 1,
+            "34": 1,
+            "35": 1,
+            "36": 1,
+            "37": 1,
+            "38": 1,
+            "39": 1,
+            "41": 1,
+            "43": 1,
+            "44": 1,
+            "45": 1,
+            "47": 1,
+            "49": 1,
+            "50": 1,
+            "51": 1,
+            "52": 1,
+            "53": 1,
+            "54": 1,
+            "55": 1,
+            "56": 1,
+            "57": 1,
+            "58": 1
+          },
+          "Branches": [
+            {
+              "Line": 45,
+              "Offset": 230,
+              "EndOffset": 299,
+              "Path": 1,
+              "Ordinal": 1,
+              "Hits": 1
+            }
+          ]
+        }
+      },
+      "DeOlho.ETL.UnitTests.ETLTest/<>c__DisplayClass1_0": {
+        "System.Object DeOlho.ETL.UnitTests.ETLTest/<>c__DisplayClass1_0::<Steps_Collection_DbCreateTableIfNotExistExtension_NotExists>b__2()": {
+          "Lines": {
+            "118": 2,
+            "119": 2,
+            "120": 1,
+            "122": 2
+          },
+          "Branches": [
+            {
+              "Line": 119,
+              "Offset": 50,
+              "EndOffset": 52,
+              "Path": 0,
+              "Ordinal": 0,
+              "Hits": 0
+            },
+            {
+              "Line": 119,
+              "Offset": 50,
+              "EndOffset": 58,
+              "Path": 1,
+              "Ordinal": 1,
+              "Hits": 1
+            }
+          ]
+        },
+        "System.Int32 DeOlho.ETL.UnitTests.ETLTest/<>c__DisplayClass1_0::<Steps_Collection_DbCreateTableIfNotExistExtension_NotExists>b__4()": {
+          "Lines": {
+            "127": 2,
+            "128": 2,
+            "129": 2,
+            "131": 1,
+            "132": 2
+          },
+          "Branches": [
+            {
+              "Line": 128,
+              "Offset": 95,
+              "EndOffset": 97,
+              "Path": 0,
+              "Ordinal": 0,
+              "Hits": 1
+            },
+            {
+              "Line": 128,
+              "Offset": 95,
+              "EndOffset": 101,
+              "Path": 1,
+              "Ordinal": 1,
+              "Hits": 0
+            }
+          ]
+        }
+      },
+      "DeOlho.ETL.UnitTests.ETLTest/<>c": {
+        "System.Decimal DeOlho.ETL.UnitTests.ETLTest/<>c::<Transform_JsonToDynamicTransform>b__2_3(System.Object)": {
+          "Lines": {
+            "170": 5
+          },
+          "Branches": [
+            {
+              "Line": 170,
+              "Offset": 5,
+              "EndOffset": 9,
+              "Path": 1,
+              "Ordinal": 1,
+              "Hits": 1
+            },
+            {
+              "Line": 170,
+              "Offset": 5,
+              "EndOffset": 46,
+              "Path": 0,
+              "Ordinal": 0,
+              "Hits": 2
+            },
+            {
+              "Line": 170,
+              "Offset": 66,
+              "EndOffset": 70,
+              "Path": 1,
+              "Ordinal": 3,
+              "Hits": 1
+            },
+            {
+              "Line": 170,
+              "Offset": 66,
+              "EndOffset": 117,
+              "Path": 0,
+              "Ordinal": 2,
+              "Hits": 2
+            }
+          ]
+        }
+      },
+      "DeOlho.ETL.UnitTests.ETLTest/<>c/<<Transform_JsonToDynamicTransform>b__2_1>d": {
+        "System.Void DeOlho.ETL.UnitTests.ETLTest/<>c/<<Transform_JsonToDynamicTransform>b__2_1>d::MoveNext()": {
+          "Lines": {
+            "164": 2,
+            "165": 3,
+            "166": 3,
+            "167": 3,
+            "168": 3,
+            "169": 3,
+            "171": 3
+          },
+          "Branches": [
+            {
+              "Line": 164,
+              "Offset": 8,
+              "EndOffset": 14,
+              "Path": 0,
+              "Ordinal": 0,
+              "Hits": 1
+            },
+            {
+              "Line": 164,
+              "Offset": 77,
+              "EndOffset": 79,
+              "Path": 0,
+              "Ordinal": 2,
+              "Hits": 1
+            },
+            {
+              "Line": 164,
+              "Offset": 8,
+              "EndOffset": 115,
+              "Path": 1,
+              "Ordinal": 1,
+              "Hits": 1
+            },
+            {
+              "Line": 164,
+              "Offset": 77,
+              "EndOffset": 143,
+              "Path": 1,
+              "Ordinal": 3,
+              "Hits": 1
+            }
+          ]
+        }
+      },
+      "DeOlho.ETL.UnitTests.ETLTest/<Steps_Collection_DbCreateTableIfNotExistExtension_NotExists>d__1": {
+        "System.Void DeOlho.ETL.UnitTests.ETLTest/<Steps_Collection_DbCreateTableIfNotExistExtension_NotExists>d__1::MoveNext()": {
+          "Lines": {
+            "62": 1,
+            "63": 1,
+            "64": 1,
+            "65": 1,
+            "66": 1,
+            "67": 1,
+            "68": 1,
+            "69": 1,
+            "70": 1,
+            "71": 1,
+            "72": 1,
+            "73": 1,
+            "74": 1,
+            "75": 1,
+            "76": 1,
+            "77": 1,
+            "78": 1,
+            "79": 1,
+            "80": 1,
+            "81": 1,
+            "82": 1,
+            "83": 1,
+            "84": 1,
+            "85": 1,
+            "86": 1,
+            "87": 1,
+            "88": 1,
+            "89": 1,
+            "90": 1,
+            "91": 1,
+            "92": 1,
+            "93": 1,
+            "94": 1,
+            "95": 1,
+            "96": 1,
+            "97": 1,
+            "98": 1,
+            "99": 1,
+            "100": 1,
+            "101": 1,
+            "102": 1,
+            "103": 1,
+            "104": 1,
+            "105": 1,
+            "106": 1,
+            "107": 1,
+            "109": 1,
+            "110": 1,
+            "111": 1,
+            "113": 1,
+            "116": 1,
+            "117": 1,
+            "121": 1,
+            "123": 1,
+            "125": 1,
+            "126": 1,
+            "130": 1,
+            "134": 1,
+            "135": 1,
+            "136": 1,
+            "138": 1,
+            "140": 1,
+            "142": 1,
+            "143": 1
+          },
+          "Branches": [
+            {
+              "Line": 140,
+              "Offset": 738,
+              "EndOffset": 810,
+              "Path": 1,
+              "Ordinal": 1,
+              "Hits": 1
+            }
+          ]
+        }
+      },
+      "DeOlho.ETL.UnitTests.ETLTest/<Transform_JsonToDynamicTransform>d__2": {
+        "System.Void DeOlho.ETL.UnitTests.ETLTest/<Transform_JsonToDynamicTransform>d__2::MoveNext()": {
+          "Lines": {
+            "147": 1,
+            "148": 1,
+            "149": 1,
+            "150": 1,
+            "151": 1,
+            "152": 1,
+            "153": 1,
+            "154": 1,
+            "155": 1,
+            "156": 1,
+            "157": 1,
+            "158": 1,
+            "159": 1,
+            "160": 1,
+            "161": 1,
+            "163": 1,
+            "173": 1,
+            "175": 1,
+            "176": 1,
+            "177": 1,
+            "178": 1,
+            "179": 1,
+            "180": 1,
+            "181": 1,
+            "182": 1,
+            "183": 1,
+            "184": 1,
+            "185": 1,
+            "187": 1
+          },
+          "Branches": [
+            {
+              "Line": 163,
+              "Offset": 141,
+              "EndOffset": 143,
+              "Path": 0,
+              "Ordinal": 0,
+              "Hits": 1
+            },
+            {
+              "Line": 163,
+              "Offset": 141,
+              "EndOffset": 166,
+              "Path": 1,
+              "Ordinal": 1,
+              "Hits": 1
+            },
+            {
+              "Line": 173,
+              "Offset": 200,
+              "EndOffset": 202,
+              "Path": 0,
+              "Ordinal": 2,
+              "Hits": 1
+            },
+            {
+              "Line": 173,
+              "Offset": 200,
+              "EndOffset": 269,
+              "Path": 1,
+              "Ordinal": 3,
+              "Hits": 1
+            }
+          ]
+        }
+      },
+      "DeOlho.ETL.UnitTests.ETLTest/<>c__DisplayClass2_0": {
+        "<>f__AnonymousType1`5<System.Decimal,System.String,System.DateTime,System.Boolean,System.Collections.Generic.IEnumerable`1<System.Decimal>> DeOlho.ETL.UnitTests.ETLTest/<>c__DisplayClass2_0::<Transform_JsonToDynamicTransform>b__2()": {
+          "Lines": {},
+          "Branches": [
+            {
+              "Line": 165,
+              "Offset": 5,
+              "EndOffset": 9,
+              "Path": 1,
+              "Ordinal": 1,
+              "Hits": 1
+            },
+            {
+              "Line": 165,
+              "Offset": 5,
+              "EndOffset": 46,
+              "Path": 0,
+              "Ordinal": 0,
+              "Hits": 1
+            },
+            {
+              "Line": 165,
+              "Offset": 66,
+              "EndOffset": 70,
+              "Path": 1,
+              "Ordinal": 3,
+              "Hits": 1
+            },
+            {
+              "Line": 165,
+              "Offset": 66,
+              "EndOffset": 117,
+              "Path": 0,
+              "Ordinal": 2,
+              "Hits": 1
+            },
+            {
+              "Line": 165,
+              "Offset": 153,
+              "EndOffset": 157,
+              "Path": 1,
+              "Ordinal": 5,
+              "Hits": 1
+            },
+            {
+              "Line": 165,
+              "Offset": 153,
+              "EndOffset": 194,
+              "Path": 0,
+              "Ordinal": 4,
+              "Hits": 1
+            },
+            {
+              "Line": 165,
+              "Offset": 214,
+              "EndOffset": 218,
+              "Path": 1,
+              "Ordinal": 7,
+              "Hits": 1
+            },
+            {
+              "Line": 165,
+              "Offset": 214,
+              "EndOffset": 265,
+              "Path": 0,
+              "Ordinal": 6,
+              "Hits": 1
+            },
+            {
+              "Line": 165,
+              "Offset": 301,
+              "EndOffset": 305,
+              "Path": 1,
+              "Ordinal": 9,
+              "Hits": 1
+            },
+            {
+              "Line": 165,
+              "Offset": 301,
+              "EndOffset": 342,
+              "Path": 0,
+              "Ordinal": 8,
+              "Hits": 1
+            },
+            {
+              "Line": 165,
+              "Offset": 362,
+              "EndOffset": 366,
+              "Path": 1,
+              "Ordinal": 11,
+              "Hits": 1
+            },
+            {
+              "Line": 165,
+              "Offset": 362,
+              "EndOffset": 413,
+              "Path": 0,
+              "Ordinal": 10,
+              "Hits": 1
+            },
+            {
+              "Line": 165,
+              "Offset": 449,
+              "EndOffset": 453,
+              "Path": 1,
+              "Ordinal": 13,
+              "Hits": 1
+            },
+            {
+              "Line": 165,
+              "Offset": 449,
+              "EndOffset": 490,
+              "Path": 0,
+              "Ordinal": 12,
+              "Hits": 1
+            },
+            {
+              "Line": 165,
+              "Offset": 510,
+              "EndOffset": 514,
+              "Path": 1,
+              "Ordinal": 15,
+              "Hits": 1
+            },
+            {
+              "Line": 165,
+              "Offset": 510,
+              "EndOffset": 561,
+              "Path": 0,
+              "Ordinal": 14,
+              "Hits": 1
+            },
+            {
+              "Line": 165,
+              "Offset": 597,
+              "EndOffset": 601,
+              "Path": 1,
+              "Ordinal": 17,
+              "Hits": 1
+            },
+            {
+              "Line": 165,
+              "Offset": 597,
+              "EndOffset": 654,
+              "Path": 0,
+              "Ordinal": 16,
+              "Hits": 1
+            },
+            {
+              "Line": 165,
+              "Offset": 684,
+              "EndOffset": 688,
+              "Path": 1,
+              "Ordinal": 19,
+              "Hits": 1
+            },
+            {
+              "Line": 165,
+              "Offset": 684,
+              "EndOffset": 735,
+              "Path": 0,
+              "Ordinal": 18,
+              "Hits": 1
+            },
+            {
+              "Line": 165,
+              "Offset": 772,
+              "EndOffset": 774,
+              "Path": 0,
+              "Ordinal": 20,
+              "Hits": 1
+            },
+            {
+              "Line": 165,
+              "Offset": 772,
+              "EndOffset": 797,
+              "Path": 1,
+              "Ordinal": 21,
+              "Hits": 1
+            }
+          ]
+        }
+      }
+    }
+  }
+}

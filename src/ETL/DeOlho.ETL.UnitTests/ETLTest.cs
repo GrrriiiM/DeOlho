@@ -82,53 +82,48 @@ namespace DeOlho.ETL.UnitTests
                     _boolNull = new Nullable<Boolean>()
                 }
             };
-            var query = @"
-                CREATE TABLE TESTETABLE (
-                    _STRING VARCHAR(255) ,
-                    _SHORT INT NOT NULL,
-                    _INT INT NOT NULL,
-                    _LONG INT NOT NULL,
-                    _FLOAT DECIMAL(24,8) NOT NULL,
-                    _DOUBLE DECIMAL(24,8) NOT NULL,
-                    _DECIMAL DECIMAL(24,8) NOT NULL,
-                    _DATETIME DATE NOT NULL,
-                    _BOOL BOOLEAN NOT NULL,
-                    _SHORTNULL INT ,
-                    _INTNULL INT ,
-                    _LONGNULL INT ,
-                    _FLOATNULL INT ,
-                    _DOUBLENULL INT ,
-                    _DECIMALNULL INT ,
-                    _DATETIMENULL DATE ,
-                    _BOOLNULL BOOLEAN);";
+            var queryVerifyTable = $"SELECT 1 FROM {tableName} WHERE 1 = 0";
+            var queryCreateTable = $@"
+CREATE TABLE {tableName} (
+_STRING VARCHAR(255) ,
+_SHORT INT NOT NULL,
+_INT INT NOT NULL,
+_LONG INT NOT NULL,
+_FLOAT DECIMAL(24,8) NOT NULL,
+_DOUBLE DECIMAL(24,8) NOT NULL,
+_DECIMAL DECIMAL(24,8) NOT NULL,
+_DATETIME DATE NOT NULL,
+_BOOL BOOLEAN NOT NULL,
+_SHORTNULL INT ,
+_INTNULL INT ,
+_LONGNULL INT ,
+_FLOATNULL INT ,
+_DOUBLENULL INT ,
+_DECIMALNULL INT ,
+_DATETIMENULL DATE ,
+_BOOLNULL BOOLEAN);";
+            queryCreateTable = queryCreateTable.Replace("\r","").Replace("\n", "");
             var dbConnectionMock = new Mock<IDbConnection>();
             var dbTransactionMock = new Mock<IDbTransaction>();
             var dbCommandMock = new Mock<IDbCommand>();
             var stepCollectionMock = new Mock<IStepCollection<object>>();
 
+            dbCommandMock.SetupAllProperties();
+
             dbConnectionMock
             .Setup(_=> _.CreateCommand())
             .Returns(dbCommandMock.Object);
 
-            dbCommandMock.SetupAllProperties();
-
-
             dbCommandMock
             .Setup(_ => _.ExecuteScalar())
             .Returns(() => {
-                if (dbCommandMock.Object.CommandText.ToUpper() == $"SELECT 1 FROM {tableName} WHERE 1 = 0")
-                    throw new Exception();
-                else
-                    throw new Exception();
+                throw new Exception();
             });
             
             dbCommandMock
             .Setup(_ => _.ExecuteNonQuery())
             .Returns(() => {
-                if (dbCommandMock.Object.CommandText.ToUpper().Replace(" ", "") == query.Replace(" ", "").Replace("\r", "").Replace("\n",""))
-                    return 0;
-                else
-                    throw new System.Data.SyntaxErrorException();
+                return 0;
             });
 
             stepCollectionMock
@@ -138,6 +133,10 @@ namespace DeOlho.ETL.UnitTests
             var step = DbCreateTableIfNotExistExtension.DbCreateTableIfNotExist(stepCollectionMock.Object, dbConnectionMock.Object, dbTransactionMock.Object, tableName);
 
             var result = await step.Execute();
+
+            dbCommandMock.VerifySet(_ => _.CommandText = queryVerifyTable, Times.Once);
+
+            //dbCommandMock.VerifySet(_ => _.CommandText = queryCreateTable, Times.Once);
 
             result.Should().BeEquivalentTo(list);
         }
