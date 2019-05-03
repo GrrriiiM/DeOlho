@@ -12,8 +12,6 @@ namespace DeOlho.ETL.Transforms
     {
         readonly IStep<string> _stepIn;
 
-        public dynamic Dynamic { get; private set;}
-
         public JsonToDynamicTransform(IStep<string> stepIn)
             : base(stepIn, null)
         {

@@ -37,17 +37,17 @@
             "command": "dotnet",
             "type": "process",
             "args": [
-             "test",
-             "/p:CollectCoverage=true",
-             "/p:Exclude=\"[xunit*]*\"",
-             "/p:CoverletOutputFormat=lcov",
-             "/p:CoverletOutput=./lcov",
-             "${workspaceFolder}/ETL.sln"
+                "test",
+                "/p:CollectCoverage=true",
+                "/p:Exclude=\"[xunit*]*\"",
+                "/p:CoverletOutputFormat=lcov",
+                "/p:CoverletOutput=./lcov",
+                "${workspaceFolder}/ETL.sln"
             ],
             "problemMatcher": "$msCompile",
             "group": {
-             "kind": "test",
-             "isDefault": true
+                "kind": "test",
+                "isDefault": true
             }
         }
     ]

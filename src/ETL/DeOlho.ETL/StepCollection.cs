@@ -20,7 +20,7 @@ namespace DeOlho.ETL
             return new StepCollectionTransform<T, TOut>(this, transform);
         }
 
-        public IStepCollection<TOut> Extract<TOut>(Func<T, Source<TOut>> extract)
+        public IStepCollection<TOut> Extract<TOut>(Func<T, ISource<TOut>> extract)
         {
             return new StepCollectionTransform<T, TOut>(this, async (_) => {
                 return await extract(_).Execute();
@@ -28,9 +28,14 @@ namespace DeOlho.ETL
             
         }
 
-        public async Task<IEnumerable<T>> Load(Func<Destination> destination)
+        public async Task<IEnumerable<T>> Load(Func<IDestination> destination)
         {
             return await destination().Execute(this);
+        }
+
+        public async Task<IEnumerable<T>> Load()
+        {
+            return await this.Load(() => new NothingDestination());
         }
 
         public abstract Task<IEnumerable<T>> Execute();

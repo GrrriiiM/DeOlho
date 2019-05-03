@@ -52,24 +52,15 @@ namespace DeOlho.ETL.Steps
                 {
 
                 }
-                
             }
             
             if (!existTable)
             {
                 var sqlColumns = new List<string>();
 
-                var varcharTypes = new Type[] { typeof(string) };
-                var intTypes = new Type[] { typeof(int), typeof(long), typeof(short) };
-                var boolTypes = new Type[] { typeof(bool) };
-                var dateTypes = new Type[] { typeof(DateTime) };
-                var decimalTypes = new Type[] { typeof(decimal), typeof(double), typeof(float) };
-
                 var propertyTypes = new Dictionary<string, Type>();
-
                 
                 propertyTypes = type.GetProperties().ToDictionary(_ => _.Name, _ => _.PropertyType);
-                
 
                 foreach(var property in propertyTypes)
                 {
@@ -86,24 +77,24 @@ namespace DeOlho.ETL.Steps
 
                     var columnsType = "";
 
-                    if (varcharTypes.Contains(propertyType))
+                    if (Constants.Db.VarcharTypes.Contains(propertyType))
                     {
                         columnsType = "varchar(255)";
                         isNullable = true;
                     }
-                    else if (intTypes.Contains(propertyType))
+                    else if (Constants.Db.IntTypes.Contains(propertyType))
                     {
                         columnsType = "int";
                     }
-                    else if (boolTypes.Contains(propertyType))
+                    else if (Constants.Db.BoolTypes.Contains(propertyType))
                     {
                         columnsType = "boolean";
                     }
-                    else if (dateTypes.Contains(propertyType))
+                    else if (Constants.Db.DateTypes.Contains(propertyType))
                     {
                         columnsType = "date";
                     }
-                    else if (decimalTypes.Contains(propertyType))
+                    else if (Constants.Db.DecimalTypes.Contains(propertyType))
                     {
                         columnsType = "decimal(24,8)";
                     }

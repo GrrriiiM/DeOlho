@@ -1,19 +1,20 @@
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 
 namespace DeOlho.ETL.Destinations
 {
-    public class DbDestination : Destination
+    public class DbDestinationCollection : IDestination
     {
         readonly string _tableName;
 
         readonly IDbConnection _dbConnection;
         readonly IDbTransaction _dbTransaction;
 
-        public DbDestination(IDbConnection dbConnection, IDbTransaction dbTransaction, string tableName)
+        public DbDestinationCollection(IDbConnection dbConnection, IDbTransaction dbTransaction, string tableName)
         {
             this._tableName = tableName;
             this._dbConnection = dbConnection;
@@ -21,22 +22,16 @@ namespace DeOlho.ETL.Destinations
         }
 
 
-        public async override Task<IEnumerable<T>> Execute<T>(StepCollection<T> stepIn)
+        public async Task<IEnumerable<T>> Execute<T>(IStepCollection<T> stepIn)
         {
             var @in = await stepIn.Execute();
-    
-            var varcharTypes = new Type[] { typeof(string) };
-            var intTypes = new Type[] { typeof(int), typeof(long), typeof(short) };
-            var boolTypes = new Type[] { typeof(bool) };
-            var dateTypes = new Type[] { typeof(DateTime) };
-            var decimalTypes = new Type[] { typeof(decimal), typeof(double), typeof(float) };
-            
-            var propertyInfos = typeof(T).GetProperties();
-            
+
             var sqlInserts = new List<string>();
 
             foreach(var item in @in)
             {
+                var propertyInfos = item.GetType().GetProperties();
+
                 var sqlColumnInserts = new List<string>();
                 foreach(var propertyInfo in propertyInfos)
                 {
@@ -56,25 +51,25 @@ namespace DeOlho.ETL.Destinations
                     }
                     else
                     {
-                        if (varcharTypes.Contains(propertyType))
+                        if (Constants.Db.VarcharTypes.Contains(propertyType))
                         {
                             sqlColumnInserts.Add($"'{value.ToString().Replace('\'','`')}'");
                         }
-                        else if (intTypes.Contains(propertyType))
+                        else if (Constants.Db.IntTypes.Contains(propertyType))
                         {
                             sqlColumnInserts.Add(value.ToString());
                         }
-                        else if (boolTypes.Contains(propertyType))
+                        else if (Constants.Db.BoolTypes.Contains(propertyType))
                         {
                             sqlColumnInserts.Add(((bool)value ? "TRUE" : "FALSE"));
                         }
-                        else if (dateTypes.Contains(propertyType))
+                        else if (Constants.Db.DateTypes.Contains(propertyType))
                         {
-                            sqlColumnInserts.Add($"'{((DateTime)value).ToString("yyyy-MM-dd hh:mm:ss")}'");
+                            sqlColumnInserts.Add($"'{((DateTime)value).ToString("yyyy-MM-dd HH:mm:ss")}'");
                         }
-                        else if (decimalTypes.Contains(propertyType))
+                        else if (Constants.Db.DecimalTypes.Contains(propertyType))
                         {
-                            sqlColumnInserts.Add(value.ToString());
+                            sqlColumnInserts.Add(String.Format(CultureInfo.InvariantCulture, "{0}", value));
                         }
                     }
                 }
@@ -85,6 +80,8 @@ namespace DeOlho.ETL.Destinations
 
             if (sqlInserts.Any())
             {
+                var propertyInfos = @in.FirstOrDefault().GetType().GetProperties();
+
                 var sql = $"INSERT INTO {this._tableName} ({string.Join(",", propertyInfos.Select(_ => _.Name))}) VALUES {string.Join(",", sqlInserts)}";
                 
                 using (var command = this._dbConnection.CreateCommand())
@@ -97,9 +94,10 @@ namespace DeOlho.ETL.Destinations
 
             return @in;
         }
-        public async override Task<T> Execute<T>(Step<T> stepIn)
+        public async Task<T> Execute<T>(IStep<T> stepIn)
         {
-            return await stepIn.Execute();
+            throw new NotImplementedException();
         }
+
     }
 }

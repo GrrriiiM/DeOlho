@@ -19,6 +19,52 @@ namespace DeOlho.ETL.UnitTests
 {
     public class ETLTest
     {
+        private dynamic objectTest1;
+
+        private dynamic objectTest2;
+
+        public ETLTest()
+        {
+            objectTest1 = new { 
+                _string = "string",
+                _short = new Int16(),
+                _int = 1,
+                _long = 2L,
+                _float = 3.4F,
+                _double = 4.5D,
+                _decimal = 5.6M,
+                _DateTime = new DateTime(1999, 12, 31, 23, 59, 01),
+                _bool = true,
+                _shortNull = new Nullable<Int16>(),
+                _intNull = new Nullable<Int32>(),
+                _longNull = new Nullable<Int64>(),
+                _floatNull = new Nullable<Single>(),
+                _doubleNull = new Nullable<double>(),
+                _decimalNull = new Nullable<decimal>(),
+                _DateTimeNull = new Nullable<DateTime>(),
+                _boolNull = new Nullable<Boolean>()
+            };
+            objectTest2 = new { 
+                _string = "string1",
+                _short = 9,
+                _int = 8,
+                _long = 7L,
+                _float = 6.51F,
+                _double = 5.41D,
+                _decimal = 4.31M,
+                _DateTime = new DateTime(2099, 01, 15, 5, 5, 5),
+                _bool = false,
+                _shortNull = new Nullable<Int16>(1000),
+                _intNull = new Nullable<Int32>(2000),
+                _longNull = new Nullable<Int64>(3000),
+                _floatNull = new Nullable<Single>(4000.44F),
+                _doubleNull = new Nullable<double>(5000.55D),
+                _decimalNull = new Nullable<decimal>(6000.66M),
+                _DateTimeNull = new Nullable<DateTime>(new DateTime(1901,10,20,1,2,3)),
+                _boolNull = new Nullable<Boolean>(true)
+            };
+        }
+
         [Fact]
         public async void Sources_HttpJsonSource()
         {
@@ -60,49 +106,31 @@ namespace DeOlho.ETL.UnitTests
         [Fact]
         public async void Steps_Collection_DbCreateTableIfNotExistExtension_NotExists()
         {
-            var tableName = "testeTable";
+            var tableName = "TESTETABLE";
             var list = new[] { 
-                new { 
-                    _string = "string",
-                    _short = new Int16(),
-                    _int = 0,
-                    _long = 0L,
-                    _float = 0F,
-                    _double = 0D,
-                    _decimal = 0M,
-                    _DateTime = new DateTime(),
-                    _bool = false,
-                    _shortNull = new Nullable<Int16>(),
-                    _intNull = new Nullable<Int32>(),
-                    _longNull = new Nullable<Int32>(),
-                    _floatNull = new Nullable<Int32>(),
-                    _doubleNull = new Nullable<Int32>(),
-                    _decimalNull = new Nullable<Int32>(),
-                    _DateTimeNull = new Nullable<DateTime>(),
-                    _boolNull = new Nullable<Boolean>()
-                }
+                objectTest1
             };
             var queryVerifyTable = $"SELECT 1 FROM {tableName} WHERE 1 = 0";
-            var queryCreateTable = $@"
-CREATE TABLE {tableName} (
-_STRING VARCHAR(255) ,
-_SHORT INT NOT NULL,
-_INT INT NOT NULL,
-_LONG INT NOT NULL,
-_FLOAT DECIMAL(24,8) NOT NULL,
-_DOUBLE DECIMAL(24,8) NOT NULL,
-_DECIMAL DECIMAL(24,8) NOT NULL,
-_DATETIME DATE NOT NULL,
-_BOOL BOOLEAN NOT NULL,
-_SHORTNULL INT ,
-_INTNULL INT ,
-_LONGNULL INT ,
-_FLOATNULL INT ,
-_DOUBLENULL INT ,
-_DECIMALNULL INT ,
-_DATETIMENULL DATE ,
-_BOOLNULL BOOLEAN);";
-            queryCreateTable = queryCreateTable.Replace("\r","").Replace("\n", "");
+            var queryCreateTable = new string[] {
+                $"CREATE TABLE {tableName}",
+                "_STRING VARCHAR(255)",
+                "_SHORT INT NOT NULL",
+                "_INT INT NOT NULL",
+                "_LONG INT NOT NULL",
+                "_FLOAT DECIMAL(24,8) NOT NULL",
+                "_DOUBLE DECIMAL(24,8) NOT NULL",
+                "_DECIMAL DECIMAL(24,8) NOT NULL",
+                "_DATETIME DATE NOT NULL",
+                "_BOOL BOOLEAN NOT NULL",
+                "_SHORTNULL INT",
+                "_INTNULL INT",
+                "_LONGNULL INT",
+                "_FLOATNULL DECIMAL(24,8)",
+                "_DOUBLENULL DECIMAL(24,8)",
+                "_DECIMALNULL DECIMAL(24,8)",
+                "_DATETIMENULL DATE",
+                "_BOOLNULL BOOLEAN"
+            };
             var dbConnectionMock = new Mock<IDbConnection>();
             var dbTransactionMock = new Mock<IDbTransaction>();
             var dbCommandMock = new Mock<IDbCommand>();
@@ -136,11 +164,101 @@ _BOOLNULL BOOLEAN);";
 
             dbCommandMock.VerifySet(_ => _.CommandText = queryVerifyTable, Times.Once);
 
-            //dbCommandMock.VerifySet(_ => _.CommandText = queryCreateTable, Times.Once);
+            dbCommandMock.VerifySet(_ => _.CommandText = It.Is<string>(_1 => queryCreateTable.All(_2 => _1.ToUpper().Contains(_2))), Times.Once);
 
             result.Should().BeEquivalentTo(list);
         }
     
+        [Fact]
+        public async void Steps_Collection_DbCreateTableIfNotExistExtension_Exists()
+        {
+            var tableName = "TESTETABLE";
+            var list = new[] { 
+                objectTest1
+            };
+            var queryVerifyTable = $"SELECT 1 FROM {tableName} WHERE 1 = 0";
+
+            var dbConnectionMock = new Mock<IDbConnection>();
+            var dbTransactionMock = new Mock<IDbTransaction>();
+            var dbCommandMock = new Mock<IDbCommand>();
+            var stepCollectionMock = new Mock<IStepCollection<object>>();
+
+            dbCommandMock.SetupAllProperties();
+
+            dbConnectionMock
+            .Setup(_=> _.CreateCommand())
+            .Returns(dbCommandMock.Object);
+
+            dbCommandMock
+            .Setup(_ => _.ExecuteScalar())
+            .Returns(() => {
+                return 0;
+            });
+            
+            dbCommandMock
+            .Setup(_ => _.ExecuteNonQuery())
+            .Returns(() => {
+                return 0;
+            });
+
+            stepCollectionMock
+            .Setup(_ => _.Execute())
+            .ReturnsAsync(list); 
+
+            var step = DbCreateTableIfNotExistExtension.DbCreateTableIfNotExist(stepCollectionMock.Object, dbConnectionMock.Object, dbTransactionMock.Object, tableName);
+
+            var result = await step.Execute();
+
+            dbCommandMock.VerifySet(_ => _.CommandText = It.Is<string>(_1 => _1.ToUpper() == queryVerifyTable.ToUpper()), Times.Once);
+
+            dbCommandMock.VerifySet(_ => _.CommandText = It.Is<string>(_1 => _1.ToUpper() != queryVerifyTable.ToUpper()), Times.Never);
+
+            result.Should().BeEquivalentTo(list);
+        }
+
+        [Fact]
+        public async void Steps_Collection_DbCreateTableIfNotExistExtension_Empty()
+        {
+            var tableName = "TESTETABLE";
+            var list = new object[0];
+            
+            
+            var dbConnectionMock = new Mock<IDbConnection>();
+            var dbTransactionMock = new Mock<IDbTransaction>();
+            var dbCommandMock = new Mock<IDbCommand>();
+            var stepCollectionMock = new Mock<IStepCollection<object>>();
+
+            dbCommandMock.SetupAllProperties();
+
+            dbConnectionMock
+            .Setup(_=> _.CreateCommand())
+            .Returns(dbCommandMock.Object);
+
+            dbCommandMock
+            .Setup(_ => _.ExecuteScalar())
+            .Returns(() => {
+                return 0;
+            });
+            
+            dbCommandMock
+            .Setup(_ => _.ExecuteNonQuery())
+            .Returns(() => {
+                return 0;
+            });
+
+            stepCollectionMock
+            .Setup(_ => _.Execute())
+            .ReturnsAsync(list); 
+
+            var step = DbCreateTableIfNotExistExtension.DbCreateTableIfNotExist(stepCollectionMock.Object, dbConnectionMock.Object, dbTransactionMock.Object, tableName);
+
+            var result = await step.Execute();
+
+            dbCommandMock.VerifySet(_ => _.CommandText = It.IsAny<string>(), Times.Never);
+
+            result.Should().BeEquivalentTo(list);
+        }
+
         [Fact]
         public async void Transform_JsonToDynamicTransform()
         {
@@ -160,14 +278,14 @@ _BOOLNULL BOOLEAN);";
                 }");
             
             var transform = stepMock.Object.TransformJsonToDynamic()
-                .Transform(async _ => await Task.Run(() => 
+                .Transform(_ => 
                     new {
                         Number = (decimal)_.number,
                         Text = (string)_.text,
                         Date = (DateTime)_.date,
                         Bit = (bool)_.bit,
                         List = new List<dynamic>(_.list).Select(_1 => (decimal)_1.listNumber)
-                    }));
+                    });
 
             var result = await transform.Execute();
 
@@ -184,5 +302,220 @@ _BOOLNULL BOOLEAN);";
             result.List.Should().Contain(2.3M);
 
         }
+    
+        [Fact]
+        public async void Transform_Collection_JsonToDynamicTransform()
+        {
+            var stepMock = new Mock<IStepCollection<string>>();
+            stepMock.Setup(_ => _.Execute())
+            .ReturnsAsync(new string [] {@"
+                { 
+                    'number': 1.2, 
+                    'text': 'text', 
+                    'date': '1999-12-31T23:59:01', 
+                    'bit': true, 
+                    'list': [
+                        {
+                            listNumber: 2.3
+                        }
+                    ]
+                }",
+                @"{ 
+                    'number': 9876.5432, 
+                    'text': 'text1', 
+                    'date': '2010-10-20T10:11:12', 
+                    'bit': false, 
+                    'list': [
+                        {
+                            listNumber: 1234.5678
+                        }
+                    ]
+                }"});
+            
+            var transform = stepMock.Object.TransformJsonToDynamic()
+                .Transform(_ =>  
+                    new {
+                        Number = (decimal)_.number,
+                        Text = (string)_.text,
+                        Date = (DateTime)_.date,
+                        Bit = (bool)_.bit,
+                        List = new List<dynamic>(_.list).Select(_1 => (decimal)_1.listNumber)
+                    });
+
+            var result = (await transform.Execute()).ToArray();
+
+
+            result.Should().HaveCount(2);
+
+            result[0].Number.Should().Be(1.2M);
+            result[0].Text.Should().Be("text");
+            result[0].Date.Year.Should().Be(1999);
+            result[0].Date.Month.Should().Be(12);
+            result[0].Date.Day.Should().Be(31);
+            result[0].Date.Hour.Should().Be(23);
+            result[0].Date.Minute.Should().Be(59);
+            result[0].Date.Second.Should().Be(1);
+            result[0].Bit.Should().Be(true);
+            result[0].List.Should().HaveCount(1);
+            result[0].List.Should().Contain(2.3M);
+
+            result[1].Number.Should().Be(9876.5432M);
+            result[1].Text.Should().Be("text1");
+            result[1].Date.Year.Should().Be(2010);
+            result[1].Date.Month.Should().Be(10);
+            result[1].Date.Day.Should().Be(20);
+            result[1].Date.Hour.Should().Be(10);
+            result[1].Date.Minute.Should().Be(11);
+            result[1].Date.Second.Should().Be(12);
+            result[1].Bit.Should().Be(false);
+            result[1].List.Should().HaveCount(1);
+            result[1].List.Should().Contain(1234.5678M);
+
+
+        }
+    
+
+        [Fact]
+        public async void DbDestination_Collection_DbDestination()
+        {
+            var tableName = "TESTETABLE";
+            var list = new[] { 
+                objectTest1,
+                objectTest2
+            };
+
+            var stepMock = new Mock<IStepCollection<object>>();
+            stepMock.Setup(_ => _.Execute())
+            .ReturnsAsync(list.ToList());
+
+            var queryInsertTable = new string[] {
+                $"INSERT INTO {tableName}",
+                "_STRING", "'STRING'", "'STRING1'",
+                "_SHORT", "0", "9",
+                "_INT", "1", "8",
+                "_LONG", "2", "7",
+                "_FLOAT", "3.4", "6.51",
+                "_DOUBLE", "4.5", "5.41",
+                "_DECIMAL", "5.6", "4.31",
+                "_DATETIME", "'1999-12-31 23:59:01'", "'2099-01-15 05:05:05'",
+                "_BOOL","TRUE", "FALSE",
+                "_SHORTNULL", "NULL", "1000",
+                "_INTNULL", "2000",
+                "_LONGNULL", "3000",
+                "_FLOATNULL", "4000.44",
+                "_DOUBLENULL", "5000.55",
+                "_DECIMALNULL", "6000.66",
+                "_DATETIMENULL", "'1901-10-20 01:02:03'",
+                "_BOOLNULL"
+            };
+            var dbConnectionMock = new Mock<IDbConnection>();
+            var dbTransactionMock = new Mock<IDbTransaction>();
+            var dbCommandMock = new Mock<IDbCommand>();
+            var stepCollectionMock = new Mock<IStepCollection<object>>();
+
+            dbCommandMock.SetupAllProperties();
+
+            dbConnectionMock
+            .Setup(_=> _.CreateCommand())
+            .Returns(dbCommandMock.Object);
+
+            dbCommandMock
+            .Setup(_ => _.ExecuteScalar())
+            .Returns(() => {
+                throw new Exception();
+            });
+            
+            dbCommandMock
+            .Setup(_ => _.ExecuteNonQuery())
+            .Returns(() => {
+                return 0;
+            });
+
+            stepCollectionMock
+            .Setup(_ => _.Execute())
+            .ReturnsAsync(list); 
+
+            var result = await new Destinations.DbDestinationCollection(dbConnectionMock.Object, dbTransactionMock.Object, tableName).Execute(stepMock.Object);
+
+            dbCommandMock.VerifySet(_ => _.CommandText = It.Is<string>(_1 => queryInsertTable.All(_2 => _1.ToUpper().Contains(_2.ToUpper()))), Times.Once);
+
+            result.Should().BeEquivalentTo(list);
+        }
+
+        [Fact]
+        public async void Step_Extract_Load()
+        {
+            var stepMock = new Mock<Step<int>>();
+            stepMock.Setup(_ => _.Execute())
+            .ReturnsAsync(1);
+
+            var sourceMock = new Mock<ISource<string>>();
+            sourceMock.Setup(_ => _.Execute())
+            .ReturnsAsync("A");
+            
+            var result = await stepMock.Object
+            .Extract(_ => sourceMock.Object)
+            .Load();
+
+            result.Should().Be("A");
+
+        }
+
+
+
+        [Fact]
+        public async void Step_Collection_Extract_Load()
+        {
+            var stepCollectionMock = new Mock<StepCollection<int>>();
+            stepCollectionMock.Setup(_ => _.Execute())
+            .ReturnsAsync(new int[] {
+                1,2,3,4,5
+            });
+
+            var sourceCollectionMock = new Mock<ISource<string>>();
+            sourceCollectionMock.Setup(_ => _.Execute())
+            .ReturnsAsync("A");
+            
+            var result = await stepCollectionMock.Object
+            .Extract(_ => sourceCollectionMock.Object)
+            .Load();
+
+            result.Should().HaveCount(5);
+            result.Should().OnlyContain(_ => _ == "A");
+
+        }
+
+        [Fact]
+        public async void Process_Extract_Transform_TransformAsync_TransformList_Collection_Transform_TransformAsync_Load()
+        {
+            var sourceMock = new Mock<ISource<dynamic>>();
+            sourceMock.Setup(_ => _.Execute())
+            .ReturnsAsync(new {
+                Value = 1,
+                List = new int[] {
+                    1,2,3,4,5
+                }
+            });
+            
+            var result = await new Process()
+            .Extract(() => sourceMock.Object)
+            .Extract(_ => sourceMock.Object)
+            .Transform(_ => _)
+            .TransformAsync(async _ => await Task.Run(() => _))
+            .TransformToList(_ => new List<int>(_.List))
+            .Transform(_ => (decimal)_)
+            .TransformAsync(async _ => await Task.Run(() => (_ * 2) + (_/10)))
+            .Load();
+
+            result.Should().HaveCount(5);
+            result.Should().Contain(2.1M);
+            result.Should().Contain(4.2M);
+            result.Should().Contain(6.3M);
+            result.Should().Contain(8.4M);
+            result.Should().Contain(10.5M);
+
+        }
+
+    
     }
 }

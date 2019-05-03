@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace DeOlho.ETL.Sources
 {
-    public class HttpJsonSource : Source<string>
+    public class HttpJsonSource : ISource<string>
     {
         readonly string _uri;
         readonly HttpClient _httpClient;
@@ -15,7 +15,7 @@ namespace DeOlho.ETL.Sources
             this._httpClient = httpClient;
         }
 
-        public async override Task<string> Execute()
+        public async Task<string> Execute()
         {
             this._httpClient.DefaultRequestHeaders.Accept.Clear();
             this._httpClient.DefaultRequestHeaders.Accept.Add(

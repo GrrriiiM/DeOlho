@@ -48,7 +48,7 @@ namespace DeOlho.ETL.dadosabertos_camara_leg_br
                             UrlWebSite = (string)_.dados.urlWebSite
                         })
                     .DbCreateTableIfNotExist(destinationDbConnection, destinationDbTransaction, this._configuration.PartidoTableName)
-                    .Load(() => new DbDestination(destinationDbConnection, destinationDbTransaction, this._configuration.PartidoTableName));
+                    .Load(() => new DbDestinationCollection(destinationDbConnection, destinationDbTransaction, this._configuration.PartidoTableName));
         }
 
         public async Task ExecuteLegislatura(IDbConnection destinationDbConnection, IDbTransaction destinationDbTransaction)
@@ -64,7 +64,7 @@ namespace DeOlho.ETL.dadosabertos_camara_leg_br
                             DataFim = (DateTime)_.dataInicio
                         })
                     .DbCreateTableIfNotExist(destinationDbConnection, destinationDbTransaction, this._configuration.LegislaturaTableName)
-                    .Load(() => new DbDestination(destinationDbConnection, destinationDbTransaction, this._configuration.LegislaturaTableName));
+                    .Load(() => new DbDestinationCollection(destinationDbConnection, destinationDbTransaction, this._configuration.LegislaturaTableName));
         }
 
 
@@ -109,7 +109,7 @@ namespace DeOlho.ETL.dadosabertos_camara_leg_br
                             
                         })
                     .DbCreateTableIfNotExist(destinationDbConnection, destinationDbTransaction, this._configuration.DeputadoTableName)
-                    .Load(() => new DbDestination(destinationDbConnection, destinationDbTransaction, this._configuration.DeputadoTableName));
+                    .Load(() => new DbDestinationCollection(destinationDbConnection, destinationDbTransaction, this._configuration.DeputadoTableName));
         }
 
     }
