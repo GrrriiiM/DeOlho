@@ -9,8 +9,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DeOlho.ETL.dadosabertos_cam
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DeOlho.ETL.UnitTests", "DeOlho.ETL.UnitTests\DeOlho.ETL.UnitTests.csproj", "{A393BAA2-3908-4327-9E41-CC086640E94C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DeOlho.ETL.Console", "DeOlho.ETL.Console\DeOlho.ETL.Console.csproj", "{91009110-7A21-45C5-8A65-7A8E6DF1F912}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU

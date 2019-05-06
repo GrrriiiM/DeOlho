@@ -20,7 +20,7 @@ namespace DeOlho.ETL.dadosabertos_camara_leg_br
             HttpClient httpClient,
             IIntegrationServiceConfiguration configuration)
         {
-            this._httpClient = httpClient;
+            this._httpClient =  httpClient;
             this._configuration = configuration;
         }
 
@@ -29,88 +29,132 @@ namespace DeOlho.ETL.dadosabertos_camara_leg_br
                 var load = await new Process()
                     .Extract(() => new HttpJsonSource(this._httpClient, this._configuration.PartidoURL))
                     .TransformJsonToDynamic()
-                    .TransformToList(_ => new List<dynamic>(_.dados))
-                    .Extract(_ => new HttpJsonSource(this._httpClient, string.Format(this._configuration.PartidoDetailWithIdArgURL, _.id)))
+                    .TransformToList(_ => new List<dynamic>(_.Value.dados))
+                    .Extract(_ => new HttpJsonSource(this._httpClient, string.Format(this._configuration.PartidoDetailWithIdArgURL, _.Value.id)))
                     .TransformJsonToDynamic()
                     .Transform(_ => 
                         new {
-                            Id = (long)_.dados.id,
-                            Sigla = (string)_.dados.sigla,
-                            Nome = (string)_.dados.nome,
-                            Data = _.dados.status.data != null ? new Nullable<DateTime>(DateTime.Parse((string)_.dados.status.data)) : null,
-                            LegislaturaId = (long)_.dados.status.idLegislatura,
-                            Situacao = (string)_.dados.status.situacao,
-                            TotalPosse = (int)_.dados.status.totalPosse,
-                            TotalMembros = (int)_.dados.status.totalMembros,
-                            LiderId = (string)_.dados.status.lider.uri,
-                            UrlFacebook = (string)_.dados.urlFacebook,
-                            UrlLogo = (string)_.dados.urlLogo,
-                            UrlWebSite = (string)_.dados.urlWebSite
+                            Id = (long)_.Value.dados.id,
+                            Sigla = (string)_.Value.dados.sigla,
+                            Nome = (string)_.Value.dados.nome,
+                            Data = _.Value.dados.status.data != null ? new Nullable<DateTime>(DateTime.Parse((string)_.Value.dados.status.data)) : null,
+                            LegislaturaId = (long)_.Value.dados.status.idLegislatura,
+                            Situacao = (string)_.Value.dados.status.situacao,
+                            TotalPosse = (int)_.Value.dados.status.totalPosse,
+                            TotalMembros = (int)_.Value.dados.status.totalMembros,
+                            LiderId = (string)_.Value.dados.status.lider.uri,
+                            UrlFacebook = (string)_.Value.dados.urlFacebook,
+                            UrlLogo = (string)_.Value.dados.urlLogo,
+                            UrlWebSite = (string)_.Value.dados.urlWebSite
                         })
                     .DbCreateTableIfNotExist(destinationDbConnection, destinationDbTransaction, this._configuration.PartidoTableName)
+                    .DbDelete(destinationDbConnection, destinationDbTransaction, this._configuration.PartidoTableName)
                     .Load(() => new DbDestinationCollection(destinationDbConnection, destinationDbTransaction, this._configuration.PartidoTableName));
         }
 
         public async Task ExecuteLegislatura(IDbConnection destinationDbConnection, IDbTransaction destinationDbTransaction)
         {
-                var load = await new Process()
-                    .Extract(() => new HttpJsonSource(this._httpClient, this._configuration.LegislaturaURL))
-                    .TransformJsonToDynamic()
-                    .TransformToList(_ => new List<dynamic>(_.dados))
-                    .Transform(_ => 
-                        new {
-                            Id = (long)_.id,
-                            DataInicio = (DateTime)_.dataInicio,
-                            DataFim = (DateTime)_.dataInicio
-                        })
-                    .DbCreateTableIfNotExist(destinationDbConnection, destinationDbTransaction, this._configuration.LegislaturaTableName)
-                    .Load(() => new DbDestinationCollection(destinationDbConnection, destinationDbTransaction, this._configuration.LegislaturaTableName));
+            var load = await new Process()
+                .Extract(() => new HttpJsonSource(this._httpClient, this._configuration.LegislaturaURL))
+                .TransformJsonToDynamic()
+                .TransformToList(_ => new List<dynamic>(_.Value.dados))
+                .Transform(_ => 
+                    new {
+                        Id = (long)_.Value.id,
+                        DataInicio = (DateTime)_.Value.dataInicio,
+                        DataFim = (DateTime)_.Value.dataFim
+                    })
+                .DbCreateTableIfNotExist(destinationDbConnection, destinationDbTransaction, this._configuration.LegislaturaTableName)
+                .DbDelete(destinationDbConnection, destinationDbTransaction, this._configuration.LegislaturaTableName)
+                .Load(() => new DbDestinationCollection(destinationDbConnection, destinationDbTransaction, this._configuration.LegislaturaTableName));
         }
 
 
         public async Task ExecuteDeputado(IDbConnection destinationDbConnection, IDbTransaction destinationDbTransaction)
         {
-                var load = await new Process()
-                    .Extract(() => new HttpJsonSource(this._httpClient, this._configuration.DeputadoURL))
-                    .TransformJsonToDynamic()
-                    .TransformToList(_ => new List<dynamic>(_.dados))
-                    .Extract(_ => new HttpJsonSource(this._httpClient, string.Format(this._configuration.DeputadoDetailWithIdArgURL, _.id)))
-                    .TransformJsonToDynamic()
-                    .Transform(_ => 
-                        new {
-                            Id = (long)_.dados.id,
-                            CPF = (string)_.dados.cpf,
-                            DataFalecimento = (DateTime?)_.dados.dataFalecimento,
-                            DataNascimento = (DateTime)_.dados.dataNascimento,
-                            Escolaridade = (string)_.dados.escolaridade,
-                            MunicipioNascimento = (string)_.dados.municipioNascimento,
-                            NomeCivil = (string)_.dados.nomeCivil,
-                            RedeSocial = string.Join(",", ((IList)_.dados.redeSocial).OfType<string>()),
-                            Sexo = (string)_.dados.sexo,
-                            UFNascimento = (string)_.dados.ufNascimento,
-                            URLWebsite = (string)_.dados.urlWebsite,
-                            LegislaturaId  = (long)_.dados.ultimoStatus.idLegislatura,
-                            Nome = (string)_.dados.ultimoStatus.nome,
-                            NomeEleitoral  = (string)_.dados.ultimoStatus.nomeEleitoral,
-                            SiglaPartido  = (string)_.dados.ultimoStatus.siglaPartido,
-                            SiglaUf = (string)_.dados.ultimoStatus.siglaUf,
-                            Situacao = (string)_.dados.ultimoStatus.situacao,
-                            PartidoId = Convert.ToInt64(((string)_.dados.ultimoStatus.uriPartido).Split('/').LastOrDefault()),
-                            URLFoto = (string)_.dados.ultimoStatus.urlFoto,
-                            CondicaoEleitoral = (string)_.dados.ultimoStatus.condicaoEleitoral,
-                            Data = (DateTime?)_.dados.ultimoStatus.data,
-                            DescricaoStatus = (string)_.dados.ultimoStatus.descricaoStatus,
-                            GabineteAndar = (string)_.dados.ultimoStatus.gabinete.andar,
-                            GabineteEmail = (string)_.dados.ultimoStatus.gabinete.email,
-                            GabineteNome = (string)_.dados.ultimoStatus.gabinete.nome,
-                            GabinetePredio = (string)_.dados.ultimoStatus.gabinete.predio,
-                            GabineteSala = (string)_.dados.ultimoStatus.gabinete.sala,
-                            GabineteTelefone = (string)_.dados.ultimoStatus.gabinete.telefone
-                            
-                        })
-                    .DbCreateTableIfNotExist(destinationDbConnection, destinationDbTransaction, this._configuration.DeputadoTableName)
-                    .Load(() => new DbDestinationCollection(destinationDbConnection, destinationDbTransaction, this._configuration.DeputadoTableName));
+            var load = await new Process()
+                .Extract(() => new HttpJsonSource(this._httpClient, this._configuration.DeputadoURL))
+                .TransformJsonToDynamic()
+                .TransformToList(_ => new List<dynamic>(_.Value.dados))
+                .Extract(_ => new HttpJsonSource(this._httpClient, string.Format(this._configuration.DeputadoDetailWithIdArgURL, _.Value.id)))
+                .TransformJsonToDynamic()
+                .Transform(_ => 
+                    new {
+                        Id = (long)_.Value.dados.id,
+                        CPF = (string)_.Value.dados.cpf,
+                        DataFalecimento = (DateTime?)_.Value.dados.dataFalecimento,
+                        DataNascimento = (DateTime)_.Value.dados.dataNascimento,
+                        Escolaridade = (string)_.Value.dados.escolaridade,
+                        MunicipioNascimento = (string)_.Value.dados.municipioNascimento,
+                        NomeCivil = (string)_.Value.dados.nomeCivil,
+                        RedeSocial = string.Join(",", ((IList)_.Value.dados.redeSocial).OfType<string>()),
+                        Sexo = (string)_.Value.dados.sexo,
+                        UFNascimento = (string)_.Value.dados.ufNascimento,
+                        URLWebsite = (string)_.Value.dados.urlWebsite,
+                        LegislaturaId  = (long)_.Value.dados.ultimoStatus.idLegislatura,
+                        Nome = (string)_.Value.dados.ultimoStatus.nome,
+                        NomeEleitoral  = (string)_.Value.dados.ultimoStatus.nomeEleitoral,
+                        SiglaPartido  = (string)_.Value.dados.ultimoStatus.siglaPartido,
+                        SiglaUf = (string)_.Value.dados.ultimoStatus.siglaUf,
+                        Situacao = (string)_.Value.dados.ultimoStatus.situacao,
+                        PartidoId = Convert.ToInt64(((string)_.Value.dados.ultimoStatus.uriPartido).Split('/').LastOrDefault()),
+                        URLFoto = (string)_.Value.dados.ultimoStatus.urlFoto,
+                        CondicaoEleitoral = (string)_.Value.dados.ultimoStatus.condicaoEleitoral,
+                        Data = (DateTime?)_.Value.dados.ultimoStatus.data,
+                        DescricaoStatus = (string)_.Value.dados.ultimoStatus.descricaoStatus,
+                        GabineteAndar = (string)_.Value.dados.ultimoStatus.gabinete.andar,
+                        GabineteEmail = (string)_.Value.dados.ultimoStatus.gabinete.email,
+                        GabineteNome = (string)_.Value.dados.ultimoStatus.gabinete.nome,
+                        GabinetePredio = (string)_.Value.dados.ultimoStatus.gabinete.predio,
+                        GabineteSala = (string)_.Value.dados.ultimoStatus.gabinete.sala,
+                        GabineteTelefone = (string)_.Value.dados.ultimoStatus.gabinete.telefone
+                        
+                    })
+                .DbCreateTableIfNotExist(destinationDbConnection, destinationDbTransaction, this._configuration.DeputadoTableName)
+                .DbDelete(destinationDbConnection, destinationDbTransaction, this._configuration.DeputadoTableName)
+                .Load(() => new DbDestinationCollection(destinationDbConnection, destinationDbTransaction, this._configuration.DeputadoTableName));
         }
+
+
+        public async Task ExecuteDespesa(IDbConnection destinationDbConnection, IDbTransaction destinationDbTransaction)
+        {
+            await ExecuteDespesa(destinationDbConnection, destinationDbTransaction, DateTime.Now.Year, DateTime.Now.Month);
+        }
+
+        public async Task ExecuteDespesa(IDbConnection destinationDbConnection, IDbTransaction destinationDbTransaction, int year, int month)
+        {
+            var load = await new Process()
+                .Extract(() => new HttpJsonSource(this._httpClient, this._configuration.DeputadoURL))
+                .TransformJsonToDynamic()
+                .TransformToList(_ => new List<dynamic>(_.Value.dados))
+                .Extract(_ => new HttpJsonSource(this._httpClient, string.Format(this._configuration.DespesaDetailWithIdMonthYeahArgURL, _.Value.id, year, month)))
+                .TransformJsonToDynamic()
+                .TransformToList(_ => new List<dynamic>(_.Value.dados))
+                .Transform(_ => 
+                    new {
+                        DeputadoId = (long)((dynamic)_.Parent.Parent.Parent.Value).id,
+                        Ano = (int)_.Value.ano,
+                        CnpjCpfFornecedor = (string)_.Value.cnpjCpfFornecedor,
+                        CodDocumento = (long)_.Value.codDocumento,
+                        CodLote = (long)_.Value.codLote,
+                        CodTipoDocumento = (int?)_.Value.codTipoDocumento,
+                        DataDocumento = (DateTime?)_.Value.dataDocumento,
+                        Mes = (int)_.Value.mes,
+                        NomeFornecedor = (string)_.Value.nomeFornecedor,
+                        NumDocumento = (string)_.Value.numDocumento,
+                        NumRessarcimento = (string)_.Value.numRessarcimento,
+                        Parcela = (int)_.Value.parcela,
+                        TipoDespesa = (string)_.Value.tipoDespesa,
+                        TipoDocumento = (string)_.Value.tipoDocumento,
+                        URLDocumento = (string)_.Value.urlDocumento,
+                        ValorDocumento = (decimal)_.Value.valorDocumento,
+                        ValorGlosa = (decimal)_.Value.valorGlosa,
+                        ValorLiquido = (decimal)_.Value.valorLiquido
+                    })
+                .DbCreateTableIfNotExist(destinationDbConnection, destinationDbTransaction, this._configuration.DespesaTableName)
+                .DbDelete(destinationDbConnection, destinationDbTransaction, this._configuration.DespesaTableName, $"ANO = {year} AND MES = {month}")
+                .Load(() => new DbDestinationCollection(destinationDbConnection, destinationDbTransaction, this._configuration.DespesaTableName));
+        } 
 
     }
 }

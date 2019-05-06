@@ -5,7 +5,7 @@ namespace DeOlho.ETL
 {
     public interface IDestination
     {
-        Task<IEnumerable<T>> Execute<T>(IStepCollection<T> stepIn);
-        Task<T> Execute<T>(IStep<T> stepIn);
+        Task<IEnumerable<StepValue<T>>> Execute<T>(IStepCollection<T> stepIn);
+        Task<StepValue<T>> Execute<T>(IStep<T> stepIn);
     }
 }

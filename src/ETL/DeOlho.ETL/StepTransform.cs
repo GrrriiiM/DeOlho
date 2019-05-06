@@ -9,19 +9,19 @@ namespace DeOlho.ETL
     public class StepTransform<TIn, TOut> : Step<TOut>
     {
         readonly IStep<TIn> _stepIn;
-        readonly Func<TIn, Task<TOut>> _transform;
+        readonly Func<StepValue<TIn>, Task<TOut>> _transform;
 
-        public StepTransform(IStep<TIn> stepIn, Func<TIn, Task<TOut>> transform)
+        public StepTransform(IStep<TIn> stepIn, Func<StepValue<TIn>, Task<TOut>> transform)
         {
             this._stepIn = stepIn;
             this._transform = transform;
         }
 
-        public async override Task<TOut> Execute()
+        public async override Task<StepValue<TOut>> Execute()
         {
             var @in = await this._stepIn.Execute();
             var @out = await this._transform(@in);
-            return @out;
+            return  new StepValue<TOut>(@out, @in);
         }
     }
 }

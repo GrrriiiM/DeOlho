@@ -15,10 +15,10 @@ namespace DeOlho.ETL
             this._source = source;
         }
 
-        public async override Task<TOut> Execute()
+        public async override Task<StepValue<TOut>> Execute()
         {
             var @out = await this._source();
-            return @out;
+            return new StepValue<TOut>(@out, null);
         }
     }
 }

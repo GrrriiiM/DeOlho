@@ -5,17 +5,16 @@ using System.Threading.Tasks;
 
 namespace DeOlho.ETL
 {
-    public class StepCollectionTransform<TIn, TOut> : StepCollection<TOut>
+    public class StepCollectionTransformToCollection<TIn, TOut> : StepCollection<TOut>
     {
         readonly IStepCollection<TIn> _stepIn;
-        readonly Func<StepValue<TIn>, Task<TOut>> _transform;
+        readonly Func<StepValue<TIn>, IEnumerable<TOut>> _transform;
 
-        public StepCollectionTransform(IStepCollection<TIn> stepIn, Func<StepValue<TIn>, Task<TOut>> _transform)
+        public StepCollectionTransformToCollection(IStepCollection<TIn> stepIn, Func<StepValue<TIn>, IEnumerable<TOut>> _transform)
         {
             this._stepIn = stepIn;
             this._transform = _transform;
         }
-
 
         public async override Task<IEnumerable<StepValue<TOut>>> Execute()
         {
@@ -23,10 +22,11 @@ namespace DeOlho.ETL
             var @out = new List<StepValue<TOut>>();
             foreach(var i in @in)
             {
-                var value = await this._transform(i);
-                @out.Add(new StepValue<TOut>(value, i));
+                var value = this._transform(i);
+                @out.AddRange(value.Select(_ => new StepValue<TOut>(_, i)));
             }
             return @out;
         }
+
     }
 }

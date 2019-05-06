@@ -156,11 +156,11 @@ namespace DeOlho.ETL.UnitTests
 
             stepCollectionMock
             .Setup(_ => _.Execute())
-            .ReturnsAsync(list); 
+            .ReturnsAsync(list.Select(_ => new StepValue<dynamic>(_ , null))); 
 
             var step = DbCreateTableIfNotExistExtension.DbCreateTableIfNotExist(stepCollectionMock.Object, dbConnectionMock.Object, dbTransactionMock.Object, tableName);
 
-            var result = await step.Execute();
+            var result = (await step.Execute()).Select(_ => _.Value);
 
             dbCommandMock.VerifySet(_ => _.CommandText = queryVerifyTable, Times.Once);
 
@@ -203,11 +203,11 @@ namespace DeOlho.ETL.UnitTests
 
             stepCollectionMock
             .Setup(_ => _.Execute())
-            .ReturnsAsync(list); 
+            .ReturnsAsync(list.Select(_ => new StepValue<dynamic>(_, null))); 
 
             var step = DbCreateTableIfNotExistExtension.DbCreateTableIfNotExist(stepCollectionMock.Object, dbConnectionMock.Object, dbTransactionMock.Object, tableName);
 
-            var result = await step.Execute();
+            var result = (await step.Execute()).Select(_ => _.Value);
 
             dbCommandMock.VerifySet(_ => _.CommandText = It.Is<string>(_1 => _1.ToUpper() == queryVerifyTable.ToUpper()), Times.Once);
 
@@ -248,7 +248,7 @@ namespace DeOlho.ETL.UnitTests
 
             stepCollectionMock
             .Setup(_ => _.Execute())
-            .ReturnsAsync(list); 
+            .ReturnsAsync(list.Select(_ => new StepValue<object>(_, null))); 
 
             var step = DbCreateTableIfNotExistExtension.DbCreateTableIfNotExist(stepCollectionMock.Object, dbConnectionMock.Object, dbTransactionMock.Object, tableName);
 
@@ -264,7 +264,7 @@ namespace DeOlho.ETL.UnitTests
         {
             var stepMock = new Mock<IStep<string>>();
             stepMock.Setup(_ => _.Execute())
-            .ReturnsAsync(@"
+            .ReturnsAsync(new StepValue<string>(@"
                 { 
                     'number': 1.2, 
                     'text': 'text', 
@@ -275,19 +275,19 @@ namespace DeOlho.ETL.UnitTests
                             listNumber: 2.3
                         }
                     ]
-                }");
+                }", null));
             
             var transform = stepMock.Object.TransformJsonToDynamic()
                 .Transform(_ => 
                     new {
-                        Number = (decimal)_.number,
-                        Text = (string)_.text,
-                        Date = (DateTime)_.date,
-                        Bit = (bool)_.bit,
-                        List = new List<dynamic>(_.list).Select(_1 => (decimal)_1.listNumber)
+                        Number = (decimal)_.Value.number,
+                        Text = (string)_.Value.text,
+                        Date = (DateTime)_.Value.date,
+                        Bit = (bool)_.Value.bit,
+                        List = new List<dynamic>(_.Value.list).Select(_1 => (decimal)_1.listNumber)
                     });
 
-            var result = await transform.Execute();
+            var result = (await transform.Execute()).Value;
 
             result.Number.Should().Be(1.2M);
             result.Text.Should().Be("text");
@@ -330,19 +330,19 @@ namespace DeOlho.ETL.UnitTests
                             listNumber: 1234.5678
                         }
                     ]
-                }"});
+                }"}.Select(_ => new StepValue<string>(_, null)));
             
             var transform = stepMock.Object.TransformJsonToDynamic()
                 .Transform(_ =>  
                     new {
-                        Number = (decimal)_.number,
-                        Text = (string)_.text,
-                        Date = (DateTime)_.date,
-                        Bit = (bool)_.bit,
-                        List = new List<dynamic>(_.list).Select(_1 => (decimal)_1.listNumber)
+                        Number = (decimal)_.Value.number,
+                        Text = (string)_.Value.text,
+                        Date = (DateTime)_.Value.date,
+                        Bit = (bool)_.Value.bit,
+                        List = new List<dynamic>(_.Value.list).Select(_1 => (decimal)_1.listNumber)
                     });
 
-            var result = (await transform.Execute()).ToArray();
+            var result = (await transform.Execute()).Select(_ => _.Value).ToArray();
 
 
             result.Should().HaveCount(2);
@@ -386,7 +386,7 @@ namespace DeOlho.ETL.UnitTests
 
             var stepMock = new Mock<IStepCollection<object>>();
             stepMock.Setup(_ => _.Execute())
-            .ReturnsAsync(list.ToList());
+            .ReturnsAsync(list.Select(_ => new StepValue<dynamic>(_, null)));
 
             var queryInsertTable = new string[] {
                 $"INSERT INTO {tableName}",
@@ -411,7 +411,6 @@ namespace DeOlho.ETL.UnitTests
             var dbConnectionMock = new Mock<IDbConnection>();
             var dbTransactionMock = new Mock<IDbTransaction>();
             var dbCommandMock = new Mock<IDbCommand>();
-            var stepCollectionMock = new Mock<IStepCollection<object>>();
 
             dbCommandMock.SetupAllProperties();
 
@@ -431,11 +430,9 @@ namespace DeOlho.ETL.UnitTests
                 return 0;
             });
 
-            stepCollectionMock
-            .Setup(_ => _.Execute())
-            .ReturnsAsync(list); 
-
-            var result = await new Destinations.DbDestinationCollection(dbConnectionMock.Object, dbTransactionMock.Object, tableName).Execute(stepMock.Object);
+            var result = (await new Destinations.DbDestinationCollection(dbConnectionMock.Object, dbTransactionMock.Object, tableName)
+                .Execute(stepMock.Object))
+                .Select(_ => _.Value);
 
             dbCommandMock.VerifySet(_ => _.CommandText = It.Is<string>(_1 => queryInsertTable.All(_2 => _1.ToUpper().Contains(_2.ToUpper()))), Times.Once);
 
@@ -447,15 +444,15 @@ namespace DeOlho.ETL.UnitTests
         {
             var stepMock = new Mock<Step<int>>();
             stepMock.Setup(_ => _.Execute())
-            .ReturnsAsync(1);
+            .ReturnsAsync(new StepValue<int>(1, null));
 
             var sourceMock = new Mock<ISource<string>>();
             sourceMock.Setup(_ => _.Execute())
             .ReturnsAsync("A");
             
-            var result = await stepMock.Object
+            var result = (await stepMock.Object
             .Extract(_ => sourceMock.Object)
-            .Load();
+            .Load()).Value;
 
             result.Should().Be("A");
 
@@ -468,17 +465,17 @@ namespace DeOlho.ETL.UnitTests
         {
             var stepCollectionMock = new Mock<StepCollection<int>>();
             stepCollectionMock.Setup(_ => _.Execute())
-            .ReturnsAsync(new int[] {
+            .ReturnsAsync((new int[] {
                 1,2,3,4,5
-            });
+            }).Select(_ => new StepValue<int>(_, null)));
 
             var sourceCollectionMock = new Mock<ISource<string>>();
             sourceCollectionMock.Setup(_ => _.Execute())
             .ReturnsAsync("A");
             
-            var result = await stepCollectionMock.Object
+            var result = (await stepCollectionMock.Object
             .Extract(_ => sourceCollectionMock.Object)
-            .Load();
+            .Load()).Select(_ => _.Value);
 
             result.Should().HaveCount(5);
             result.Should().OnlyContain(_ => _ == "A");
@@ -497,15 +494,15 @@ namespace DeOlho.ETL.UnitTests
                 }
             });
             
-            var result = await new Process()
+            var result = (await new Process()
             .Extract(() => sourceMock.Object)
             .Extract(_ => sourceMock.Object)
-            .Transform(_ => _)
-            .TransformAsync(async _ => await Task.Run(() => _))
-            .TransformToList(_ => new List<int>(_.List))
-            .Transform(_ => (decimal)_)
-            .TransformAsync(async _ => await Task.Run(() => (_ * 2) + (_/10)))
-            .Load();
+            .Transform(_ => _.Value)
+            .TransformAsync(async _ => await Task.Run(() => _.Value))
+            .TransformToList(_ => new List<int>(_.Value.List))
+            .Transform(_ => (decimal)_.Value)
+            .TransformAsync(async _ => await Task.Run(() => (_.Value * 2) + (_.Value/10)))
+            .Load()).Select(_ => _.Value);
 
             result.Should().HaveCount(5);
             result.Should().Contain(2.1M);
@@ -516,6 +513,38 @@ namespace DeOlho.ETL.UnitTests
 
         }
 
-    
+        [Fact]
+        public async void Step_Collection_DbDelete()
+        {
+            var tableName = "TESTETABLE";
+            var queryDeleteTable = $"DELETE FROM {tableName} WHERE ID > 1 AND TEXTO = 'TESTE' AND DATA<='2019-10-12'";
+            var dbConnectionMock = new Mock<IDbConnection>();
+            var dbTransactionMock = new Mock<IDbTransaction>();
+            var dbCommandMock = new Mock<IDbCommand>();
+            var stepCollectionMock = new Mock<IStepCollection<int>>();
+
+            dbCommandMock.SetupAllProperties();
+
+            dbConnectionMock
+            .Setup(_=> _.CreateCommand())
+            .Returns(dbCommandMock.Object);
+
+            
+            dbCommandMock
+            .Setup(_ => _.ExecuteNonQuery())
+            .Returns(() => {
+                return 0;
+            });
+
+            stepCollectionMock
+            .Setup(_ => _.Execute())
+            .ReturnsAsync(new StepValue<int>[] {}); 
+
+            var step = DbDeleteStepCollectionExtension.DbDelete(stepCollectionMock.Object, dbConnectionMock.Object, dbTransactionMock.Object, tableName, "ID > 1 AND TEXTO = 'TESTE' AND DATA <= '2019-10-12'");
+
+            var result = (await step.Execute()).Select(_ => _.Value);
+
+            dbCommandMock.VerifySet(_ => _.CommandText = It.Is<string>(_1 => _1.ToUpper().Replace(" ", "") == queryDeleteTable.ToUpper().Replace(" ", "")), Times.Once);
+        }
     }
 }

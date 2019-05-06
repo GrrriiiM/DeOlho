@@ -27,14 +27,14 @@ namespace DeOlho.ETL.Steps
             this._dbTransaction = dbTransaction;
         }
 
-        public async override Task<IEnumerable<T>> Execute()
+        public async override Task<IEnumerable<StepValue<T>>> Execute()
         {
             var @in = await this._stepIn.Execute();
 
             if (!@in.Any())
                 return @in;
 
-            var type = @in.FirstOrDefault().GetType();
+            var type = @in.FirstOrDefault().Value.GetType();
 
             var existTable = false;
 

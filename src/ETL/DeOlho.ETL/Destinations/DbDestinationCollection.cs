@@ -22,14 +22,15 @@ namespace DeOlho.ETL.Destinations
         }
 
 
-        public async Task<IEnumerable<T>> Execute<T>(IStepCollection<T> stepIn)
+        public async Task<IEnumerable<StepValue<T>>> Execute<T>(IStepCollection<T> stepIn)
         {
             var @in = await stepIn.Execute();
 
             var sqlInserts = new List<string>();
 
-            foreach(var item in @in)
+            foreach(var stepValue in @in)
             {
+                var item = stepValue.Value;
                 var propertyInfos = item.GetType().GetProperties();
 
                 var sqlColumnInserts = new List<string>();
@@ -80,9 +81,9 @@ namespace DeOlho.ETL.Destinations
 
             if (sqlInserts.Any())
             {
-                var propertyInfos = @in.FirstOrDefault().GetType().GetProperties();
+                var propertyInfos = @in.FirstOrDefault().Value.GetType().GetProperties();
 
-                var sql = $"INSERT INTO {this._tableName} ({string.Join(",", propertyInfos.Select(_ => _.Name))}) VALUES {string.Join(",", sqlInserts)}";
+                var sql = $"INSERT INTO {this._tableName} ({string.Join(",", propertyInfos.Select(_ => _.Name))}) VALUES {string.Join(",", sqlInserts)};";
                 
                 using (var command = this._dbConnection.CreateCommand())
                 {
@@ -94,7 +95,7 @@ namespace DeOlho.ETL.Destinations
 
             return @in;
         }
-        public async Task<T> Execute<T>(IStep<T> stepIn)
+        public async Task<StepValue<T>> Execute<T>(IStep<T> stepIn)
         {
             throw new NotImplementedException();
         }

@@ -18,11 +18,11 @@ namespace DeOlho.ETL.Transforms
             this._stepIn = stepIn;
         }
 
-        public async override Task<dynamic> Execute()
+        public async override Task<StepValue<dynamic>> Execute()
         {
             var @in = await this._stepIn.Execute();
-            var @out = (dynamic)JValue.Parse(@in).ToObject<dynamic>();
-            return @out;
+            var @out = (dynamic)JValue.Parse(@in.Value).ToObject<dynamic>();
+            return new StepValue<dynamic>(@out, @in);
         }
     }
 
@@ -36,13 +36,14 @@ namespace DeOlho.ETL.Transforms
             this._stepIn = stepIn;
         }
 
-        public async override Task<IEnumerable<dynamic>> Execute()
+        public async override Task<IEnumerable<StepValue<dynamic>>> Execute()
         {
             var @in = await this._stepIn.Execute();
-            var @out = new List<dynamic>(); 
+            var @out = new List<StepValue<dynamic>>(); 
             foreach(var i in @in)
             {
-                @out.Add((dynamic)JValue.Parse(i).ToObject<dynamic>());
+                var value = (dynamic)JValue.Parse(i.Value).ToObject<dynamic>(); 
+                @out.Add(new StepValue<dynamic>(value, i));
             }
             return @out;
         }

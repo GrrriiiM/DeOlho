@@ -7,7 +7,8 @@ namespace DeOlho.ETL.dadosabertos_camara_leg_br
     {
         Task ExecutePartido(IDbConnection destinationDbConnection, IDbTransaction destinationDbTransaction);
         Task ExecuteLegislatura(IDbConnection destinationDbConnection, IDbTransaction destinationDbTransaction);
-
         Task ExecuteDeputado(IDbConnection destinationDbConnection, IDbTransaction destinationDbTransaction);
+        Task ExecuteDespesa(IDbConnection destinationDbConnection, IDbTransaction destinationDbTransaction);
+        Task ExecuteDespesa(IDbConnection destinationDbConnection, IDbTransaction destinationDbTransaction, int year, int month);
     }
 }

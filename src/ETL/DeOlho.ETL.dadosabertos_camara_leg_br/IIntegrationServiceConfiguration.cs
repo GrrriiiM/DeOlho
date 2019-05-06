@@ -13,5 +13,8 @@ namespace DeOlho.ETL.dadosabertos_camara_leg_br
         string DeputadoTableName { get; }
         string DeputadoURL { get; }
         string DeputadoDetailWithIdArgURL { get; }
+
+        string DespesaTableName { get; }
+        string DespesaDetailWithIdMonthYeahArgURL { get; }
     }
 }
