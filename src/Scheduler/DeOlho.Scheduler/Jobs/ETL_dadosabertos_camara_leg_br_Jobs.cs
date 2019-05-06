@@ -6,26 +6,28 @@ using MySql.Data.MySqlClient;
 
 namespace DeOlho.Scheduler.Jobs
 {
-    public class ETL_dadosabertos_camara_leg_br_Jobs
+    public class ETL_dadosabertos_camara_leg_br_Jobs : IETL_dadosabertos_camara_leg_br_Jobs
     {
-        private static Configuration.ETL_dadosabertos_camara_leg_br_Configuration configuration;
+        readonly IIntegrationService _integrationService;
+        readonly IDbConnection _dbConnection;
 
-        public static void SetConfiguration(Configuration.ETL_dadosabertos_camara_leg_br_Configuration configuration)
+        public ETL_dadosabertos_camara_leg_br_Jobs(
+            IIntegrationService integrationService,
+            IDbConnection dbConnection)
         {
-            ETL_dadosabertos_camara_leg_br_Jobs.configuration = configuration;
+            this._integrationService = integrationService;
+            this._dbConnection = dbConnection;
         }
-
 
         private async Task execute(Func<IDbConnection, IDbTransaction, Task> execute)
         {
-            using(IDbConnection connection = new MySqlConnection(configuration.DestinationConnectionString))
-            {
+
                 IDbTransaction transaction = null;
                 try
                 {
-                    connection.Open();
-                    transaction = connection.BeginTransaction();
-                    await execute(connection, transaction);
+                    this._dbConnection.Open();
+                    transaction = this._dbConnection.BeginTransaction();
+                    await execute(this._dbConnection, transaction);
                     transaction.Commit();
                     transaction = null;
                 }
@@ -38,25 +40,34 @@ namespace DeOlho.Scheduler.Jobs
                 {
                     if (transaction != null)
                         transaction.Rollback();
-                    if (connection.State != ConnectionState.Closed)
-                        connection.Close();
+                    if (this._dbConnection.State != ConnectionState.Closed)
+                        this._dbConnection.Close();
                 }
-            }
         }
 
         public void ExecutePartido()
         {
-            Task.WaitAll(execute(async (dbConnection, dbTransaction) => await new IntegrationService(new System.Net.Http.HttpClient(), configuration).ExecutePartido(dbConnection, dbTransaction)));
+            Task.WaitAll(execute(async (dbConnection, dbTransaction) => await this._integrationService.ExecutePartido(dbConnection, dbTransaction)));
         }
 
         public void ExecuteLegislatura()
         {
-            Task.WaitAll(execute(async (dbConnection, dbTransaction) => await new IntegrationService(new System.Net.Http.HttpClient(), configuration).ExecuteLegislatura(dbConnection, dbTransaction)));
+            Task.WaitAll(execute(async (dbConnection, dbTransaction) => await this._integrationService.ExecuteLegislatura(dbConnection, dbTransaction)));
         }
 
         public void ExecuteDeputado()
         {
-            Task.WaitAll(execute(async (dbConnection, dbTransaction) => await new IntegrationService(new System.Net.Http.HttpClient(), configuration).ExecuteDeputado(dbConnection, dbTransaction)));
+            Task.WaitAll(execute(async (dbConnection, dbTransaction) => await this._integrationService.ExecuteDeputado(dbConnection, dbTransaction)));
+        }
+
+        public void ExecuteDespesa()
+        {
+            Task.WaitAll(execute(async (dbConnection, dbTransaction) => await this._integrationService.ExecuteDespesa(dbConnection, dbTransaction)));
+        }
+
+        public void ExecuteDespesaLastMonth()
+        {
+            Task.WaitAll(execute(async (dbConnection, dbTransaction) => await this._integrationService.ExecuteDespesa(dbConnection, dbTransaction, DateTime.Now.AddMonths(-1).Year, DateTime.Now.AddMonths(-1).Month)));
         }
     }
 }

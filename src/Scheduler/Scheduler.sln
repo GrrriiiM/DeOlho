@@ -5,8 +5,6 @@ VisualStudioVersion = 15.0.26124.0
 MinimumVisualStudioVersion = 15.0.26124.0
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DeOlho.Scheduler", "DeOlho.Scheduler\DeOlho.Scheduler.csproj", "{887879AB-38DC-489E-8F79-42CC75F721C3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DeOlho.Scheduler.Console", "DeOlho.Scheduler.Console\DeOlho.Scheduler.Console.csproj", "{F0C51DA2-5FE7-40FB-BE55-07779684BB12}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DeOlho.Scheduler.Dashboard", "DeOlho.Scheduler.Dashboard\DeOlho.Scheduler.Dashboard.csproj", "{0E7B795D-B918-43B1-BE2F-DC09EB38F59E}"
 EndProject
 Global

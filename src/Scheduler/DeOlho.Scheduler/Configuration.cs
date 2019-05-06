@@ -35,6 +35,9 @@ namespace DeOlho.Scheduler
             public string DeputadoURL { get; set; }
             public string DeputadoDetailWithIdArgURL { get; set; }
             public string DeputadoTableName { get; set; }
+
+            public string DespesaDetailWithIdMonthYeahArgURL { get; set; }
+            public string DespesaTableName { get; set; }
         }
     }
 }
