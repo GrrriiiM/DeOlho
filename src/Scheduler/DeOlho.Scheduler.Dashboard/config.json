@@ -1,8 +1,8 @@
 {
     "scheduler:configuration": {
-        "connectionstring": "server=127.0.0.1;uid=root;pwd=mysql;database=hangfire;Allow User Variables=True",
+        "connectionstring": "server=multivac;Port=3306;uid=root;pwd=mysql;database=hangfire;Allow User Variables=True",
         "ETL_dadosabertos_camara_leg_br": {
-            "DestinationConnectionString": "server=127.0.0.1;uid=root;pwd=mysql;database=deolhointegration;Allow User Variables=True",
+            "DestinationConnectionString": "server=multivac;Port=3306;uid=root;pwd=mysql;database=deolhointegration;Allow User Variables=True",
             
             "PartidoURL": "https://dadosabertos.camara.leg.br/api/v2/partidos?itens=9999",
             "PartidoDetailWithIdArgURL": "https://dadosabertos.camara.leg.br/api/v2/partidos/{0}",

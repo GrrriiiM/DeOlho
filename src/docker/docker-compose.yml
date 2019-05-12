@@ -1,0 +1,18 @@
+version: '2.1'
+ 
+services:
+  mysql-integration:
+    image: deolho/mysql-integration
+    ports:
+      - "13306:3306"
+
+  service-integration:
+    depends_on:
+      mysql-integration:
+        condition: service_healthy
+    image: deolho/service-integration
+    ports:
+      - "8080:80"
+    environment:
+      "scheduler__configuration__connectionstring": "server=mysql-integration;Port=3306;uid=root;pwd=mysql;database=hangfire;Allow User Variables=True"
+      "scheduler__configuration__ETL_dadosabertos_camara_leg_br__DestinationConnectionString": "server=mysql-integration;Port=3306;uid=root;pwd=mysql;database=integration;Allow User Variables=True"

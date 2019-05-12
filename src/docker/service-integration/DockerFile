@@ -1,0 +1,26 @@
+    
+FROM microsoft/dotnet:2.2-sdk-alpine AS build-env
+WORKDIR /src
+
+COPY Scheduler/Scheduler.sln /src/Scheduler/
+COPY Scheduler/DeOlho.Scheduler/. /src/Scheduler/DeOlho.Scheduler/
+COPY Scheduler/DeOlho.Scheduler.Dashboard/. /src/Scheduler/DeOlho.Scheduler.Dashboard/
+COPY /ETL/DeOlho.ETL/. /src/ETL/DeOlho.ETL/
+COPY /ETL/DeOlho.ETL.dadosabertos_camara_leg_br/. /src/ETL/DeOlho.ETL.dadosabertos_camara_leg_br/
+
+WORKDIR /src/Scheduler
+RUN dotnet restore
+
+
+WORKDIR /src/Scheduler/DeOlho.Scheduler.Dashboard
+RUN dotnet publish -c Release -o ../../../app
+
+FROM microsoft/dotnet:2.2-aspnetcore-runtime-alpine
+#ENV "scheduler__configuration__connectionstring"="server=192.168.99.100;Port=13306;uid=root;pwd=mysql;database=hangfire;Allow User Variables=True"
+WORKDIR /app
+COPY --from=build-env /app .
+
+ENTRYPOINT ["dotnet", "DeOlho.Scheduler.Dashboard.dll"]
+
+#docker build -f docker\service-integration\DockerFile -t deolho/service-integration --no-cache .
+#docker run -d -p 80:8080 --name service-integration deolho/service-integration

@@ -1,0 +1,8 @@
+FROM mysql/mysql-server
+ENV MYSQL_ROOT_PASSWORD mysql
+
+COPY ./docker/mysql-integration/start.sql /docker-entrypoint-initdb.d/
+
+#docker build -f docker\mysql-integration\DockerFile -t deolho/mysql-integration --no-cache .
+#docker run -d -p 13306:3306 --name mysql-integration deolho/mysql-integration
+#docker exec -it mysql-integration mysql -uroot -p

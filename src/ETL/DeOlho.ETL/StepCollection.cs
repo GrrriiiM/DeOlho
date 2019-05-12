@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -44,5 +45,37 @@ namespace DeOlho.ETL
         }
 
         public abstract Task<IEnumerable<StepValue<T>>> Execute();
+
+        public IEnumerator<StepValue<T>> GetEnumerator()
+        {
+            return this.Execute().Result.GetEnumerator();
+        }
+
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return GetEnumerator();
+        }
     }
+
+    public static class StepCollectionExtensions
+    {
+        public static IStepCollection<T> ToStepCollection<T>(this IEnumerable<StepValue<T>> value)
+        {
+            return new StepCollectionTransform<T, T>(new _StepCollection<T>(value), async (_) => await Task.Run(() => _.Value)); 
+        }
+    }
+
+    public class _StepCollection<T> : StepCollection<T>
+    {
+        readonly IEnumerable<StepValue<T>> _values;
+        public _StepCollection(IEnumerable<StepValue<T>> values)
+        {
+            _values = values;
+        }
+
+        public async override Task<IEnumerable<StepValue<T>>> Execute()
+        {
+            return await Task.Run(() => _values);
+        }
+    } 
 }

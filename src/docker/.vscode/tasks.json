@@ -1,0 +1,68 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "build service-integration",
+            "command": "docker",
+            "type": "process",
+            "problemMatcher": "$tsc",
+            "args": [
+                "build",
+                "-f",
+                "${workspaceFolder}/service-integration/DockerFile",
+                "-t",
+                "deolho/service-integration",
+                "--no-cache",
+                "${workspaceFolder}/../."
+            ]
+        },
+        {
+            "label": "rmi service-integration",
+            "command": "docker",
+            "type": "process",
+            "problemMatcher": "$tsc",
+            "args": [
+                "rmi",
+                "deolho/service-integration",
+                "-f"
+            ]
+        },
+        {
+            "label": "build mysql-integration",
+            "command": "docker",
+            "type": "process",
+            "problemMatcher": "$tsc",
+            "args": [
+                "build",
+                "-f",
+                "${workspaceFolder}/mysql-integration/DockerFile",
+                "-t",
+                "deolho/mysql-integration",
+                "--no-cache",
+                "${workspaceFolder}/../."
+            ]
+        },
+        {
+            "label": "rmi mysql-integration",
+            "command": "docker",
+            "type": "process",
+            "problemMatcher": "$tsc",
+            "args": [
+                "rmi",
+                "deolho/service-integration",
+                "-f"
+            ]
+        },
+        {
+            "label": "compose up",
+            "command": "docker-compose",
+            "type": "process",
+            "problemMatcher": "$tsc",
+            "args": [
+                "-f",
+                "${workspaceFolder}/docker-compose.yml",
+                "up"
+            ]
+        }
+    ]
+}

@@ -13,20 +13,19 @@ using DeOlho.Scheduler.Jobs;
 using DeOlho.ETL.dadosabertos_camara_leg_br;
 using System.Data;
 using MySql.Data.MySqlClient;
+using Hangfire.Dashboard;
+using Polly;
+using System.Net.Http;
+using Polly.Extensions.Http;
 
 namespace DeOlho.Scheduler.Dashboard
 {
     public class Startup
     {
-        readonly Configuration _schedulerConfiguration;
+        private Configuration _schedulerConfiguration;
         public Startup()
         {
-            var builder = new ConfigurationBuilder()
-                .SetBasePath(Directory.GetCurrentDirectory())
-                .AddJsonFile("config.json", optional: false, reloadOnChange: true);
-
-            IConfigurationRoot configuration = builder.Build();
-            _schedulerConfiguration = configuration.GetSection("scheduler:configuration").Get<Configuration>();
+            
         }
 
         // This method gets called by the runtime. Use this method to add services to the container.
@@ -34,7 +33,9 @@ namespace DeOlho.Scheduler.Dashboard
         public void ConfigureServices(IServiceCollection services)
         {
             // services.AddHttpClient();
-            services.AddHttpClient<IIntegrationService, IntegrationService>();
+            services.AddHttpClient<IIntegrationService, IntegrationService>()
+                .AddPolicyHandler(GetRetryPolicy());
+                
             services.AddTransient<IIntegrationServiceConfiguration>(_ => _schedulerConfiguration.ETL_dadosabertos_camara_leg_br);
             services.AddTransient<IDbConnection>(_ => new MySqlConnection(_schedulerConfiguration.ETL_dadosabertos_camara_leg_br.DestinationConnectionString));
             services.AddScoped<IETL_dadosabertos_camara_leg_br_Jobs, ETL_dadosabertos_camara_leg_br_Jobs>();
@@ -50,12 +51,22 @@ namespace DeOlho.Scheduler.Dashboard
                     .UseStorage(_schedulerConfiguration.Storage);
             });
 
-            services.AddHangfireServer();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
+
+            var builder = new ConfigurationBuilder()
+                .SetBasePath( Directory.GetCurrentDirectory())
+                .AddJsonFile("config.json", optional: false, reloadOnChange: true)
+                .AddEnvironmentVariables();
+
+            IConfigurationRoot configuration = builder.Build();
+            _schedulerConfiguration = configuration.GetSection("scheduler:configuration").Get<Configuration>();
+Console.WriteLine(_schedulerConfiguration.ConnectionString);
+Console.WriteLine(_schedulerConfiguration.ETL_dadosabertos_camara_leg_br.DestinationConnectionString);
+
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
@@ -63,8 +74,15 @@ namespace DeOlho.Scheduler.Dashboard
             
             
             // app.UseHangfireServer(storage: _schedulerConfiguration.Storage);
-            app.UseHangfireDashboard("");//, storage: _schedulerConfiguration.Storage);
-            //app.UseHangfireServer();
+            app.UseHangfireDashboard("", new DashboardOptions
+            {
+                Authorization = new [] { new MyAuthorizationFilter() }
+            });
+
+            app.UseHangfireServer(new BackgroundJobServerOptions {
+                WorkerCount = 1
+            });
+            
 
             RecurringJob.AddOrUpdate<IETL_dadosabertos_camara_leg_br_Jobs>(_ => _.ExecutePartido(), () => Cron.Monthly());
             RecurringJob.AddOrUpdate<IETL_dadosabertos_camara_leg_br_Jobs>(_ => _.ExecuteLegislatura(), () => Cron.Monthly());
@@ -78,5 +96,26 @@ namespace DeOlho.Scheduler.Dashboard
 
             //new Start(_schedulerConfiguration);
         }
+
+        public class MyAuthorizationFilter : IDashboardAuthorizationFilter
+        {
+            public bool Authorize(DashboardContext context)
+            {
+                return true;
+            }
+        }
+
+        static IAsyncPolicy<HttpResponseMessage> GetRetryPolicy()
+        {
+            return HttpPolicyExtensions
+                .HandleTransientHttpError()
+                .OrResult(msg => msg.StatusCode == System.Net.HttpStatusCode.TooManyRequests)
+                .WaitAndRetryAsync(new TimeSpan[] {
+                    TimeSpan.FromSeconds(1),
+                    TimeSpan.FromSeconds(5),
+                    TimeSpan.FromSeconds(10)
+                });
+        }
+
     }
 }

@@ -13,6 +13,8 @@ namespace DeOlho.Scheduler
         public string ConnectionString { get => connectionString; 
             set 
             {
+                Console.WriteLine($"connection:{connectionString}");
+                Console.WriteLine($"connection:{value}");
                 connectionString = value;
                 storage = new MySqlStorage(connectionString, new MySqlStorageOptions {
                         

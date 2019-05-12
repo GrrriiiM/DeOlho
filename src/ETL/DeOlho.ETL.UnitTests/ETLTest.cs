@@ -3,6 +3,8 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.Common;
+using System.IO;
+using System.IO.Compression;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
@@ -546,5 +548,141 @@ namespace DeOlho.ETL.UnitTests
 
             dbCommandMock.VerifySet(_ => _.CommandText = It.Is<string>(_1 => _1.ToUpper().Replace(" ", "") == queryDeleteTable.ToUpper().Replace(" ", "")), Times.Once);
         }
+    
+        [Fact]
+        public async void Sources_HttpStreamSource()
+        {
+            var stringContent = "[{'id':1, 'value':'Sucesso'}]";
+            using(var ms = new MemoryStream(System.Text.Encoding.UTF8.GetBytes(stringContent)))
+            {
+                ms.Position = 0;
+                var httpMessageHandlerMock = new Mock<HttpMessageHandler>(MockBehavior.Strict);
+                httpMessageHandlerMock
+                    .Protected()
+                    .Setup<Task<HttpResponseMessage>>(
+                        "SendAsync",
+                        ItExpr.IsAny<HttpRequestMessage>(),
+                        ItExpr.IsAny<CancellationToken>()
+                    )
+                    .ReturnsAsync(new HttpResponseMessage()
+                    {
+                        StatusCode = HttpStatusCode.OK,
+                        Content = new StreamContent(ms)
+                    })
+                    .Verifiable();
+
+                var httpClient = new HttpClient(httpMessageHandlerMock.Object);
+
+                var uri = "http://teste.com/api";
+                var httpJsonSource = new DeOlho.ETL.Sources.HttpStreamSource(httpClient, uri);
+                var result = await httpJsonSource.Execute();
+                
+                var reader = new StreamReader(result);
+                var text = reader.ReadToEnd();
+                text.Should().Be(stringContent);
+
+                httpMessageHandlerMock.Protected().Verify(
+                    "SendAsync",
+                    Times.Exactly(1),
+                    ItExpr.Is<HttpRequestMessage>(req =>
+                        req.Method == HttpMethod.Get  // we expected a GET request
+                        && req.RequestUri == new Uri($"{uri}")
+                    ),
+                    ItExpr.IsAny<CancellationToken>()
+                );
+            }
+        }
+
+
+        [Fact]
+        public async void Step_Collection_DescompressStream()
+        {
+            using (var memoryStream = new MemoryStream())
+            {
+                using (var archive = new ZipArchive(memoryStream, ZipArchiveMode.Create, true))
+                {
+                    var demoFile = archive.CreateEntry("foo.txt");
+
+                    using (var entryStream = demoFile.Open())
+                    using (var streamWriter = new StreamWriter(entryStream))
+                    {
+                        streamWriter.Write("Bar!");
+                    }
+                }
+
+                var listStepValue = new List<StepValue<Stream>>() { new StepValue<Stream>(memoryStream, null) };
+
+                var stepCollectionMock = new Mock<StepCollection<Stream>>();
+                stepCollectionMock.Setup(_ => _.Execute())
+                .ReturnsAsync(listStepValue);
+
+                var result = await DescompressStreamTransformExtensions.TransformDescompressStream(stepCollectionMock.Object).Execute();
+
+                result.Should().HaveCount(1);
+                var stream = result.ToList()[0].Value;
+                var reader = new StreamReader(stream);
+                var text = reader.ReadToEnd();
+                text.Should().Be("Bar!");
+
+
+            }
+        }
+    
+
+        [Fact]
+        public async void Step_Collection_CsvToDynamic()
+        {
+            var csv = "id,name\r\n1,teste1\r\n2,teste2";
+            using(var ms = new MemoryStream())
+            {
+                using(var sw = new StreamWriter(ms))
+                {
+                    sw.Write(csv);
+                    sw.Flush();
+                    ms.Position = 0;
+                    var listStepValue = new List<StepValue<Stream>>() { new StepValue<Stream>(ms, null) };
+
+                    var stepCollectionMock = new Mock<StepCollection<Stream>>();
+                    stepCollectionMock.Setup(_ => _.Execute())
+                    .ReturnsAsync(listStepValue);
+                    var result = (await CsvToDynamicTransformExtensions.TransformCsvToDynamic(stepCollectionMock.Object).Execute()).ToList();
+
+                    result.Should().HaveCount(1);
+                    var list = result[0].Value.ToList();
+                    list.Should().HaveCount(2);
+                    var item1 = list[0];
+                    var item2 = list[1];
+                    ((string)item1.id).Should().Be("1");
+                    ((string)item1.name).Should().Be("teste1");
+                    ((string)item2.id).Should().Be("2");
+                    ((string)item2.name).Should().Be("teste2");
+                }
+            }
+        }
+
+        [Fact]
+        public async void Step_ToStepCollection()
+        {
+            var list = new dynamic[] {
+                new { Id = 1, Name = "Teste1" },
+                new { Id = 2, Name = "Teste2" }
+            };
+            var listSetupValue = list.Select(_ => new StepValue<dynamic>((dynamic)_, null));
+
+            var stepCollectionMock = new Mock<StepCollection<dynamic>>();
+            stepCollectionMock.Setup(_ => _.Execute())
+            .ReturnsAsync(listSetupValue);
+
+            var step = stepCollectionMock.Object.Where(_ => _.Value.Id == 2).ToStepCollection();
+
+            var result = (await step.Execute()).ToList();
+
+            result.Should().HaveCount(1);
+            ((int)result[0].Value.Id).Should().Be(2);
+            ((string)result[0].Value.Name).Should().Be("Teste2");
+
+
+        }
+    
     }
 }

@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 
 namespace DeOlho.ETL
 {
-    public interface IStepCollection<T>
+    public interface IStepCollection<T> : IEnumerable<StepValue<T>>
     {
         IStepCollection<TOut> Transform<TOut>(Func<StepValue<T>, TOut> transform);
         IStepCollection<TOut> TransformAsync<TOut>(Func<StepValue<T>, Task<TOut>> transform);
