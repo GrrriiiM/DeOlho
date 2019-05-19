@@ -5,6 +5,8 @@ using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
 using DeOlho.ETL.dadosabertos_camara_leg_br;
+using DeOlho.ETL.dadosabertos_camara_leg_br.Api;
+using DeOlho.ETL.dadosabertos_camara_leg_br.Api.Services;
 using FluentAssertions;
 using Moq;
 using Moq.Protected;
@@ -14,15 +16,16 @@ namespace DeOlho.ETL.dadosabertos_camara_leg_br.UnitTests
 {
     public class ETLdadosabertos_camara_leg_brTest
     {
-        readonly Mock<IIntegrationServiceConfiguration> _configurationMock;
+        readonly Mock<IETLConfiguration> _configurationMock;
 
         readonly Mock<HttpMessageHandler> _httpMessageHandlerMock;
 
-        readonly IntegrationService _integrationService;
+        readonly IETLService _etlService;
 
         public ETLdadosabertos_camara_leg_brTest()
         {
-            _configurationMock = new Mock<IIntegrationServiceConfiguration>();
+            _configurationMock = new Mock<IETLConfiguration>();
+            
 
             _configurationMock.SetupGet(_ => _.PartidoURL).Returns($"{Constants.Url.ROOT}{Constants.Url.PARTIDO}");
             _configurationMock.SetupGet(_ => _.PartidoDetailWithIdArgURL).Returns($"{Constants.Url.ROOT}{Constants.Url.DETAIL_PARTIDO}");
@@ -38,15 +41,15 @@ namespace DeOlho.ETL.dadosabertos_camara_leg_br.UnitTests
             _configurationMock.SetupGet(_ => _.DespesaDetailWithIdMonthYeahArgURL).Returns($"{Constants.Url.ROOT}{Constants.Url.DETAIL_DESPESA}");
             _configurationMock.SetupGet(_ => _.DespesaTableName).Returns(Constants.Db.TABLE_DESPESA);
 
-            _integrationService = new IntegrationService(new HttpClient(new FakeHttpMessageHandler(_configurationMock.Object)), _configurationMock.Object);
+            _etlService = new ETLService(new HttpClient(new FakeHttpMessageHandler(_configurationMock.Object)), _configurationMock.Object);
         }
 
 
         public class FakeHttpMessageHandler : DelegatingHandler
         {
-            private IIntegrationServiceConfiguration _configuration;
+            private IETLConfiguration _configuration;
 
-            public FakeHttpMessageHandler(IIntegrationServiceConfiguration configuration)
+            public FakeHttpMessageHandler(IETLConfiguration configuration)
             {
                 _configuration = configuration;   
             }
@@ -81,36 +84,46 @@ namespace DeOlho.ETL.dadosabertos_camara_leg_br.UnitTests
             }
         }
 
-        private async Task integrationService_Test(Func<IDbConnection, IDbTransaction, Task> execute, string createTable, string insertTable, string deleteTable)
+        private async Task integrationService_Test(Func<Task> execute, string createTable, string insertTable, string deleteTable)
         {
             var dbConnectionMock = new Mock<IDbConnection>();
-            var dbTransactionMock = new Mock<IDbTransaction>();
             var dbCommandMock = new Mock<IDbCommand>();
+            var dbTransactionMock = new Mock<IDbTransaction>();
 
             dbCommandMock.SetupAllProperties();
 
             dbConnectionMock
-            .Setup(_=> _.CreateCommand())
-            .Returns(dbCommandMock.Object);
+                .Setup(_=> _.CreateCommand())
+                .Returns(dbCommandMock.Object);
+
+            dbConnectionMock
+                .Setup(_ => _.BeginTransaction())
+                .Returns(dbTransactionMock.Object);
 
             dbCommandMock
-            .Setup(_ => _.ExecuteScalar())
-            .Returns(() => {
-                throw new Exception();
-            });
+                .Setup(_ => _.ExecuteScalar())
+                .Returns(() => {
+                    throw new Exception();
+                });
             
             dbCommandMock
-            .Setup(_ => _.ExecuteNonQuery())
-            .Returns(() => {
-                return 0;
-            });
+                .Setup(_ => _.ExecuteNonQuery())
+                .Returns(() => {
+                    return 0;
+                });
 
-            await execute(dbConnectionMock.Object, dbTransactionMock.Object);
+
+
+            _configurationMock.Setup(_ => _.CreateConnection())
+                .Returns(dbConnectionMock.Object);
+
+            await execute();
             
             createTable = createTable.ToUpper().Replace("\r","").Replace("\n","").Replace("\t","").Replace(" ","");
             insertTable = insertTable.ToUpper().Replace("\r","").Replace("\n","").Replace("\t","").Replace(" ","");
             deleteTable = deleteTable.ToUpper().Replace("\r","").Replace("\n","").Replace("\t","").Replace(" ","");
 
+            dbTransactionMock.Verify(_ => _.Commit(), Times.Once);
             dbCommandMock.VerifySet(_ => _.CommandText = It.Is<string>(_1 => _1.ToUpper().Replace("\r","").Replace("\n","").Replace("\t","").Replace(" ","") == createTable), Times.Once);
             dbCommandMock.VerifySet(_ => _.CommandText = It.Is<string>(_1 => _1.ToUpper().Replace("\r","").Replace("\n","").Replace("\t","").Replace(" ","") == insertTable), Times.Once);
             dbCommandMock.VerifySet(_ => _.CommandText = It.Is<string>(_1 => _1.ToUpper().Replace("\r","").Replace("\n","").Replace("\t","").Replace(" ","") == deleteTable), Times.Once);
@@ -119,25 +132,25 @@ namespace DeOlho.ETL.dadosabertos_camara_leg_br.UnitTests
         [Fact]
         public async void IntegrationService_ExecutePartido()
         {
-            await integrationService_Test(_integrationService.ExecutePartido, Constants.Db.CREATE_PARTIDO, Constants.Db.INSERT_PARTIDO, Constants.Db.DELETE_PARTIDO);
+            await integrationService_Test(_etlService.ExecutePartido, Constants.Db.CREATE_PARTIDO, Constants.Db.INSERT_PARTIDO, Constants.Db.DELETE_PARTIDO);
         }
 
         [Fact]
         public async void IntegrationService_ExecuteLegislatura()
         {
-            await integrationService_Test(_integrationService.ExecuteLegislatura, Constants.Db.CREATE_LEGISLATURA, Constants.Db.INSERT_LEGISLATURA, Constants.Db.DELETE_LEGISLATURA);
+            await integrationService_Test(_etlService.ExecuteLegislatura, Constants.Db.CREATE_LEGISLATURA, Constants.Db.INSERT_LEGISLATURA, Constants.Db.DELETE_LEGISLATURA);
         }
 
         [Fact]
         public async void IntegrationService_ExecuteDeputado()
         {
-            await integrationService_Test(_integrationService.ExecuteDeputado, Constants.Db.CREATE_DEPUTADO, Constants.Db.INSERT_DEPUTADO, Constants.Db.DELETE_DEPUTADO);
+            await integrationService_Test(_etlService.ExecuteDeputado, Constants.Db.CREATE_DEPUTADO, Constants.Db.INSERT_DEPUTADO, Constants.Db.DELETE_DEPUTADO);
         }
 
         [Fact]
         public async void IntegrationService_ExecuteDespesa()
         {
-            await integrationService_Test(async (dbConnection, dbTransaction) => await _integrationService.ExecuteDespesa(dbConnection, dbTransaction, 2019, 3), Constants.Db.CREATE_DESPESA, Constants.Db.INSERT_DESPESA, string.Format(Constants.Db.DELETE_DESPESA, 2019, 3));
+            await integrationService_Test(async () => await _etlService.ExecuteDespesa(2019, 3), Constants.Db.CREATE_DESPESA, Constants.Db.INSERT_DESPESA, string.Format(Constants.Db.DELETE_DESPESA, 2019, 3));
         }
     }
 }

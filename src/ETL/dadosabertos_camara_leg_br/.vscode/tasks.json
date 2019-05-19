@@ -31,6 +31,48 @@
                 "${workspaceFolder}/Api/DeOlho.ETL.dadosabertos_camara_leg_br.Api.csproj"
             ],
             "problemMatcher": "$tsc"
+        },
+        {
+            "label": "Test with coverage",
+            "command": "dotnet",
+            "type": "process",
+            "args": [
+                "test",
+                "/p:CollectCoverage=true",
+                "/p:Exclude=\"[xunit*]*\"",
+                "/p:CoverletOutputFormat=\"lcov,opencover\"",
+                "/p:CoverletOutput=./coverage/",
+                "${workspaceFolder}/dadosabertos_camara_leg_br.sln"
+            ],
+            "problemMatcher": "$msCompile",
+            "group": "test"
+        },
+        {
+            "label": "Generate coverage report",
+            "type": "shell",
+            "command": "dotnet reportgenerator \"-reports:./coverage/coverage.opencover.xml\" \"-targetdir:./coverage/report\"",
+            "dependsOn": "Test with coverage",
+            "group": "test",
+            "options": {
+                "cwd": "${workspaceFolder}/UnitTests"
+            },
+            "presentation": {
+                "reveal": "silent",
+                "panel": "shared"
+            }
+        },
+        {
+            "label": "View coverage report in chrome",
+            "type": "shell",
+            "command": "C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe",
+            "dependsOn": "Generate coverage report",
+            "args": [
+                "${workspaceFolder}/UnitTests/coverage/report/index.htm"
+            ],
+            "group": {
+                "kind": "test",
+                "isDefault": true
+            }
         }
     ]
 }
