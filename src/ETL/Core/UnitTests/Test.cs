@@ -19,13 +19,13 @@ using Xunit;
 
 namespace DeOlho.ETL.UnitTests
 {
-    public class ETLTest
+    public class Test
     {
         private dynamic objectTest1;
 
         private dynamic objectTest2;
 
-        public ETLTest()
+        public Test()
         {
             objectTest1 = new { 
                 _string = "string",
