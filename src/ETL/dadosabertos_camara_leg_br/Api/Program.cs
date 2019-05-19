@@ -8,16 +8,17 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 
-namespace DeOlho.Scheduler.Dashboard
+namespace DeOlho.ETL.dadosabertos_camara_leg_br.Api
 {
     public class Program
     {
         public static void Main(string[] args)
         {
+
             CreateWebHostBuilder(args).Build().Run();
         }
 
-        public static IWebHostBuilder CreateWebHostBuilder(string[] args)
+        public static IWebHostBuilder CreateWebHostBuilder(string[] args) 
         {
             var builder = new ConfigurationBuilder()   
                 .SetBasePath(Directory.GetCurrentDirectory())  

@@ -9,71 +9,54 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Configuration;
 using Hangfire;
-using DeOlho.Scheduler.Jobs;
-using DeOlho.ETL.dadosabertos_camara_leg_br;
 using System.Data;
-using MySql.Data.MySqlClient;
 using Hangfire.Dashboard;
 using Polly;
 using System.Net.Http;
 using Polly.Extensions.Http;
+using RawRabbit.vNext;
+using DeOlho.Scheduler.Dashboard.Jobs;
 
 namespace DeOlho.Scheduler.Dashboard
 {
     public class Startup
     {
-        private Configuration _schedulerConfiguration;
-        public Startup()
+        private IConfiguration _configuration;
+        public Startup(
+            IConfiguration configuration)
         {
-            
+            _configuration = configuration;
         }
 
         // This method gets called by the runtime. Use this method to add services to the container.
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
-            // services.AddHttpClient();
-            services.AddHttpClient<IIntegrationService, IntegrationService>()
-                .AddPolicyHandler(GetRetryPolicy());
-                
-            services.AddTransient<IIntegrationServiceConfiguration>(_ => _schedulerConfiguration.ETL_dadosabertos_camara_leg_br);
-            services.AddTransient<IDbConnection>(_ => new MySqlConnection(_schedulerConfiguration.ETL_dadosabertos_camara_leg_br.DestinationConnectionString));
             services.AddScoped<IETL_dadosabertos_camara_leg_br_Jobs, ETL_dadosabertos_camara_leg_br_Jobs>();
-
-            // var type = typeof(ITypedHttpClientFactory<>).Assembly.DefinedTypes.Single(t => t.Name.Contains("DefaultTypedHttpClientFactory"));
-            // services.AddTransient(typeof(ITypedHttpClientFactory<>), type);
 
             services.AddHangfire(config => {
                 config
                     .UseSimpleAssemblyNameTypeSerializer()
                     .UseRecommendedSerializerSettings()
                     .UseColouredConsoleLogProvider()
-                    .UseStorage(_schedulerConfiguration.Storage);
+                    .UseStorage(_configuration.GetSection("scheduler:configuration").Get<Configuration>().CreateStorage());
             });
+
+            services.AddRawRabbit(
+                config => config.AddConfiguration(_configuration.GetSection("RawRabbit:Configuration")),
+                custom => {}
+            );
 
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
-
-            var builder = new ConfigurationBuilder()
-                .SetBasePath( Directory.GetCurrentDirectory())
-                .AddJsonFile("config.json", optional: false, reloadOnChange: true)
-                .AddEnvironmentVariables();
-
-            IConfigurationRoot configuration = builder.Build();
-            _schedulerConfiguration = configuration.GetSection("scheduler:configuration").Get<Configuration>();
-Console.WriteLine(_schedulerConfiguration.ConnectionString);
-Console.WriteLine(_schedulerConfiguration.ETL_dadosabertos_camara_leg_br.DestinationConnectionString);
-
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
             }
             
-            
-            // app.UseHangfireServer(storage: _schedulerConfiguration.Storage);
             app.UseHangfireDashboard("", new DashboardOptions
             {
                 Authorization = new [] { new MyAuthorizationFilter() }
@@ -82,19 +65,12 @@ Console.WriteLine(_schedulerConfiguration.ETL_dadosabertos_camara_leg_br.Destina
             app.UseHangfireServer(new BackgroundJobServerOptions {
                 WorkerCount = 1
             });
-            
 
-            RecurringJob.AddOrUpdate<IETL_dadosabertos_camara_leg_br_Jobs>(_ => _.ExecutePartido(), () => Cron.Monthly());
             RecurringJob.AddOrUpdate<IETL_dadosabertos_camara_leg_br_Jobs>(_ => _.ExecuteLegislatura(), () => Cron.Monthly());
-            RecurringJob.AddOrUpdate<IETL_dadosabertos_camara_leg_br_Jobs>(_ => _.ExecuteDeputado(), () => Cron.Monthly());
-            RecurringJob.AddOrUpdate<IETL_dadosabertos_camara_leg_br_Jobs>(_ => _.ExecuteDespesa(), () => Cron.Daily(2));
-            RecurringJob.AddOrUpdate<IETL_dadosabertos_camara_leg_br_Jobs>(_ => _.ExecuteDespesaLastMonth(), () => Cron.Daily(3));
-            // app.Run(async (context) =>
-            // {
-            //     await context.Response.WriteAsync("Hello World!");
-            // });
-
-            //new Start(_schedulerConfiguration);
+            RecurringJob.AddOrUpdate<IETL_dadosabertos_camara_leg_br_Jobs>(_ => _.ExecutePartido(), () => Cron.Monthly());
+            RecurringJob.AddOrUpdate<IETL_dadosabertos_camara_leg_br_Jobs>(_ => _.ExecuteDespesa(), () => Cron.Daily(4));
+            RecurringJob.AddOrUpdate<IETL_dadosabertos_camara_leg_br_Jobs>(_ => _.ExecuteDespesaLastMonth(), () => Cron.Daily(5));
+           
         }
 
         public class MyAuthorizationFilter : IDashboardAuthorizationFilter
@@ -104,18 +80,5 @@ Console.WriteLine(_schedulerConfiguration.ETL_dadosabertos_camara_leg_br.Destina
                 return true;
             }
         }
-
-        static IAsyncPolicy<HttpResponseMessage> GetRetryPolicy()
-        {
-            return HttpPolicyExtensions
-                .HandleTransientHttpError()
-                .OrResult(msg => msg.StatusCode == System.Net.HttpStatusCode.TooManyRequests)
-                .WaitAndRetryAsync(new TimeSpan[] {
-                    TimeSpan.FromSeconds(1),
-                    TimeSpan.FromSeconds(5),
-                    TimeSpan.FromSeconds(10)
-                });
-        }
-
     }
 }

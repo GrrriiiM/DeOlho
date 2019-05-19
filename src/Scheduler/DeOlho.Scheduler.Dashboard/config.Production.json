@@ -1,5 +1,0 @@
-{
-    "scheduler:configuration": {
-        "connectionstring": "server=testando;Port=13306;uid=root;pwd=mysql;database=hangfire;Allow User Variables=True"
-    }
-}
