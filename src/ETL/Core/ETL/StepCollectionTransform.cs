@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace DeOlho.ETL
 {
-    public class StepCollectionTransform<TIn, TOut> : StepCollection<TOut>
+    public class StepCollectionTransform<TIn, TOut> : StepCollection<TOut> where TOut : class
     {
         readonly IStepCollection<TIn> _stepIn;
         readonly Func<StepValue<TIn>, Task<TOut>> _transform;

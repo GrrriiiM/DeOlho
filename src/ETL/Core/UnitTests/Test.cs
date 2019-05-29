@@ -444,9 +444,9 @@ namespace DeOlho.ETL.UnitTests
         [Fact]
         public async void Step_Extract_Load()
         {
-            var stepMock = new Mock<Step<int>>();
+            var stepMock = new Mock<Step<Tuple<int>>>();
             stepMock.Setup(_ => _.Execute())
-            .ReturnsAsync(new StepValue<int>(1, null));
+            .ReturnsAsync(new StepValue<Tuple<int>>(new Tuple<int>(1), null));
 
             var sourceMock = new Mock<ISource<string>>();
             sourceMock.Setup(_ => _.Execute())
@@ -465,11 +465,11 @@ namespace DeOlho.ETL.UnitTests
         [Fact]
         public async void Step_Collection_Extract_Load()
         {
-            var stepCollectionMock = new Mock<StepCollection<int>>();
+            var stepCollectionMock = new Mock<StepCollection<Tuple<int>>>();
             stepCollectionMock.Setup(_ => _.Execute())
-            .ReturnsAsync((new int[] {
-                1,2,3,4,5
-            }).Select(_ => new StepValue<int>(_, null)));
+            .ReturnsAsync((new Tuple<int>[] {
+                new Tuple<int>(1),new Tuple<int>(2),new Tuple<int>(3),new Tuple<int>(4),new Tuple<int>(5)
+            }).Select(_ => new StepValue<Tuple<int>>(_, null)));
 
             var sourceCollectionMock = new Mock<ISource<string>>();
             sourceCollectionMock.Setup(_ => _.Execute())
@@ -501,10 +501,10 @@ namespace DeOlho.ETL.UnitTests
             .Extract(_ => sourceMock.Object)
             .Transform(_ => _.Value)
             .TransformAsync(async _ => await Task.Run(() => _.Value))
-            .TransformToList(_ => new List<int>(_.Value.List))
-            .Transform(_ => (decimal)_.Value)
-            .TransformAsync(async _ => await Task.Run(() => (_.Value * 2) + (_.Value/10)))
-            .Load()).Select(_ => _.Value);
+            .TransformToList(_ => new List<int>(_.Value.List).Select(_1 => new Tuple<int>(_1)))
+            .Transform(_ =>  new Tuple<decimal>(_.Value.Item1))
+            .TransformAsync(async _ => await Task.Run(() => new Tuple<decimal>((_.Value.Item1 * 2) + (_.Value.Item1/10))))
+            .Load()).Select(_ => _.Value.Item1);
 
             result.Should().HaveCount(5);
             result.Should().Contain(2.1M);
@@ -523,7 +523,7 @@ namespace DeOlho.ETL.UnitTests
             var dbConnectionMock = new Mock<IDbConnection>();
             var dbTransactionMock = new Mock<IDbTransaction>();
             var dbCommandMock = new Mock<IDbCommand>();
-            var stepCollectionMock = new Mock<IStepCollection<int>>();
+            var stepCollectionMock = new Mock<IStepCollection<Tuple<int>>>();
 
             dbCommandMock.SetupAllProperties();
 
@@ -540,7 +540,7 @@ namespace DeOlho.ETL.UnitTests
 
             stepCollectionMock
             .Setup(_ => _.Execute())
-            .ReturnsAsync(new StepValue<int>[] {}); 
+            .ReturnsAsync(new StepValue<Tuple<int>>[] {}); 
 
             var step = DbDeleteStepCollectionExtension.DbDelete(stepCollectionMock.Object, dbConnectionMock.Object, dbTransactionMock.Object, tableName, "ID > 1 AND TEXTO = 'TESTE' AND DATA <= '2019-10-12'");
 

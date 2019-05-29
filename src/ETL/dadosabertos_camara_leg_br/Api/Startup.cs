@@ -21,6 +21,8 @@ using Swashbuckle.AspNetCore.Swagger;
 using System.Data.Common;
 using DeOlho.EventBus.ELT.dadosabertos_camara_leg_br.Responses;
 using DeOlho.EventBus.ELT.dadosabertos_camara_leg_br.Requests;
+using DeOlho.ETL.dadosabertos_camara_leg_br.Api.Infra.Data;
+using Microsoft.EntityFrameworkCore;
 
 namespace DeOlho.ETL.dadosabertos_camara_leg_br.Api
 {
@@ -35,6 +37,11 @@ namespace DeOlho.ETL.dadosabertos_camara_leg_br.Api
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
+
+            services.AddDbContext<DeOlhoDbContext>(options => {
+                options.UseMySql(_configuration.GetSection("ETL:Configuration:ConnectionString").Value);
+            });
+
             services.AddHttpClient<IETLService, ETLService>()
                 .AddPolicyHandler((_) =>
                     HttpPolicyExtensions
@@ -47,7 +54,7 @@ namespace DeOlho.ETL.dadosabertos_camara_leg_br.Api
                         }));
 
             services.AddTransient<IETLConfiguration>(_ => _configuration.GetSection("ETL:Configuration").Get<ETLConfiguration>());
-            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
+            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
 
             services.AddSwaggerGen(c =>
             {
@@ -61,11 +68,8 @@ namespace DeOlho.ETL.dadosabertos_camara_leg_br.Api
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env, IBusClient busClient, IServiceProvider serviceProvider)
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env, IServiceProvider serviceProvider)
         {
-
-            configureEventBus(busClient, serviceProvider);
-
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
@@ -79,40 +83,11 @@ namespace DeOlho.ETL.dadosabertos_camara_leg_br.Api
                 c.RoutePrefix = string.Empty;
             });
 
+            app.UseMigrate();
+
+            //app.UseEventBus();
+
             app.UseMvc();
-        }
-
-        private void configureEventBus(IBusClient busClient, IServiceProvider serviceProvider)
-        {
-            var etlService = serviceProvider.GetService<IETLService>();
-
-            busClient.RespondAsync<LegislaturaRequest, LegislaturaResponse>(
-                async (req, context) => {
-                    await etlService.ExecuteLegislatura();
-                    return new LegislaturaResponse() {Message = $"Sucesso Legislatura: {req.Message}"};
-                }
-            );
-
-            busClient.RespondAsync<PartidoRequest, PartidoResponse>(
-                async (req, context) => {
-                    await etlService.ExecutePartido();
-                    return new PartidoResponse() {Message = $"Sucesso Partido: {req.Message}"};
-                }
-            );
-
-            busClient.RespondAsync<DeputadoRequest, DeputadoResponse>(
-                async (req, context) => {
-                    await etlService.ExecuteDeputado();
-                    return new DeputadoResponse() {Message = $"Sucesso Deputado: {req.Message}"};
-                }
-            );
-
-            busClient.RespondAsync<DespesaRequest, DespesaResponse>(
-                async (req, context) => {
-                    await etlService.ExecuteDespesa(req.Year, req.Month);
-                    return new DespesaResponse() {Message = $"Sucesso Despesa: {req.Message}"};
-                }
-            );
         }
     }
 }

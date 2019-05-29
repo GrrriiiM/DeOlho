@@ -41,7 +41,7 @@ namespace DeOlho.ETL.dadosabertos_camara_leg_br.UnitTests
             _configurationMock.SetupGet(_ => _.DespesaDetailWithIdMonthYeahArgURL).Returns($"{Constants.Url.ROOT}{Constants.Url.DETAIL_DESPESA}");
             _configurationMock.SetupGet(_ => _.DespesaTableName).Returns(Constants.Db.TABLE_DESPESA);
 
-            _etlService = new ETLService(new HttpClient(new FakeHttpMessageHandler(_configurationMock.Object)), _configurationMock.Object);
+            _etlService = new ETLService(new HttpClient(new FakeHttpMessageHandler(_configurationMock.Object)), null, _configurationMock.Object);
         }
 
 

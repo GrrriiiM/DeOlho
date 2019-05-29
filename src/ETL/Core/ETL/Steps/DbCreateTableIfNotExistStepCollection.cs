@@ -11,7 +11,7 @@ using Newtonsoft.Json.Linq;
 
 namespace DeOlho.ETL.Steps
 {
-    public class DbCreateTableIfNotExistStepCollection<T> : StepCollection<T>
+    public class DbCreateTableIfNotExistStepCollection<T> : StepCollection<T> where T : class
     {
         readonly string _tableName;
         readonly IStepCollection<T> _stepIn;
@@ -125,7 +125,7 @@ namespace DeOlho.ETL.Steps
 
     public static class DbCreateTableIfNotExistExtension
     {
-        public static StepCollection<T> DbCreateTableIfNotExist<T>(this IStepCollection<T> value, IDbConnection dbConnection, IDbTransaction dbTransaction, string tableName)
+        public static StepCollection<T> DbCreateTableIfNotExist<T>(this IStepCollection<T> value, IDbConnection dbConnection, IDbTransaction dbTransaction, string tableName) where T : class
         {
             return new DbCreateTableIfNotExistStepCollection<T>(value, dbConnection, dbTransaction, tableName);
         }

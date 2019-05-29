@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DeOlho.ETL", "ETL\DeOlho.ET
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DeOlho.ETL.UnitTests", "UnitTests\DeOlho.ETL.UnitTests.csproj", "{0B085997-B69F-4752-AB4B-B1DE1DE39EC2}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DeOlho.ETL.EFCore", "ETL.EFCore\DeOlho.ETL.EFCore.csproj", "{88D3E57C-B30D-4EA1-B9F0-D8FB82718DB5}"
+EndProject
 Global
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -44,5 +46,17 @@ Global
 		{0B085997-B69F-4752-AB4B-B1DE1DE39EC2}.Release|x64.Build.0 = Release|Any CPU
 		{0B085997-B69F-4752-AB4B-B1DE1DE39EC2}.Release|x86.ActiveCfg = Release|Any CPU
 		{0B085997-B69F-4752-AB4B-B1DE1DE39EC2}.Release|x86.Build.0 = Release|Any CPU
+		{88D3E57C-B30D-4EA1-B9F0-D8FB82718DB5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{88D3E57C-B30D-4EA1-B9F0-D8FB82718DB5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{88D3E57C-B30D-4EA1-B9F0-D8FB82718DB5}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{88D3E57C-B30D-4EA1-B9F0-D8FB82718DB5}.Debug|x64.Build.0 = Debug|Any CPU
+		{88D3E57C-B30D-4EA1-B9F0-D8FB82718DB5}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{88D3E57C-B30D-4EA1-B9F0-D8FB82718DB5}.Debug|x86.Build.0 = Debug|Any CPU
+		{88D3E57C-B30D-4EA1-B9F0-D8FB82718DB5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{88D3E57C-B30D-4EA1-B9F0-D8FB82718DB5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{88D3E57C-B30D-4EA1-B9F0-D8FB82718DB5}.Release|x64.ActiveCfg = Release|Any CPU
+		{88D3E57C-B30D-4EA1-B9F0-D8FB82718DB5}.Release|x64.Build.0 = Release|Any CPU
+		{88D3E57C-B30D-4EA1-B9F0-D8FB82718DB5}.Release|x86.ActiveCfg = Release|Any CPU
+		{88D3E57C-B30D-4EA1-B9F0-D8FB82718DB5}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

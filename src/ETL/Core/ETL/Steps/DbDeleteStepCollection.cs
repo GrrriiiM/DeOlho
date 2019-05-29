@@ -11,7 +11,7 @@ using Newtonsoft.Json.Linq;
 
 namespace DeOlho.ETL.Steps
 {
-    public class DbDeleteStepCollection<T> : StepCollection<T>
+    public class DbDeleteStepCollection<T> : StepCollection<T> where T : class
     {
         readonly string _tableName;
         readonly IStepCollection<T> _stepIn;
@@ -47,7 +47,7 @@ namespace DeOlho.ETL.Steps
 
     public static class DbDeleteStepCollectionExtension
     {
-        public static StepCollection<T> DbDelete<T>(this IStepCollection<T> value, IDbConnection dbConnection, IDbTransaction dbTransaction, string tableName, string whereCondition = "")
+        public static StepCollection<T> DbDelete<T>(this IStepCollection<T> value, IDbConnection dbConnection, IDbTransaction dbTransaction, string tableName, string whereCondition = "") where T : class
         {
             return new DbDeleteStepCollection<T>(value, dbConnection, dbTransaction, tableName, whereCondition);
         }

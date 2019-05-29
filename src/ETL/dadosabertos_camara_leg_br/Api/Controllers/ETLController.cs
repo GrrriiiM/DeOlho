@@ -2,8 +2,8 @@ using System;
 using System.Data;
 using System.Threading.Tasks;
 using DeOlho.ETL.dadosabertos_camara_leg_br.Api.Services;
-using DeOlho.EventBus.ELT.dadosabertos_camara_leg_br.Requests;
-using DeOlho.EventBus.ELT.dadosabertos_camara_leg_br.Responses;
+// using DeOlho.EventBus.ELT.dadosabertos_camara_leg_br.Requests;
+// using DeOlho.EventBus.ELT.dadosabertos_camara_leg_br.Responses;
 using Microsoft.AspNetCore.Mvc;
 using RawRabbit;
 
@@ -14,23 +14,24 @@ namespace DeOlho.ETL.dadosabertos_camara_leg_br.Api.Controllers
     {
         readonly IETLService _etlService;
 
-        readonly IBusClient _busClient;
+        // readonly IBusClient _busClient;
 
         public ETLController(
-            IETLService etlService,
-            IBusClient busClient)
+            IETLService etlService
+            // ,
+            // IBusClient busClient
+            )
         {
             _etlService = etlService;
-            _busClient = busClient;
+            // _busClient = busClient;
         }
 
         [HttpPost()]
         public async Task<ActionResult> Legislaturas()
         {
-            //await execute(_etlService.ExecuteLegislatura);
-            var ret = await _busClient.RequestAsync<LegislaturaRequest, LegislaturaResponse>(
-                new LegislaturaRequest { Message = "Testando Legislatura" });
-            return Ok(ret.Message);
+            await _etlService.ExecuteLegislatura();
+            
+            return Ok();
         }
 
 

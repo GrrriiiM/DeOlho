@@ -1,0 +1,21 @@
+    
+FROM microsoft/dotnet:2.2-sdk-alpine AS build-env
+WORKDIR /src
+
+COPY /ETL/dadosabertos_camara_leg_br/Api/. /src/ETL/dadosabertos_camara_leg_br/Api
+COPY /ETL/Core/ETL/. /src/ETL/Core/ETL
+COPY /EventBus/ETL/dadosabertos_camara_leg_br/. /src/EventBus/ETL/dadosabertos_camara_leg_br
+
+WORKDIR /src/ETL/dadosabertos_camara_leg_br/Api
+RUN dotnet restore
+
+
+WORKDIR /src/ETL/dadosabertos_camara_leg_br/Api
+RUN dotnet publish -c Release -o ../../../../app
+
+FROM microsoft/dotnet:2.2-aspnetcore-runtime-alpine
+
+WORKDIR /app
+COPY --from=build-env /app .
+
+ENTRYPOINT ["dotnet", "DeOlho.ETL.dadosabertos_camara_leg_br.Api.dll"]

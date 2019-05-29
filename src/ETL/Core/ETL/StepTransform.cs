@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace DeOlho.ETL
 {
-    public class StepTransform<TIn, TOut> : Step<TOut>
+    public class StepTransform<TIn, TOut> : Step<TOut> where TOut : class where TIn : class
     {
         readonly IStep<TIn> _stepIn;
         readonly Func<StepValue<TIn>, Task<TOut>> _transform;

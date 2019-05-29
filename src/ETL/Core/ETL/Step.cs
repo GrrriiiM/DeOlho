@@ -4,10 +4,10 @@ using System.Threading.Tasks;
 
 namespace DeOlho.ETL
 {
-    public abstract class Step<T> : IStep<T>
+    public abstract class Step<T> : IStep<T> where T : class
     {
 
-        public IStep<TOut> Transform<TOut>(Func<StepValue<T>, TOut> transform)
+        public IStep<TOut> Transform<TOut>(Func<StepValue<T>, TOut> transform) where TOut : class
         {
             return new StepTransform<T, TOut>(this, async (_) =>
             { 
@@ -15,19 +15,19 @@ namespace DeOlho.ETL
             });
         }
 
-        public IStep<TOut> TransformAsync<TOut>(Func<StepValue<T>, Task<TOut>> transform)
+        public IStep<TOut> TransformAsync<TOut>(Func<StepValue<T>, Task<TOut>> transform) where TOut : class
         {
             return new StepTransform<T, TOut>(this, transform);
         }
 
 
 
-        public IStepCollection<TOut> TransformToList<TOut>(Func<StepValue<T>, IEnumerable<TOut>> transform)
+        public IStepCollection<TOut> TransformToList<TOut>(Func<StepValue<T>, IEnumerable<TOut>> transform) where TOut : class
         {
             return new StepTransformToCollection<T, TOut>(this, transform);
         }
 
-        public IStep<TOut> Extract<TOut>(Func<StepValue<T>, ISource<TOut>> extract)
+        public IStep<TOut> Extract<TOut>(Func<StepValue<T>, ISource<TOut>> extract) where TOut : class
         {
             return new StepTransform<T, TOut>(this, async (_) => await extract(_).Execute());
         }

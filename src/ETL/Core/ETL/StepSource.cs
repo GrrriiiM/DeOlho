@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace DeOlho.ETL
 {
-    public class StepSource<TOut> : Step<TOut>
+    public class StepSource<TOut> : Step<TOut> where TOut : class
     {
         readonly Func<Task<TOut>> _source;
 

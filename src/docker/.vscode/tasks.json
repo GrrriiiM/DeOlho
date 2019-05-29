@@ -2,16 +2,61 @@
     "version": "2.0.0",
     "tasks": [
         {
-            "label": "build service-integration",
+            "label": "build mysql-scheduler",
             "command": "docker",
             "type": "process",
             "problemMatcher": "$tsc",
             "args": [
                 "build",
                 "-f",
-                "${workspaceFolder}/service-integration/DockerFile",
+                "${workspaceFolder}/mysql-scheduler/DockerFile",
                 "-t",
-                "deolho/service-integration",
+                "deolho/mysql-scheduler",
+                "--no-cache",
+                "${workspaceFolder}/../."
+            ]
+        },
+        {
+            "label": "build api-scheduler",
+            "command": "docker",
+            "type": "process",
+            "problemMatcher": "$tsc",
+            "args": [
+                "build",
+                "-f",
+                "${workspaceFolder}/api-scheduler/DockerFile",
+                "-t",
+                "deolho/api-scheduler",
+                "--no-cache",
+                "${workspaceFolder}/../."
+            ]
+        },
+        {
+            "label": "build mysql-dadosabertos_camara_leg_br",
+            "command": "docker",
+            "type": "process",
+            "problemMatcher": "$tsc",
+            "args": [
+                "build",
+                "-f",
+                "${workspaceFolder}/mysql-dadosabertos_camara_leg_br/DockerFile",
+                "-t",
+                "deolho/mysql-dadosabertos_camara_leg_br",
+                "--no-cache",
+                "${workspaceFolder}/../."
+            ]
+        },
+        {
+            "label": "build api-dadosabertos_camara_leg_br",
+            "command": "docker",
+            "type": "process",
+            "problemMatcher": "$tsc",
+            "args": [
+                "build",
+                "-f",
+                "${workspaceFolder}/api-dadosabertos_camara_leg_br/DockerFile",
+                "-t",
+                "deolho/api-dadosabertos_camara_leg_br",
                 "--no-cache",
                 "${workspaceFolder}/../."
             ]
