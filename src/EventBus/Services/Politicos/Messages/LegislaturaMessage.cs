@@ -1,6 +1,6 @@
 using System;
 
-namespace DeOlho.EventBus.Services.Politicos
+namespace DeOlho.EventBus.Services.Politicos.Messages
 {
     public class LegislaturaMessage : BaseMessage
     {

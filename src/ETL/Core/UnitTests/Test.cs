@@ -66,44 +66,6 @@ namespace DeOlho.ETL.UnitTests
                 _boolNull = new Nullable<Boolean>(true)
             };
         }
-
-        [Fact]
-        public async void Sources_HttpJsonSource()
-        {
-            var stringContent  = "[{'id':1, 'value':'Sucesso'}]";
-            var httpMessageHandlerMock = new Mock<HttpMessageHandler>(MockBehavior.Strict);
-            httpMessageHandlerMock
-                .Protected()
-                .Setup<Task<HttpResponseMessage>>(
-                    "SendAsync",
-                    ItExpr.IsAny<HttpRequestMessage>(),
-                    ItExpr.IsAny<CancellationToken>()
-                )
-                .ReturnsAsync(new HttpResponseMessage()
-                {
-                    StatusCode = HttpStatusCode.OK,
-                    Content = new StringContent("[{'id':1, 'value':'Sucesso'}]"),
-                })
-                .Verifiable();
-
-            var httpClient = new HttpClient(httpMessageHandlerMock.Object);
-
-            var uri = "http://teste.com/api";
-            var httpJsonSource = new DeOlho.ETL.Sources.HttpJsonSource(httpClient, uri);
-            var result = await httpJsonSource.Execute();
-            
-            result.Should().Be(stringContent);
-
-            httpMessageHandlerMock.Protected().Verify(
-                "SendAsync",
-                Times.Exactly(1), // we expected a single external request
-                ItExpr.Is<HttpRequestMessage>(req =>
-                    req.Method == HttpMethod.Get  // we expected a GET request
-                    && req.RequestUri == new Uri($"{uri}") // to this uri
-                ),
-                ItExpr.IsAny<CancellationToken>()
-            );
-        }
     
         [Fact]
         public async void Steps_Collection_DbCreateTableIfNotExistExtension_NotExists()
@@ -549,50 +511,6 @@ namespace DeOlho.ETL.UnitTests
             dbCommandMock.VerifySet(_ => _.CommandText = It.Is<string>(_1 => _1.ToUpper().Replace(" ", "") == queryDeleteTable.ToUpper().Replace(" ", "")), Times.Once);
         }
     
-        [Fact]
-        public async void Sources_HttpStreamSource()
-        {
-            var stringContent = "[{'id':1, 'value':'Sucesso'}]";
-            using(var ms = new MemoryStream(System.Text.Encoding.UTF8.GetBytes(stringContent)))
-            {
-                ms.Position = 0;
-                var httpMessageHandlerMock = new Mock<HttpMessageHandler>(MockBehavior.Strict);
-                httpMessageHandlerMock
-                    .Protected()
-                    .Setup<Task<HttpResponseMessage>>(
-                        "SendAsync",
-                        ItExpr.IsAny<HttpRequestMessage>(),
-                        ItExpr.IsAny<CancellationToken>()
-                    )
-                    .ReturnsAsync(new HttpResponseMessage()
-                    {
-                        StatusCode = HttpStatusCode.OK,
-                        Content = new StreamContent(ms)
-                    })
-                    .Verifiable();
-
-                var httpClient = new HttpClient(httpMessageHandlerMock.Object);
-
-                var uri = "http://teste.com/api";
-                var httpJsonSource = new DeOlho.ETL.Sources.HttpStreamSource(httpClient, uri);
-                var result = await httpJsonSource.Execute();
-                
-                var reader = new StreamReader(result);
-                var text = reader.ReadToEnd();
-                text.Should().Be(stringContent);
-
-                httpMessageHandlerMock.Protected().Verify(
-                    "SendAsync",
-                    Times.Exactly(1),
-                    ItExpr.Is<HttpRequestMessage>(req =>
-                        req.Method == HttpMethod.Get  // we expected a GET request
-                        && req.RequestUri == new Uri($"{uri}")
-                    ),
-                    ItExpr.IsAny<CancellationToken>()
-                );
-            }
-        }
-
 
         [Fact]
         public async void Step_Collection_DescompressStream()

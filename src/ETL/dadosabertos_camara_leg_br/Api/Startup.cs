@@ -21,8 +21,9 @@ using Swashbuckle.AspNetCore.Swagger;
 using System.Data.Common;
 using DeOlho.EventBus.ELT.dadosabertos_camara_leg_br.Responses;
 using DeOlho.EventBus.ELT.dadosabertos_camara_leg_br.Requests;
-using DeOlho.ETL.dadosabertos_camara_leg_br.Api.Infra.Data;
+using DeOlho.ETL.dadosabertos_camara_leg_br.Api.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
+using DeOlho.ETL.dadosabertos_camara_leg_br.Api.Interfaces;
 
 namespace DeOlho.ETL.dadosabertos_camara_leg_br.Api
 {
@@ -42,18 +43,10 @@ namespace DeOlho.ETL.dadosabertos_camara_leg_br.Api
                 options.UseMySql(_configuration.GetSection("ETL:Configuration:ConnectionString").Value);
             });
 
-            services.AddHttpClient<IETLService, ETLService>()
-                .AddPolicyHandler((_) =>
-                    HttpPolicyExtensions
-                        .HandleTransientHttpError()
-                        .OrResult(msg => msg.StatusCode == System.Net.HttpStatusCode.TooManyRequests)
-                        .WaitAndRetryAsync(new TimeSpan[] {
-                            TimeSpan.FromSeconds(1),
-                            TimeSpan.FromSeconds(5),
-                            TimeSpan.FromSeconds(10)
-                        }));
+            services.AddServices();
 
             services.AddTransient<IETLConfiguration>(_ => _configuration.GetSection("ETL:Configuration").Get<ETLConfiguration>());
+
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
 
             services.AddSwaggerGen(c =>
@@ -84,8 +77,6 @@ namespace DeOlho.ETL.dadosabertos_camara_leg_br.Api
             });
 
             app.UseMigrate();
-
-            //app.UseEventBus();
 
             app.UseMvc();
         }

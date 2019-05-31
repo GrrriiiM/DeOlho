@@ -3,14 +3,16 @@ using System;
 using DeOlho.ETL.dadosabertos_camara_leg_br.Api.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace DeOlho.ETL.dadosabertos_camara_leg_br.Api.Migrations
 {
     [DbContext(typeof(DeOlhoDbContext))]
-    partial class DeOlhoDbContextModelSnapshot : ModelSnapshot
+    [Migration("20190531013257_init")]
+    partial class init
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
