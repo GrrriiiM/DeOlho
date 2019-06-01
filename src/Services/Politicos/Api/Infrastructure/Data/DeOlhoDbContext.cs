@@ -10,7 +10,8 @@ namespace DeOlho.Services.Politicos.Api.Infrastructure.Data
         {
             
         }
-
-        public DbSet<Legislatura> Legislaturas { get; set; }
+        public DbSet<Mandato> Mandatos { get; set; }
+        public DbSet<Partido> Partidos { get; set; }
+        public DbSet<Politico> Politicos { get; set; }
     }
 }

@@ -5,11 +5,20 @@ using DeOlho.EventBus.Services.Politicos;
 using DeOlho.Services.Politicos.Api.Infrastructure.Data;
 using DeOlho.Services.Politicos.Api.Domain;
 using Microsoft.EntityFrameworkCore;
+using DeOlho.EventBus.Services.Politicos.Messages;
+using DeOlho.Services.Politicos.Api.IntegrationEvents.Subscribes;
 
 namespace Deolho.Services.Politicos.Api
 {
     public static class Extensions
     {
+        public static IServiceCollection AddServices(this IServiceCollection services)
+        {
+            services.AddTransient<IMandatoChangeSubscribe, MandatoChangeSubscribe>();
+            services.AddTransient<IPartidoChangeSubscribe, PartidoChangeSubscribe>();
+            return services;
+        }
+
         public static IApplicationBuilder UseMigrate(this IApplicationBuilder app)
         {
             using (var serviceScope = app.ApplicationServices
@@ -31,23 +40,22 @@ namespace Deolho.Services.Politicos.Api
 
             var busClient = services.GetService<IBusClient>();
 
-            busClient.SubscribeAsync<LegislaturaMessage>(
+            busClient.SubscribeAsync<MandatoChangeMessage>(
                 async (msg, context) => {
                     using(var scope = services.CreateScope())
                     {
-                        var dbContext = scope.ServiceProvider.GetService<DeOlhoDbContext>();
-                        var legislatura = await dbContext.Legislaturas.FindAsync(msg.Id);
-                        if (legislatura == null)
-                        {
-                            legislatura = new Legislatura(msg.Id, msg.DataInicio, msg.DataFim, msg.Timestamp, msg.Origin);
-                            await dbContext.AddAsync(legislatura);
-                        }
-                        else
-                        {
-                            legislatura.Update(msg.DataInicio, msg.DataFim, msg.Timestamp, msg.Origin);
-                            dbContext.Update(legislatura);
-                        }
-                        await dbContext.SaveChangesAsync();
+                        var service = scope.ServiceProvider.GetService<IMandatoChangeSubscribe>();
+                        await service.Execute(msg);
+                    }
+                }
+            );
+
+            busClient.SubscribeAsync<PartidoChangeMessage>(
+                async (msg, context) => {
+                    using(var scope = services.CreateScope())
+                    {
+                        var service = scope.ServiceProvider.GetService<IPartidoChangeSubscribe>();
+                        await service.Execute(msg);
                     }
                 }
             );
