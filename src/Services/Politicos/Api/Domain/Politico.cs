@@ -38,6 +38,11 @@ namespace DeOlho.Services.Politicos.Api.Domain
         public PoliticoSituacao Situacao { get; set; }
         public PoliticoSexo Sexo { get; set; }
 
+        public MandatoTipo MandatoTipo { get; set; }
+        public DateTime? MandatoInicio { get; set; }
+        public DateTime? MandatoFim { get; set; }
+        public MandatoSituacao MandatoSituacao { get; set; }
+
         private List<PoliticoContato> _contatos = new List<PoliticoContato>();
         public IReadOnlyCollection<PoliticoContato> Contatos { get => _contatos; protected set => _contatos = new List<PoliticoContato>(value); }
 

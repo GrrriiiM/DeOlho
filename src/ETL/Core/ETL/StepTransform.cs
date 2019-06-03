@@ -8,7 +8,7 @@ namespace DeOlho.ETL
 {
     public class StepTransform<TIn, TOut> : Step<TOut> where TOut : class where TIn : class
     {
-        readonly IStep<TIn> _stepIn;
+        protected readonly IStep<TIn> _stepIn;
         readonly Func<StepValue<TIn>, Task<TOut>> _transform;
 
         public StepTransform(IStep<TIn> stepIn, Func<StepValue<TIn>, Task<TOut>> transform)

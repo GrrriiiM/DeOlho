@@ -1,6 +1,6 @@
 namespace DeOlho.Services.Politicos.Api.Domain
 {
-    public enum PoliticoMandatoSituacao
+    public enum MandatoSituacao
     {
         Nenhum = 0,
         Exercicio = 1,

@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net.Http;
@@ -28,4 +29,6 @@ namespace DeOlho.ETL.Sources
             return await response.Content.ReadAsStreamAsync();
         }
     }
+
+
 }

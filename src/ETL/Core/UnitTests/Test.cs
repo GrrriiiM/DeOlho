@@ -512,71 +512,10 @@ namespace DeOlho.ETL.UnitTests
         }
     
 
-        [Fact]
-        public async void Step_Collection_DescompressStream()
-        {
-            using (var memoryStream = new MemoryStream())
-            {
-                using (var archive = new ZipArchive(memoryStream, ZipArchiveMode.Create, true))
-                {
-                    var demoFile = archive.CreateEntry("foo.txt");
-
-                    using (var entryStream = demoFile.Open())
-                    using (var streamWriter = new StreamWriter(entryStream))
-                    {
-                        streamWriter.Write("Bar!");
-                    }
-                }
-
-                var listStepValue = new List<StepValue<Stream>>() { new StepValue<Stream>(memoryStream, null) };
-
-                var stepCollectionMock = new Mock<StepCollection<Stream>>();
-                stepCollectionMock.Setup(_ => _.Execute())
-                .ReturnsAsync(listStepValue);
-
-                var result = await DescompressStreamTransformExtensions.TransformDescompressStream(stepCollectionMock.Object).Execute();
-
-                result.Should().HaveCount(1);
-                var stream = result.ToList()[0].Value;
-                var reader = new StreamReader(stream);
-                var text = reader.ReadToEnd();
-                text.Should().Be("Bar!");
-
-
-            }
-        }
+        
     
 
-        [Fact]
-        public async void Step_Collection_CsvToDynamic()
-        {
-            var csv = "id,name\r\n1,teste1\r\n2,teste2";
-            using(var ms = new MemoryStream())
-            {
-                using(var sw = new StreamWriter(ms))
-                {
-                    sw.Write(csv);
-                    sw.Flush();
-                    ms.Position = 0;
-                    var listStepValue = new List<StepValue<Stream>>() { new StepValue<Stream>(ms, null) };
-
-                    var stepCollectionMock = new Mock<StepCollection<Stream>>();
-                    stepCollectionMock.Setup(_ => _.Execute())
-                    .ReturnsAsync(listStepValue);
-                    var result = (await CsvToDynamicTransformExtensions.TransformCsvToDynamic(stepCollectionMock.Object).Execute()).ToList();
-
-                    result.Should().HaveCount(1);
-                    var list = result[0].Value.ToList();
-                    list.Should().HaveCount(2);
-                    var item1 = list[0];
-                    var item2 = list[1];
-                    ((string)item1.id).Should().Be("1");
-                    ((string)item1.name).Should().Be("teste1");
-                    ((string)item2.id).Should().Be("2");
-                    ((string)item2.name).Should().Be("teste2");
-                }
-            }
-        }
+        
 
         [Fact]
         public async void Step_ToStepCollection()

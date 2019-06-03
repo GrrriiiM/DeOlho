@@ -1,9 +1,6 @@
 using System;
-using DeOlho.ETL.dadosabertos_camara_leg_br.Api.Infrastructure.Data;
-using DeOlho.ETL.dadosabertos_camara_leg_br.Api.Interfaces;
-using DeOlho.ETL.dadosabertos_camara_leg_br.Api.Services;
-using DeOlho.EventBus.ELT.dadosabertos_camara_leg_br.Requests;
-using DeOlho.EventBus.ELT.dadosabertos_camara_leg_br.Responses;
+using DeOlho.ETL.tse_jus_br.Api.Infrastructure.Data;
+using DeOlho.ETL.tse_jus_br.Api.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
@@ -11,7 +8,7 @@ using Polly;
 using Polly.Extensions.Http;
 using RawRabbit;
 
-namespace DeOlho.ETL.dadosabertos_camara_leg_br.Api
+namespace DeOlho.ETL.tse_jus_br.Api
 {
     public static class Extensions
     {
@@ -84,10 +81,7 @@ namespace DeOlho.ETL.dadosabertos_camara_leg_br.Api
 
         public static IServiceCollection AddServices(this IServiceCollection value)
         {
-            // value.AddHttpClient<ILegislaturaService, LegislaturaService>().AddRetryPolicy();
-            // value.AddHttpClient<IPartidoService, PartidoService>().AddRetryPolicy();
-            // value.AddHttpClient<IPoliticoService, PoliticoService>().AddRetryPolicy();
-            // value.AddHttpClient<IDespesaService, DespesaService>().AddRetryPolicy();
+            value.AddHttpClient<IPoliticoService, PoliticoService>().AddRetryPolicy();
             return value;
         }
 

@@ -14,8 +14,7 @@ namespace Deolho.Services.Politicos.Api
     {
         public static IServiceCollection AddServices(this IServiceCollection services)
         {
-            services.AddTransient<IMandatoChangeSubscribe, MandatoChangeSubscribe>();
-            services.AddTransient<IPartidoChangeSubscribe, PartidoChangeSubscribe>();
+            services.AddTransient<IPoliticoChangeSubscribe, PoliticoChangeSubscribe>();
             return services;
         }
 
@@ -40,21 +39,11 @@ namespace Deolho.Services.Politicos.Api
 
             var busClient = services.GetService<IBusClient>();
 
-            busClient.SubscribeAsync<MandatoChangeMessage>(
+            busClient.SubscribeAsync<PoliticoChangeMessage>(
                 async (msg, context) => {
                     using(var scope = services.CreateScope())
                     {
-                        var service = scope.ServiceProvider.GetService<IMandatoChangeSubscribe>();
-                        await service.Execute(msg);
-                    }
-                }
-            );
-
-            busClient.SubscribeAsync<PartidoChangeMessage>(
-                async (msg, context) => {
-                    using(var scope = services.CreateScope())
-                    {
-                        var service = scope.ServiceProvider.GetService<IPartidoChangeSubscribe>();
+                        var service = scope.ServiceProvider.GetService<IPoliticoChangeSubscribe>();
                         await service.Execute(msg);
                     }
                 }

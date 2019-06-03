@@ -46,7 +46,7 @@ namespace DeOlho.ETL.dadosabertos_camara_leg_br.Api.Services
                     .TransformJsonToDynamic()
                     .Transform(Transform)
                     .Extract(_ => new DbContextSingleOrDefaultSource<Politico>(_deOlhoDbContext, _.Value.Id))
-                    .Where(_ => compare(_.Value, (Politico)_.Parent.Value))
+                    .Where(_ => Equals(_.Value, (Politico)_.Parent.Value))
                     .Select(_ => (Politico)_.Parent.Value)
                     .ParallelForEach(_ => _busClient.PublishAsync(Message(_)))
                     .ToStepCollection()
@@ -59,7 +59,7 @@ namespace DeOlho.ETL.dadosabertos_camara_leg_br.Api.Services
             }
         }
 
-        private bool compare(Politico o, Politico n)
+        public bool Equals(Politico o, Politico n)
         {
             return o == null
                 || o.CPF != n.CPF
@@ -91,7 +91,7 @@ namespace DeOlho.ETL.dadosabertos_camara_leg_br.Api.Services
                 || o.GabineteTelefone != n.GabineteTelefone;
         }
 
-        protected Politico Transform(dynamic _)
+        public Politico Transform(dynamic _)
         {
             return new Politico {
                 Id = (long)_.Value.dados.id,
@@ -125,38 +125,148 @@ namespace DeOlho.ETL.dadosabertos_camara_leg_br.Api.Services
             };
         }
 
-        protected PoliticoMessage Message(Politico _)
+        public PoliticoChangeMessage Message(Politico politico, Legislatura legislatura)
         {
-            return new PoliticoMessage {
-                Id = _.Id, 
-                CPF = _.CPF,
-                DataFalecimento = _.DataFalecimento,
-                DataNascimento = _.DataNascimento,
-                Escolaridade = _.Escolaridade,
-                MunicipioNascimento = _.MunicipioNascimento,
-                NomeCivil = _.NomeCivil,
-                RedeSocial = _.RedeSocial,
-                Sexo = _.Sexo,
-                UFNascimento = _.UFNascimento,
-                URLWebsite = _.URLWebsite,
-                LegislaturaId = _.LegislaturaId,
-                Nome = _.Nome,
-                NomeEleitoral = _.NomeEleitoral,
-                SiglaPartido = _.SiglaPartido,
-                SiglaUf = _.SiglaUf,
-                Situacao = _.Situacao,
-                PartidoId = _.PartidoId,
-                URLFoto = _.URLFoto,
-                CondicaoEleitoral = _.CondicaoEleitoral,
-                Data = _.Data,
-                DescricaoStatus = _.DescricaoStatus,
-                GabineteAndar = _.GabineteAndar,
-                GabineteEmail = _.GabineteEmail,
-                GabineteNome = _.GabineteNome,
-                GabinetePredio = _.GabinetePredio,
-                GabineteSala = _.GabineteSala,
-                GabineteTelefone = _.GabineteTelefone
+            var message =  new PoliticoChangeMessage {
+                CPF = politico.CPF,
+                Nome = politico.NomeCivil,
+                Apelido = politico.NomeEleitoral,
+                Falecimento = politico.DataFalecimento,
+                Nascimento = politico.DataNascimento,
+                NascimentoMunicipio = politico.MunicipioNascimento,
+                NascimentoUF = politico.UFNascimento,
+                Escolaridade = MessageEscolaridade(politico.Escolaridade),
+                Sexo = MessageSexo(politico.Sexo),
+                Partido = politico.SiglaPartido,
+                MandatoTipo = 1,
+                MandatoInicio = legislatura.DataInicio,
+                MandatoFim = legislatura.DataFim,
+                MandatoSituacao = MessageMandatoSituacao(politico.Situacao),
+                Contatos = new List<PoliticoChangeMessage.Contato>()
             };
+
+            if (!string.IsNullOrEmpty(politico.RedeSocial))
+            {
+                message.Contatos.Add(new PoliticoChangeMessage.Contato { Tipo = 1, Valor = politico.RedeSocial  });
+            }
+
+            if (!string.IsNullOrEmpty(politico.URLWebsite))
+            {
+                message.Contatos.Add(new PoliticoChangeMessage.Contato { Tipo = 1, Valor = politico.RedeSocial  });
+            }
+
+            if (!string.IsNullOrEmpty(politico.URLWebsite))
+            {
+                message.Contatos.Add(new PoliticoChangeMessage.Contato { Tipo = 1, Valor = politico.URLWebsite  });
+            }
+
+            if (!string.IsNullOrEmpty(politico.GabineteEmail))
+            {
+                message.Contatos.Add(new PoliticoChangeMessage.Contato { Tipo = 1, Valor = politico.GabineteEmail  });
+            }
+
+            if (!string.IsNullOrEmpty(politico.GabineteTelefone))
+            {
+                message.Contatos.Add(new PoliticoChangeMessage.Contato { Tipo = 1, Valor = politico.GabineteTelefone  });
+            }
+
+            return message;
+        }
+
+        public int MessageEscolaridade(string escolaridade)
+        {
+            switch (escolaridade)
+            {
+                case null:
+                case "":
+                    return 0;
+                case "Ensino Fundamental Incompleto":
+                case "Primário Incompleto":
+                    return 10;
+                case "Ensino Fundamental":
+                case "Primário":
+                    return 15;
+                case "Ensino Médio Incompleto":
+                case "Secundário Incompleto":
+                    return 20;
+                case "Ensino Médio":
+                case "Secundário":
+                    return 25;
+                case "Ensino Técnico Incompleto":
+                    return 30;
+                case "Ensino Técnico":
+                    return 35;
+                case "Superior Incompleto":
+                    return 40;
+                case "Superior":
+                    return 45;
+                case "Pós-Graduação Incompleto":
+                    return 50;
+                case "Pós-Graduação":
+                    return 55;
+                case "Mestrado Incompleto":
+                    return 60;
+                case "Mestrado":
+                    return 65;
+                case "Doutorado Incompleto":
+                    return 70;
+                case "Doutorado":
+                    return 75;
+                default:
+                    return 99;
+            }
+        }
+
+        public int MessageSexo(string sexo)
+        {
+            switch (sexo)
+            {
+                case null:
+                case "":
+                    return 1;
+                case "M":
+                    return 2;
+                case "F":
+                    return 4;
+                default:
+                    return 99;
+            }
+        }
+
+        public int MessageMandatoSituacao(string mandatoSituacao)
+        {
+            switch (mandatoSituacao)
+            {
+                case null:
+                case "":
+                    return 0;
+                case "E":
+                case "Exercício":
+                    return 1;
+                case "A":
+                case "Afastado":
+                    return 2;
+                case "C":
+                case "Convocado":
+                    return 3;
+                case "F":
+                case "Fim de Mandato":
+                    return 4;
+                case "L":
+                case "Licença":
+                    return 5;
+                case "S":
+                case "Suplência":
+                    return 6;
+                case "U":
+                case "Suspenso":
+                    return 7;
+                case "V":
+                case "Vacância":
+                    return 8;
+                default:
+                    return 99;
+            }
         }
 
     }

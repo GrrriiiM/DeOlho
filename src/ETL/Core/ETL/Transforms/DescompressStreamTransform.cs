@@ -10,45 +10,41 @@ using Newtonsoft.Json.Linq;
 
 namespace DeOlho.ETL.Transforms
 {
-    public class DescompressStreamTransform : StepTransform<Stream, Stream>
+    public class DescompressStreamTransform : StepTransform<Stream, List<StreamDescompressed>>
     {
         readonly IStep<Stream> _stepIn;
 
-        readonly string _entryName;
-
-        public DescompressStreamTransform(IStep<Stream> stepIn, string entryName = null)
+        public DescompressStreamTransform(IStep<Stream> stepIn)
             : base(stepIn, null)
         {
             this._stepIn = stepIn;
 
         }
 
-        public async override Task<StepValue<Stream>> Execute()
+        public async override Task<StepValue<List<StreamDescompressed>>> Execute()
         {
             var @in = await this._stepIn.Execute();
-            return @in.DescompressStream(_entryName);
+            return @in.DescompressStream();
         }
     }
 
-    public class DescompressStreamCollectionTransform : StepCollectionTransform<Stream, Stream>
+    public class DescompressStreamCollectionTransform : StepCollectionTransform<Stream, List<StreamDescompressed>>
     {
         readonly IStepCollection<Stream> _stepIn;
-        readonly string _entryName;
 
-        public DescompressStreamCollectionTransform(IStepCollection<Stream> stepIn, string entryName = null)
+        public DescompressStreamCollectionTransform(IStepCollection<Stream> stepIn)
             : base(stepIn, null)
         {
             this._stepIn = stepIn;
-            this._entryName = entryName;
         }
 
-        public async override Task<IEnumerable<StepValue<Stream>>> Execute()
+        public async override Task<IEnumerable<StepValue<List<StreamDescompressed>>>> Execute()
         {
             var @in = await this._stepIn.Execute();
-            var @out = new List<StepValue<Stream>>(); 
+            var @out = new List<StepValue<List<StreamDescompressed>>>(); 
             foreach(var i in @in)
             {
-                @out.Add(i.DescompressStream(_entryName));
+                @out.Add(i.DescompressStream());
             }
             return @out;
         }
@@ -58,26 +54,39 @@ namespace DeOlho.ETL.Transforms
 
     public static class DescompressStreamTransformExtensions
     {
-        public static IStep<Stream> TransformDescompressStream(this IStep<Stream> value)
+        public static IStep<List<StreamDescompressed>> TransformDescompressStream(this IStep<Stream> value)
         {
             return new DescompressStreamTransform(value);
         }
 
-        public static IStepCollection<Stream> TransformDescompressStream(this IStepCollection<Stream> value)
+        public static IStepCollection<List<StreamDescompressed>> TransformDescompressStream(this IStepCollection<Stream> value)
         {
             return new DescompressStreamCollectionTransform(value);
         }
 
-        public static StepValue<Stream> DescompressStream(this StepValue<Stream> value, string entryName)
+        public static StepValue<List<StreamDescompressed>> DescompressStream(this StepValue<Stream> value)
         {
             var zipArchive = new ZipArchive(value.Value);
-            ZipArchiveEntry entry = null;
-            if (!string.IsNullOrEmpty(entryName))
-                entry = zipArchive.Entries.FirstOrDefault(_ => _.Name.ToUpper() == entryName.ToUpper());
-            else
-                entry = zipArchive.Entries.FirstOrDefault();
+            var streams = new List<StreamDescompressed>();
 
-            return new StepValue<Stream>(entry.Open(), value);
+
+            foreach(var entry in zipArchive.Entries)
+            {
+                streams.Add(new StreamDescompressed
+                {
+                    Name = entry.Name,
+                    Stream = entry.Open()
+                });
+            }
+
+            return new StepValue<List<StreamDescompressed>>(streams, value);
         }
+    }
+
+    public class StreamDescompressed
+    {
+        public string Name { get; set; }
+        public Stream Stream { get; set; }
+        
     }
 }

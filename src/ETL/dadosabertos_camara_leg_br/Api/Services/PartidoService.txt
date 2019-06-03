@@ -92,22 +92,23 @@ namespace DeOlho.ETL.dadosabertos_camara_leg_br.Api.Services
             };
         }
 
-        protected PartidoMessage Message(Partido _)
+        protected PartidoChangeMessage Message(Partido _)
         {
-            return new PartidoMessage {
-                Id = _.Id, 
-                Sigla = _.Sigla,
-                Nome = _.Nome,
-                Data = _.Data,
-                LegislaturaId = _.LegislaturaId,
-                Situacao = _.Situacao,
-                TotalPosse = _.TotalPosse,
-                TotalMembros = _.TotalMembros,
-                LiderId = _.LiderId,
-                UrlFacebook = _.UrlFacebook,
-                UrlLogo = _.UrlLogo,
-                UrlWebSite = _.UrlWebSite
-            };
+            return null;
+            // return new PartidoMessage {
+            //     Id = _.Id, 
+            //     Sigla = _.Sigla,
+            //     Nome = _.Nome,
+            //     Data = _.Data,
+            //     LegislaturaId = _.LegislaturaId,
+            //     Situacao = _.Situacao,
+            //     TotalPosse = _.TotalPosse,
+            //     TotalMembros = _.TotalMembros,
+            //     LiderId = _.LiderId,
+            //     UrlFacebook = _.UrlFacebook,
+            //     UrlLogo = _.UrlLogo,
+            //     UrlWebSite = _.UrlWebSite
+            // };
         }
 
     }
