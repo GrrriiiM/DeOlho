@@ -119,30 +119,28 @@ namespace DeOlho.ETL.UnitTests.EFCore
         [Fact]
         public async void Destination_Collection_DbContext()
         {
-            var stepMock = new Mock<StepCollection<MockData>>();
-            stepMock.Setup(_ => _.Execute())
-                .ReturnsAsync(new List<StepValue<MockData>> {
-                    new StepValue<MockData>(
-                        new MockData
-                        {
-                            Id = 3,
-                            Nome = "Teste 3",
-                            Data = new DateTime(2000,1,3)
-                        },
-                        null
-                    ),
-                    new StepValue<MockData>(
-                        new MockData
-                        {
-                            Id = 4,
-                            Nome = "Teste 4",
-                            Data = new DateTime(2000,1,4)
-                        },
-                        null
-                    )
-                });
+            var stepList  = new List<StepValue<MockData>> {
+                new StepValue<MockData>(
+                    new MockData
+                    {
+                        Id = 3,
+                        Nome = "Teste 3",
+                        Data = new DateTime(2000,1,3)
+                    },
+                    null
+                ),
+                new StepValue<MockData>(
+                    new MockData
+                    {
+                        Id = 4,
+                        Nome = "Teste 4",
+                        Data = new DateTime(2000,1,4)
+                    },
+                    null
+                )
+            };
 
-            var stepValue = await stepMock.Object.Load(() => new DbContextDestination(mockDbContext));
+            var stepValue = await stepList.Load(() => new DbContextDestination(mockDbContext));
 
             var result = await mockDbContext.MockDatas.ToListAsync();
             result.Should().HaveCount(4);

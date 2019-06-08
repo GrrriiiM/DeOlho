@@ -1,9 +1,8 @@
 using System;
 using System.Data;
 using System.Threading.Tasks;
-using DeOlho.ETL.tse_jus_br.Api.Services;
-// using DeOlho.EventBus.ELT.dadosabertos_camara_leg_br.Requests;
-// using DeOlho.EventBus.ELT.dadosabertos_camara_leg_br.Responses;
+using DeOlho.ETL.tse_jus_br.Api.Application.Commands;
+using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using RawRabbit;
 
@@ -13,11 +12,17 @@ namespace DeOlho.ETL.tse_jus_br.Api.Controllers
     public class ETLController : Controller
     {
 
-        [HttpPost()]
-        public async Task<ActionResult> Politicos([FromServices]IPoliticoService legislaturaService, [FromQuery]int? year = null)
+        readonly IMediator _mediator;
+
+        public ETLController(IMediator mediator)
         {
-            year = year ?? DateTime.Now.Year;
-            await legislaturaService.ExecuteETL(year.Value);
+            _mediator = mediator;
+        }
+
+        [HttpPost()]
+        public async Task<ActionResult> Politicos([FromBody]PoliticoETLCommand request)
+        {
+            await _mediator.Send(request);
             return Ok();
         }
     }

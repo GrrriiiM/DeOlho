@@ -15,12 +15,16 @@ namespace DeOlho.ETL.EFCore.Destinations
             _dbContext = dbContext;
         }
 
-        public async Task<IEnumerable<StepValue<T>>> Execute<T>(IStepCollection<T> stepIn) where T : class
+        public async Task<IEnumerable<StepValue<T>>> Execute<T>(IEnumerable<StepValue<T>> stepIn) where T : class
         {
             var @in = await stepIn.Execute();
-            var list = @in.Select(_ => _.Value).ToList();
-            _dbContext.Set<T>().AddRange(list);
-            _dbContext.SaveChanges();
+
+            foreach(var stepValue in @in)
+            {
+                _dbContext.Set<T>().Add(stepValue.Value);    
+            }
+
+            await _dbContext.SaveChangesAsync();
             return @in;
         }
 

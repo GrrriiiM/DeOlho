@@ -22,7 +22,7 @@ namespace DeOlho.ETL
 
 
 
-        public IStepCollection<TOut> TransformToList<TOut>(Func<StepValue<T>, IEnumerable<TOut>> transform) where TOut : class
+        public IEnumerable<StepValue<TOut>> TransformToList<TOut>(Func<StepValue<T>, IEnumerable<TOut>> transform) where TOut : class
         {
             return new StepTransformToCollection<T, TOut>(this, transform);
         }

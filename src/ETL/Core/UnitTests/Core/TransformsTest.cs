@@ -32,14 +32,10 @@ namespace UnitTests.Core
 
                 var listStepValue = new List<StepValue<Stream>>() { new StepValue<Stream>(memoryStream, null) };
 
-                var stepCollectionMock = new Mock<StepCollection<Stream>>();
-                stepCollectionMock.Setup(_ => _.Execute())
-                .ReturnsAsync(listStepValue);
-
-                var result = await DescompressStreamTransformExtensions.TransformDescompressStream(stepCollectionMock.Object).Execute();
+                var result = await DescompressStreamTransformExtensions.TransformDescompressStream(listStepValue).Execute();
 
                 result.Should().HaveCount(1);
-                var streamDecompresseds = result.ToList()[0].Value;
+                var streamDecompresseds = result.ToList()[0].Value.ToList();
                 streamDecompresseds.Should().HaveCount(1);
                 var streamDecompressed = streamDecompresseds[0];
                 streamDecompressed.Name.Should().Be("foo.txt");
@@ -62,10 +58,7 @@ namespace UnitTests.Core
                     ms.Position = 0;
                     var listStepValue = new List<StepValue<Stream>>() { new StepValue<Stream>(ms, null) };
 
-                    var stepCollectionMock = new Mock<StepCollection<Stream>>();
-                    stepCollectionMock.Setup(_ => _.Execute())
-                    .ReturnsAsync(listStepValue);
-                    var result = (await CsvToDynamicTransformExtensions.TransformCsvToDynamic(stepCollectionMock.Object).Execute()).ToList();
+                    var result = (await CsvToDynamicTransformExtensions.TransformCsvToDynamic(listStepValue).Execute()).ToList();
 
                     result.Should().HaveCount(1);
                     var list = result[0].Value.ToList();

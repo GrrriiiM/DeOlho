@@ -311,29 +311,29 @@ namespace DeOlho.ETL.UnitTests
 
             result.Should().HaveCount(2);
 
-            result[0].Number.Should().Be(1.2M);
-            result[0].Text.Should().Be("text");
-            result[0].Date.Year.Should().Be(1999);
-            result[0].Date.Month.Should().Be(12);
-            result[0].Date.Day.Should().Be(31);
-            result[0].Date.Hour.Should().Be(23);
-            result[0].Date.Minute.Should().Be(59);
-            result[0].Date.Second.Should().Be(1);
-            result[0].Bit.Should().Be(true);
-            result[0].List.Should().HaveCount(1);
-            result[0].List.Should().Contain(2.3M);
+            result[0].Value.Number.Should().Be(1.2M);
+            result[0].Value.Text.Should().Be("text");
+            result[0].Value.Date.Year.Should().Be(1999);
+            result[0].Value.Date.Month.Should().Be(12);
+            result[0].Value.Date.Day.Should().Be(31);
+            result[0].Value.Date.Hour.Should().Be(23);
+            result[0].Value.Date.Minute.Should().Be(59);
+            result[0].Value.Date.Second.Should().Be(1);
+            result[0].Value.Bit.Should().Be(true);
+            result[0].Value.List.Should().HaveCount(1);
+            result[0].Value.List.Should().Contain(2.3M);
 
-            result[1].Number.Should().Be(9876.5432M);
-            result[1].Text.Should().Be("text1");
-            result[1].Date.Year.Should().Be(2010);
-            result[1].Date.Month.Should().Be(10);
-            result[1].Date.Day.Should().Be(20);
-            result[1].Date.Hour.Should().Be(10);
-            result[1].Date.Minute.Should().Be(11);
-            result[1].Date.Second.Should().Be(12);
-            result[1].Bit.Should().Be(false);
-            result[1].List.Should().HaveCount(1);
-            result[1].List.Should().Contain(1234.5678M);
+            result[1].Value.Number.Should().Be(9876.5432M);
+            result[1].Value.Text.Should().Be("text1");
+            result[1].Value.Date.Year.Should().Be(2010);
+            result[1].Value.Date.Month.Should().Be(10);
+            result[1].Value.Date.Day.Should().Be(20);
+            result[1].Value.Date.Hour.Should().Be(10);
+            result[1].Value.Date.Minute.Should().Be(11);
+            result[1].Value.Date.Second.Should().Be(12);
+            result[1].Value.Bit.Should().Be(false);
+            result[1].Value.List.Should().HaveCount(1);
+            result[1].Value.List.Should().Contain(1234.5678M);
 
 
         }
@@ -442,7 +442,7 @@ namespace DeOlho.ETL.UnitTests
             .Load()).Select(_ => _.Value);
 
             result.Should().HaveCount(5);
-            result.Should().OnlyContain(_ => _ == "A");
+            result.Should().OnlyContain(_ => _.Value == "A");
 
         }
 

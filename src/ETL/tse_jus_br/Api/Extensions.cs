@@ -1,6 +1,5 @@
 using System;
 using DeOlho.ETL.tse_jus_br.Api.Infrastructure.Data;
-using DeOlho.ETL.tse_jus_br.Api.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
@@ -77,12 +76,6 @@ namespace DeOlho.ETL.tse_jus_br.Api
                         TimeSpan.FromSeconds(5),
                         TimeSpan.FromSeconds(10)
                     }));
-        }
-
-        public static IServiceCollection AddServices(this IServiceCollection value)
-        {
-            value.AddHttpClient<IPoliticoService, PoliticoService>().AddRetryPolicy();
-            return value;
         }
 
     }

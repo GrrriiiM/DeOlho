@@ -22,7 +22,9 @@ namespace DeOlho.ETL.Destinations
         }
 
 
-        public async Task<IEnumerable<StepValue<T>>> Execute<T>(IStepCollection<T> stepIn) where T : class
+        
+
+        public async Task<IEnumerable<StepValue<T>>> Execute<T>(IEnumerable<StepValue<T>> stepIn) where T : class
         {
             var @in = await stepIn.Execute();
 
@@ -95,10 +97,11 @@ namespace DeOlho.ETL.Destinations
 
             return @in;
         }
+
+
         public async Task<StepValue<T>> Execute<T>(IStep<T> stepIn) where T : class
         {
             throw new NotImplementedException();
         }
-
     }
 }

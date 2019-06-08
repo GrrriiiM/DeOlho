@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using MediatR;
 using DeOlho.ETL.tse_jus_br.Api;
 using DeOlho.ETL.tse_jus_br.Api.Infrastructure.Data;
 using Microsoft.AspNetCore.Builder;
@@ -35,8 +36,6 @@ namespace DeOlho.ETL.tse_jus_br.Api
                 options.UseMySql(Configuration.GetConnectionString("ETL"));
             });
 
-            services.AddServices();
-
             services.AddTransient<IETLConfiguration>(_ => Configuration.GetSection("ETL:Configuration").Get<ETLConfiguration>());
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
@@ -50,6 +49,8 @@ namespace DeOlho.ETL.tse_jus_br.Api
                 config => config.AddConfiguration(Configuration.GetSection("RawRabbit:Configuration")),
                 custom => {}
             );
+
+            services.AddMediatR(this.GetType().Assembly);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

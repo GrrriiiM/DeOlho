@@ -23,7 +23,7 @@ namespace DeOlho.ETL.dadosabertos_camara_leg_br.Api
             var builder = new ConfigurationBuilder()   
                 .SetBasePath(Directory.GetCurrentDirectory())  
                 .AddJsonFile("appsettings.json")
-                .AddEnvironmentVariables();   
+                .AddEnvironmentVariables(); 
             var configuration = builder.Build();
 
             return WebHost

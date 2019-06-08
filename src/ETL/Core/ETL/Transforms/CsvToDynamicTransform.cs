@@ -28,28 +28,6 @@ namespace DeOlho.ETL.Transforms
         }
     }
 
-    public class CsvToDynamicCollectionTransform : StepCollectionTransform<Stream, IEnumerable<dynamic>>
-    {
-        readonly string _delimiter;
-
-        public CsvToDynamicCollectionTransform(IStepCollection<Stream> stepIn, string delimiter)
-            : base(stepIn, null)
-        {
-            _delimiter = delimiter;
-        }
-
-        public async override Task<IEnumerable<StepValue<IEnumerable<dynamic>>>> Execute()
-        {
-            var @in = await this._stepIn.Execute();
-            var @out = new List<StepValue<IEnumerable<dynamic>>>(); 
-            foreach(var i in @in)
-            {
-                @out.Add(i.CsvToDynamic(_delimiter));
-            }
-            return @out;
-        }
-    }
-
 
 
     public static class CsvToDynamicTransformExtensions
@@ -59,9 +37,9 @@ namespace DeOlho.ETL.Transforms
             return new CsvToDynamicTransform(value, delimiter);
         }
 
-        public static IStepCollection<IEnumerable<dynamic>> TransformCsvToDynamic(this IStepCollection<Stream> value, string delimiter = ",")
+        public static IEnumerable<StepValue<IEnumerable<dynamic>>> TransformCsvToDynamic(this IEnumerable<StepValue<Stream>> value, string delimiter = ",")
         {
-            return new CsvToDynamicCollectionTransform(value, delimiter);
+            return Enumerable.Select(value, _ => CsvToDynamic(_, delimiter));
         }
 
         public static StepValue<IEnumerable<dynamic>> CsvToDynamic(this StepValue<Stream> value, string delimiter)

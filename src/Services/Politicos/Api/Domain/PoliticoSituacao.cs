@@ -5,6 +5,7 @@ namespace DeOlho.Services.Politicos.Api.Domain
         Nenhum = 0,
         Aposentado = 1,
         Preso = 2,
-        Falecido = 3
+        Falecido = 3,
+        INCORRETO = 99
     }
 }

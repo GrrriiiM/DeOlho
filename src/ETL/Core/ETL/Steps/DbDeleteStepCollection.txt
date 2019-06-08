@@ -47,10 +47,7 @@ namespace DeOlho.ETL.Steps
 
     public static class DbDeleteStepCollectionExtension
     {
-        public static StepCollection<T> DbDelete<T>(this IStepCollection<T> value, IDbConnection dbConnection, IDbTransaction dbTransaction, string tableName, string whereCondition = "") where T : class
-        {
-            return new DbDeleteStepCollection<T>(value, dbConnection, dbTransaction, tableName, whereCondition);
-        }
+        
     }
 
 }
