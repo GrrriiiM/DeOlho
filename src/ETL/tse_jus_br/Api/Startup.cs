@@ -16,6 +16,8 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using RawRabbit.vNext;
 using Swashbuckle.AspNetCore.Swagger;
+using DeOlho.ETL.tse_jus_br.Api.Domain;
+using DeOlho.ETL.tse_jus_br.Api.Infrastructure.Repositories;
 
 namespace DeOlho.ETL.tse_jus_br.Api
 {
@@ -50,7 +52,11 @@ namespace DeOlho.ETL.tse_jus_br.Api
                 custom => {}
             );
 
-            services.AddMediatR(this.GetType().Assembly);
+            services.AddTransient<PoliticoFactory>();
+            services.AddTransient<IPoliticoRepository, PoliticoRepository>();
+            services.AddHttpClient();
+
+            services.AddMediatR(typeof(Startup));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

@@ -43,7 +43,7 @@ namespace DeOlho.ETL
 
         public async static Task<IEnumerable<StepValue<T>>> Load<T>(this IEnumerable<StepValue<T>> value, Func<IDestination> destination) where T : class
         {
-            return await value.Load(destination);
+            return await destination().Execute(value);
         }
 
         public async static Task<IEnumerable<StepValue<T>>> Execute<T>(this IEnumerable<StepValue<T>> value) where T : class

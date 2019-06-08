@@ -22,7 +22,7 @@ namespace DeOlho.ETL.tes_jus_br.Api.Migrations
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<string>("ANO_ELEICAO");
+                    b.Property<int>("ANO_ELEICAO");
 
                     b.Property<int>("CD_CARGO");
 

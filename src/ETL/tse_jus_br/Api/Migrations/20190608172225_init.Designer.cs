@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DeOlho.ETL.tes_jus_br.Api.Migrations
 {
     [DbContext(typeof(DeOlhoDbContext))]
-    [Migration("20190603015136_init")]
+    [Migration("20190608172225_init")]
     partial class init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -24,7 +24,7 @@ namespace DeOlho.ETL.tes_jus_br.Api.Migrations
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<string>("ANO_ELEICAO");
+                    b.Property<int>("ANO_ELEICAO");
 
                     b.Property<int>("CD_CARGO");
 

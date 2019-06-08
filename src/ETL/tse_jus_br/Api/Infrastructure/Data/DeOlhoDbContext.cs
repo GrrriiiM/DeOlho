@@ -1,13 +1,14 @@
 using System;
 using System.Threading.Tasks;
 using DeOlho.ETL.tse_jus_br.Api.Domain;
+using DeOlho.ETL.tse_jus_br.Api.Domain.SeedWork;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
 
 namespace DeOlho.ETL.tse_jus_br.Api.Infrastructure.Data
 {
-    public class DeOlhoDbContext : DbContext
+    public class DeOlhoDbContext : DbContext, IUnitOfWork
     {
 
         private readonly IMediator _mediator;

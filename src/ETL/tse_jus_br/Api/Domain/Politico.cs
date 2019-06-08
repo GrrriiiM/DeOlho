@@ -6,7 +6,7 @@ namespace DeOlho.ETL.tse_jus_br.Api.Domain
 {
     public class Politico : Entity
     {
-        
+        protected Politico() {}
         public Politico(
             DateTime dt_geracao,
             DateTime hh_geracao,

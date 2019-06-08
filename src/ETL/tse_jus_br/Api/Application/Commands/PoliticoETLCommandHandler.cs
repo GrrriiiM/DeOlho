@@ -12,6 +12,7 @@ using MediatR;
 using System.Collections.Generic;
 using DeOlho.ETL.tse_jus_br.Api.Infrastructure.Data;
 using DeOlho.ETL.tse_jus_br.Api;
+using System;
 
 namespace DeOlho.ETL.tse_jus_br.Api.Application.Commands
 {
@@ -46,11 +47,13 @@ namespace DeOlho.ETL.tse_jus_br.Api.Application.Commands
             CultureInfo.DefaultThreadCurrentCulture = cultureInfo;
             CultureInfo.DefaultThreadCurrentUICulture = cultureInfo;
 
+            var year = request.Year ?? DateTime.Now.Year;
+
             var load = await new Process()
-                .Extract(() => new HttpStreamSource(_httpClientFactory.CreateClient(), string.Format(_configuration.PoliticosUrl, request.Year)))
+                .Extract(() => new HttpStreamSource(_httpClientFactory.CreateClient(), string.Format(_configuration.PoliticosUrl, year)))
                 .TransformDescompressStream()
                 .TransformToList(_ => _.Value)
-                .Where(_ => _.Value.Name.ToUpper() == "CONSULTA_CAND_2018_BRASIL.CSV")
+                .Where(_ => _.Value.Name.ToUpper() == $"CONSULTA_CAND_{year}_BRASIL.CSV")
                 .Select(_ => _.Value.Stream)
                 .TransformCsvToDynamic(";")
                 .TransformToList(_ => new List<dynamic>(_.Value))
@@ -58,10 +61,12 @@ namespace DeOlho.ETL.tse_jus_br.Api.Application.Commands
                 .AsParallel()
                 .WithDegreeOfParallelism(4)
                 .Where(_ => _.Value.CD_CARGO == 6 && (_.Value.CD_SIT_TOT_TURNO == 2 || _.Value.CD_SIT_TOT_TURNO == 3))
-                .Select(_ => _politicoRepository.FindAsync(_.Value.NR_CPF_CANDIDATO).Result)
+                .Select(_ => _politicoRepository.FindByCPFAsync(_.Value.NR_CPF_CANDIDATO).Result)
                 .Where(_ => !((Politico)_.Parent.Value).Equal(_.Value))
                 .Select(_ => (Politico)_.Parent.Value)
                 .Load(() => new DbContextDestination(_deOlhoDbContext));
+
+            await _deOlhoDbContext.SaveChangesAsync();
 
             return new Unit();
         }

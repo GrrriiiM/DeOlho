@@ -49,7 +49,7 @@ namespace DeOlho.ETL
             {
                 get 
                 {
-                    return new StepValue<TOut>(@out.GetEnumerator().Current, @in);
+                    return new StepValue<TOut>(outEnumerator.Current, @in);
                 }
             }
 
@@ -60,15 +60,18 @@ namespace DeOlho.ETL
                 
             }
 
+            private IEnumerator<TOut> outEnumerator;
+
             public bool MoveNext()
             {
                 if (@out == null)
                 {
                     @in = _stepIn.Execute().Result;
                     @out = _transform(@in);
+                    outEnumerator = @out.GetEnumerator();
                 }
 
-                return @out.GetEnumerator().MoveNext();
+                return outEnumerator.MoveNext();
             }
 
             public void Reset()
@@ -77,8 +80,9 @@ namespace DeOlho.ETL
                 {
                     @in = _stepIn.Execute().Result;
                     @out = _transform(@in);
+                    outEnumerator = @out.GetEnumerator();
                 }
-                @out.GetEnumerator().Reset();
+                outEnumerator.Reset();
             }
         }
     }

@@ -14,5 +14,11 @@ namespace DeOlho.ETL
         {
             return await stepIn.Execute();
         }
+
+        public async Task<T> Execute<T>(StepValue<T> stepValue) where T : class
+        {
+            await Task.CompletedTask;
+            return stepValue.Value;
+        }
     }
 }

@@ -26,11 +26,10 @@ namespace DeOlho.ETL.Destinations
 
         public async Task<IEnumerable<StepValue<T>>> Execute<T>(IEnumerable<StepValue<T>> stepIn) where T : class
         {
-            var @in = await stepIn.Execute();
 
             var sqlInserts = new List<string>();
 
-            foreach(var stepValue in @in)
+            foreach(var stepValue in stepIn)
             {
                 var item = stepValue.Value;
                 var propertyInfos = item.GetType().GetProperties();
@@ -83,7 +82,7 @@ namespace DeOlho.ETL.Destinations
 
             if (sqlInserts.Any())
             {
-                var propertyInfos = @in.FirstOrDefault().Value.GetType().GetProperties();
+                var propertyInfos = stepIn.FirstOrDefault().Value.GetType().GetProperties();
 
                 var sql = $"INSERT INTO {this._tableName} ({string.Join(",", propertyInfos.Select(_ => _.Name))}) VALUES {string.Join(",", sqlInserts)};";
                 
@@ -94,14 +93,20 @@ namespace DeOlho.ETL.Destinations
                     command.ExecuteNonQuery();
                 }
             }
-
-            return @in;
+            await Task.CompletedTask;
+            return stepIn;
         }
 
 
         public async Task<StepValue<T>> Execute<T>(IStep<T> stepIn) where T : class
         {
             throw new NotImplementedException();
+        }
+
+        public async Task<T> Execute<T>(StepValue<T> stepValue) where T : class
+        {
+            var stepValues = new List<StepValue<T>> { stepValue };
+            return (await Execute(stepValues)).FirstOrDefault().Value;
         }
     }
 }
