@@ -1,3 +1,5 @@
+using DeOlho.Services.Politicos.Api.Domain.SeedWork;
+
 namespace DeOlho.Services.Politicos.Api.Domain
 {
     public class PoliticoContato : Entity
@@ -22,6 +24,7 @@ namespace DeOlho.Services.Politicos.Api.Domain
         public Politico Politico { get; protected set; }
         public long PoliticoId { get; protected set; }
         public ContatoTipo Tipo { get; protected set; }
+        public int TipoId { get; protected set; }
         public string Contato { get; set; }
     }
 }

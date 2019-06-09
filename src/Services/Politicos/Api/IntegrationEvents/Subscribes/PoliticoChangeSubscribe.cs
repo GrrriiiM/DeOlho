@@ -30,24 +30,24 @@ namespace DeOlho.Services.Politicos.Api.IntegrationEvents.Subscribes
                     message.NascimentoUF,
                     message.NascimentoMunicipio)
                 {
-                    Escolaridade = (PoliticoEscolaridade)message.Escolaridade,
+                    EscolaridadeId = message.Escolaridade,
                     Falecimento = message.Falecimento,
-                    Situacao = (PoliticoSituacao)message.Situacao,
-                    Sexo = (PoliticoSexo)message.Sexo
+                    SituacaoId = message.Situacao,
+                    SexoId = message.Sexo
                 };
                 politico.SetIntegration(
                     message.Timestamp,
                     message.Origin,
                     message.Id);
-                message.Contatos.ForEach(_ => politico.AddContato((ContatoTipo)_.Tipo, _.Valor));
+                message.Contatos.ForEach(_ => politico.AddContato(_.Tipo, _.Valor));
                 await _dbContext.Politicos.AddAsync(politico);
             }
             else
             {
-                politico.Escolaridade = (PoliticoEscolaridade)message.Escolaridade;
+                politico.EscolaridadeId = message.Escolaridade;
                 politico.Falecimento = message.Falecimento;
-                politico.Situacao = (PoliticoSituacao)message.Situacao;
-                politico.Sexo = (PoliticoSexo)message.Sexo;
+                politico.SituacaoId = message.Situacao;
+                politico.SexoId = message.Sexo;
                 politico.SetIntegration(
                     message.Timestamp,
                     message.Origin,
@@ -56,7 +56,7 @@ namespace DeOlho.Services.Politicos.Api.IntegrationEvents.Subscribes
                     var contato = politico.Contatos.FirstOrDefault(_1 => (int)_1.Tipo == _.Tipo);
                     if (contato == null)
                     {
-                        politico.AddContato((ContatoTipo)_.Tipo, _.Valor);
+                        politico.AddContato(_.Tipo, _.Valor);
                     }
                     else
                     {

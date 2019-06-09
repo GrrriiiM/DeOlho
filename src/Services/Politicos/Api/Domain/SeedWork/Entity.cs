@@ -1,4 +1,4 @@
-namespace DeOlho.Services.Politicos.Api.Domain
+namespace DeOlho.Services.Politicos.Api.Domain.SeedWork
 {
     public class Entity
     {

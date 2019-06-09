@@ -5,67 +5,64 @@ namespace DeOlho.ETL.tse_jus_br.Api.Domain.Events
 {
     public class PoliticoCreatedDomainEvent : INotification
     {
-        readonly DateTime DT_GERACAO;
-        readonly DateTime HH_GERACAO;
-        readonly int ANO_ELEICAO;
-        readonly int CD_TIPO_ELEICAO;
-        readonly string NM_TIPO_ELEICAO;
-        readonly int NR_TURNO;
-        readonly int CD_ELEICAO;
-        readonly string DS_ELEICAO;
-        readonly DateTime DT_ELEICAO;
-        readonly string TP_ABRANGENCIA;
-        readonly string SG_UF;
-        readonly string SG_UE;
-        readonly string NM_UE;
-        readonly int CD_CARGO;
-        readonly string DS_CARGO;
-        readonly long SQ_CANDIDATO;
-        readonly int NR_CANDIDATO;
-        readonly string NM_CANDIDATO;
-        readonly string NM_URNA_CANDIDATO;
-        readonly string NM_SOCIAL_CANDIDATO;
-        readonly long NR_CPF_CANDIDATO;
-        readonly string NM_EMAIL;
-        readonly int CD_SITUACAO_CANDIDATURA;
-        readonly string DS_SITUACAO_CANDIDATURA;
-        readonly int CD_DETALHE_SITUACAO_CAND;
-        readonly string DS_DETALHE_SITUACAO_CAND;
-        readonly string TP_AGREMIACAO;
-        readonly int NR_PARTIDO;
-        readonly string SG_PARTIDO;
-        readonly string NM_PARTIDO;
-        readonly long SQ_COLIGACAO;
-        readonly string NM_COLIGACAO;
-        readonly string DS_COMPOSICAO_COLIGACAO;
-        readonly int CD_NACIONALIDADE;
-        readonly string DS_NACIONALIDADE;
-        readonly string SG_UF_NASCIMENTO;
-        readonly int CD_MUNICIPIO_NASCIMENTO;
-        readonly string NM_MUNICIPIO_NASCIMENTO;
-        readonly DateTime DT_NASCIMENTO;
-        readonly int NR_IDADE_DATA_POSSE;
-        readonly long NR_TITULO_ELEITORAL_CANDIDATO;
-        readonly int CD_GENERO;
-        readonly string DS_GENERO;
-        readonly int CD_GRAU_INSTRUCAO;
-        readonly string DS_GRAU_INSTRUCAO;
-        readonly int CD_ESTADO_CIVIL;
-        readonly string DS_ESTADO_CIVIL;
-        readonly int CD_COR_RACA;
-        readonly string DS_COR_RACA;
-        readonly int CD_OCUPACAO;
-        readonly string DS_OCUPACAO;
-        readonly int NR_DESPESA_MAX_CAMPANHA;
-        readonly int CD_SIT_TOT_TURNO;
-        readonly string DS_SIT_TOT_TURNO;
-        readonly string ST_REELEICAO;
-        readonly string ST_DECLARAR_BENS;
-        readonly int NR_PROTOCOLO_CANDIDATURA;
-        readonly long NR_PROCESSO;
-
-
-        public Politico Politico { get; private set; }
+        public DateTime DT_GERACAO { get; private set; }
+        public DateTime HH_GERACAO { get; private set; }
+        public int ANO_ELEICAO { get; private set; }
+        public int CD_TIPO_ELEICAO { get; private set; }
+        public string NM_TIPO_ELEICAO { get; private set; }
+        public int NR_TURNO { get; private set; }
+        public int CD_ELEICAO { get; private set; }
+        public string DS_ELEICAO { get; private set; }
+        public DateTime DT_ELEICAO { get; private set; }
+        public string TP_ABRANGENCIA { get; private set; }
+        public string SG_UF { get; private set; }
+        public string SG_UE { get; private set; }
+        public string NM_UE { get; private set; }
+        public int CD_CARGO { get; private set; }
+        public string DS_CARGO { get; private set; }
+        public long SQ_CANDIDATO { get; private set; }
+        public int NR_CANDIDATO { get; private set; }
+        public string NM_CANDIDATO { get; private set; }
+        public string NM_URNA_CANDIDATO { get; private set; }
+        public string NM_SOCIAL_CANDIDATO { get; private set; }
+        public long NR_CPF_CANDIDATO { get; private set; }
+        public string NM_EMAIL { get; private set; }
+        public int CD_SITUACAO_CANDIDATURA { get; private set; }
+        public string DS_SITUACAO_CANDIDATURA { get; private set; }
+        public int CD_DETALHE_SITUACAO_CAND { get; private set; }
+        public string DS_DETALHE_SITUACAO_CAND { get; private set; }
+        public string TP_AGREMIACAO { get; private set; }
+        public int NR_PARTIDO { get; private set; }
+        public string SG_PARTIDO { get; private set; }
+        public string NM_PARTIDO { get; private set; }
+        public long SQ_COLIGACAO { get; private set; }
+        public string NM_COLIGACAO { get; private set; }
+        public string DS_COMPOSICAO_COLIGACAO { get; private set; }
+        public int CD_NACIONALIDADE { get; private set; }
+        public string DS_NACIONALIDADE { get; private set; }
+        public string SG_UF_NASCIMENTO { get; private set; }
+        public int CD_MUNICIPIO_NASCIMENTO { get; private set; }
+        public string NM_MUNICIPIO_NASCIMENTO { get; private set; }
+        public DateTime DT_NASCIMENTO { get; private set; }
+        public int NR_IDADE_DATA_POSSE { get; private set; }
+        public long NR_TITULO_ELEITORAL_CANDIDATO { get; private set; }
+        public int CD_GENERO { get; private set; }
+        public string DS_GENERO { get; private set; }
+        public int CD_GRAU_INSTRUCAO { get; private set; }
+        public string DS_GRAU_INSTRUCAO { get; private set; }
+        public int CD_ESTADO_CIVIL { get; private set; }
+        public string DS_ESTADO_CIVIL { get; private set; }
+        public int CD_COR_RACA { get; private set; }
+        public string DS_COR_RACA { get; private set; }
+        public int CD_OCUPACAO { get; private set; }
+        public string DS_OCUPACAO { get; private set; }
+        public int NR_DESPESA_MAX_CAMPANHA { get; private set; }
+        public int CD_SIT_TOT_TURNO { get; private set; }
+        public string DS_SIT_TOT_TURNO { get; private set; }
+        public string ST_REELEICAO { get; private set; }
+        public string ST_DECLARAR_BENS { get; private set; }
+        public int NR_PROTOCOLO_CANDIDATURA { get; private set; }
+        public long NR_PROCESSO { get; private set; }
 
         public PoliticoCreatedDomainEvent(
             DateTime dt_geracao,

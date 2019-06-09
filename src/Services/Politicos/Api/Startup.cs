@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Deolho.Services.Politicos.Api;
 using DeOlho.Services.Politicos.Api.Infrastructure.Data;
+using DeOlho.Services.Politicos.Api.IntegrationEvents.Subscribes;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -45,6 +46,8 @@ namespace Api
                 config => config.AddConfiguration(Configuration.GetSection("RawRabbit:Configuration")),
                 custom => {}
             );
+
+            services.AddScoped<IPoliticoChangeSubscribe, PoliticoChangeSubscribe>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

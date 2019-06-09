@@ -249,11 +249,9 @@ namespace DeOlho.ETL.tse_jus_br.Api.Domain
         public long NR_PROCESSO { get; set; }
 
 
-        public bool Equal(Politico outer)
+        public bool IsEqual(Politico outer)
         {
             return outer != null
-                && DT_GERACAO == outer.DT_GERACAO
-                && HH_GERACAO == outer.HH_GERACAO
                 && ANO_ELEICAO == outer.ANO_ELEICAO
                 && CD_TIPO_ELEICAO == outer.CD_TIPO_ELEICAO
                 && NM_TIPO_ELEICAO == outer.NM_TIPO_ELEICAO

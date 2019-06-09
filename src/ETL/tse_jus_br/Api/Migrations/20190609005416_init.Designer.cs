@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DeOlho.ETL.tes_jus_br.Api.Migrations
 {
     [DbContext(typeof(DeOlhoDbContext))]
-    [Migration("20190608172225_init")]
+    [Migration("20190609005416_init")]
     partial class init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -141,6 +141,9 @@ namespace DeOlho.ETL.tes_jus_br.Api.Migrations
                     b.Property<string>("TP_AGREMIACAO");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("NR_CPF_CANDIDATO")
+                        .IsUnique();
 
                     b.ToTable("Politicos");
                 });

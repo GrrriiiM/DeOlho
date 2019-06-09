@@ -77,6 +77,12 @@ namespace DeOlho.ETL.tes_jus_br.Api.Migrations
                 {
                     table.PrimaryKey("PK_Politicos", x => x.Id);
                 });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Politicos_NR_CPF_CANDIDATO",
+                table: "Politicos",
+                column: "NR_CPF_CANDIDATO",
+                unique: true);
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)

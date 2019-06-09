@@ -1,5 +1,7 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
+using DeOlho.Services.Politicos.Api.Domain.SeedWork;
 
 namespace DeOlho.Services.Politicos.Api.Domain
 {
@@ -34,17 +36,21 @@ namespace DeOlho.Services.Politicos.Api.Domain
         public DateTime? Falecimento { get; set; }
         public string NascimentoUF { get; protected set; }
         public string NascimentoMunicipio { get; protected set; }
-        public PoliticoEscolaridade Escolaridade { get; set; }
-        public PoliticoSituacao Situacao { get; set; }
-        public PoliticoSexo Sexo { get; set; }
-
-        public MandatoTipo MandatoTipo { get; set; }
+        public int EscolaridadeId { get; set; } 
+        public PoliticoEscolaridade Escolaridade { get => EscolaridadeId; }
+        public int SituacaoId { get; set;}
+        public PoliticoSituacao Situacao { get => SituacaoId; }
+        public int SexoId { get; set; }
+        public PoliticoSexo Sexo { get => SexoId; }
+        public int MandatoTipoId { get; set; }
+        public MandatoTipo MandatoTipo { get => MandatoTipoId; }
         public DateTime? MandatoInicio { get; set; }
         public DateTime? MandatoFim { get; set; }
-        public MandatoSituacao MandatoSituacao { get; set; }
+        public int MandatoSituacaoId { get; set; }
+        public MandatoSituacao MandatoSituacao { get => MandatoSituacaoId; }
 
         private List<PoliticoContato> _contatos = new List<PoliticoContato>();
-        public IReadOnlyCollection<PoliticoContato> Contatos { get => _contatos; protected set => _contatos = new List<PoliticoContato>(value); }
+        public IReadOnlyCollection<PoliticoContato> Contatos { get => _contatos.AsReadOnly(); protected set => _contatos = value.ToList(); }
 
         public PoliticoContato AddContato(ContatoTipo tipo, string contato)
         {

@@ -50,5 +50,15 @@ namespace DeOlho.ETL.tse_jus_br.Api.Infrastructure.Data
             await _mediator.DispatchDomainEventsAsync(this);
             return await base.SaveChangesAsync(acceptAllChangesOnSuccess, cancellationToken);
         }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<Politico>(entity => {
+                entity.HasKey(_ => _.Id);
+                //entity.Property(_ => _.Id).ForSqlServerUseSequenceHiLo("PoliticoSequenceHilo");
+                entity.HasIndex(_ => _.NR_CPF_CANDIDATO).IsUnique();
+            });
+        }
+
     }
 }

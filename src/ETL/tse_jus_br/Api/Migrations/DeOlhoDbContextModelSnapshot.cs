@@ -140,6 +140,9 @@ namespace DeOlho.ETL.tes_jus_br.Api.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("NR_CPF_CANDIDATO")
+                        .IsUnique();
+
                     b.ToTable("Politicos");
                 });
 #pragma warning restore 612, 618
