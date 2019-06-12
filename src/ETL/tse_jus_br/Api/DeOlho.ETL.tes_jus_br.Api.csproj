@@ -21,7 +21,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\Core\ETL.EFCore\DeOlho.ETL.EFCore.csproj" />
-    <ProjectReference Include="..\..\..\EventBus\ETL\dadosabertos_camara_leg_br\DeOlho.EventBus.ELT.dadosabertos_camara_leg_br.csproj" />
     <ProjectReference Include="..\..\..\EventBus\Services\Politicos\DeOlho.EventBus.Services.Politicos.csproj" />
   </ItemGroup>
 

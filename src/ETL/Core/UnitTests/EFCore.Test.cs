@@ -21,18 +21,18 @@ namespace DeOlho.ETL.UnitTests.EFCore
         }
 
         private MockData mockData1 = new MockData
-            {
-                Id = 1,
-                Nome = "Teste 1",
-                Data = new DateTime(2000, 1, 1)
-            };
+        {
+            Id = 1,
+            Nome = "Teste 1",
+            Data = new DateTime(2000, 1, 1)
+        };
 
         private MockData mockData2 = new MockData
-            {
-                Id = 2,
-                Nome = "Teste 2",
-                Data = new DateTime(2000, 1, 2)
-            };
+        {
+            Id = 2,
+            Nome = "Teste 2",
+            Data = new DateTime(2000, 1, 2)
+        };
 
         private class MockDbContext : DbContext
         {
@@ -142,6 +142,8 @@ namespace DeOlho.ETL.UnitTests.EFCore
 
             var stepValue = await stepList.Load(() => new DbContextDestination(mockDbContext));
 
+            mockDbContext.SaveChanges();
+
             var result = await mockDbContext.MockDatas.ToListAsync();
             result.Should().HaveCount(4);
             var item = result.LastOrDefault();
@@ -149,5 +151,19 @@ namespace DeOlho.ETL.UnitTests.EFCore
             item.Nome.Should().Be("Teste 4");
             item.Data.Should().Be(new DateTime(2000,1,4));
         }
+
+        [Fact]
+        public async void Source_DbContext_SingleOrDefault()
+        {
+            var process = new Process();
+            var step  = process.Extract(
+                () => new DbContextSingleOrDefaultSource<MockData>(mockDbContext, 2L));
+            var load = await step.Load();
+            var result = load.Value;
+            result.Id.Should().Be(mockData2.Id);
+            result.Nome.Should().Be(mockData2.Nome);
+            result.Data.Should().Be(mockData2.Data);
+        }
+
     }
 }

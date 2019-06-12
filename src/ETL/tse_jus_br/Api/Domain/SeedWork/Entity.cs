@@ -5,6 +5,7 @@ namespace DeOlho.ETL.tse_jus_br.Api.Domain.SeedWork
 {
     public class Entity
     {
+        protected Entity() { }
         public long Id { get; set; }
         private List<INotification> _domainEvents = new List<INotification>();
         public IReadOnlyCollection<INotification> GetDomainEvents() => _domainEvents?.AsReadOnly();

@@ -66,6 +66,7 @@ namespace DeOlho.ETL.tse_jus_br.Api.Domain
             string st_declarar_bens,
             int nr_protocolo_candidatura,
             long nr_processo)
+            : base()
         {
             DT_GERACAO = dt_geracao;
             HH_GERACAO = hh_geracao;

@@ -54,16 +54,16 @@ namespace DeOlho.ETL.tse_jus_br.Api.Application.Commands
                 .TransformDescompressStream()
                 .TransformToList(_ => _.Value)
                 .Where(_ => _.Value.Name.ToUpper() == $"CONSULTA_CAND_{year}_BRASIL.CSV")
-                .Select(_ => _.Value.Stream)
+                .Transform(_ => _.Value.Stream)
                 .TransformCsvToDynamic(";")
                 .TransformToList(_ => new List<dynamic>(_.Value))
-                .Select(_ => (Politico)_politicoFactory.Transform(_.Value))
+                .Transform(_ => (Politico)_politicoFactory.Transform(_.Value))
                 .AsParallel()
                 .WithDegreeOfParallelism(4)
                 .Where(_ => _.Value.CD_CARGO == 6 && (_.Value.CD_SIT_TOT_TURNO == 2 || _.Value.CD_SIT_TOT_TURNO == 3))
-                .Select(_ => _politicoRepository.FindByCPFAsync(_.Value.NR_CPF_CANDIDATO).Result)
+                .Transform(_ => _politicoRepository.FindByCPFAsync(_.Value.NR_CPF_CANDIDATO).Result)
                 .Where(_ => !((Politico)_.Parent.Value).IsEqual(_.Value))
-                .Select(_ => (Politico)_.Parent.Value)
+                .Transform(_ => (Politico)_.Parent.Value)
                 .Load(() => new DbContextDestination(_deOlhoDbContext));
 
             await _deOlhoDbContext.SaveChangesAsync();

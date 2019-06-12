@@ -6,13 +6,13 @@ using System.Threading.Tasks;
 
 namespace DeOlho.ETL
 {
-    public class StepTransformToCollection<TIn, TOut> : IEnumerable<StepValue<TOut>> where TOut : class where TIn : class
+    public class StepToCollectionTransform<TIn, TOut> : IEnumerable<StepValue<TOut>> where TOut : class where TIn : class
     {
 
 
         readonly IEnumerator<StepValue<TOut>> _enumerator;
 
-        public StepTransformToCollection(Step<TIn> stepIn, Func<StepValue<TIn>, IEnumerable<TOut>> transform)
+        public StepToCollectionTransform(Step<TIn> stepIn, Func<StepValue<TIn>, IEnumerable<TOut>> transform)
         {
             
             _enumerator = new StepEnumerator(stepIn, transform);

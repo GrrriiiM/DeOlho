@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using DeOlho.ETL.Destinations;
 
 namespace DeOlho.ETL
 {
@@ -24,7 +25,7 @@ namespace DeOlho.ETL
 
         public IEnumerable<StepValue<TOut>> TransformToList<TOut>(Func<StepValue<T>, IEnumerable<TOut>> transform) where TOut : class
         {
-            return new StepTransformToCollection<T, TOut>(this, transform);
+            return new StepToCollectionTransform<T, TOut>(this, transform);
         }
 
         public IStep<TOut> Extract<TOut>(Func<StepValue<T>, ISource<TOut>> extract) where TOut : class

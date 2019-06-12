@@ -31,6 +31,48 @@
                 "${workspaceFolder}/api/DeOlho.ETL.tes_jus_br.Api.csproj"
             ],
             "problemMatcher": "$tsc"
-        }
+        },
+        {
+            "label": "Test with coverage",
+            "command": "dotnet",
+            "type": "process",
+            "args": [
+                "test",
+                "/p:CollectCoverage=true",
+                "/p:Exclude=\"[xunit*]*,[DeOlho.ETL]*,[DeOlho.ETL.EFCore]*,[DeOlho.ETL.tse_jus_br.UnitTest]*,[DeOlho.EventBus.Services.Politicos]*,[DeOlho.ETL.tes_jus_br.Api]DeOlho.ETL.tes_jus_br.Api.Migrations.*\"",
+                "/p:CoverletOutputFormat=\"lcov,opencover\"",
+                "/p:CoverletOutput=./coverage/",
+                "${workspaceFolder}/tse_jus_br.sln"
+            ],
+            "problemMatcher": "$msCompile",
+            "group": "test"
+        },
+        {
+            "label": "Generate coverage report",
+            "type": "shell",
+            "command": "dotnet reportgenerator \"-reports:./coverage/coverage.opencover.xml\" \"-targetdir:./coverage/report\"",
+            "dependsOn": "Test with coverage",
+            "group": "test",
+            "options": {
+                "cwd": "${workspaceFolder}/UnitTest"
+            },
+            "presentation": {
+                "reveal": "silent",
+                "panel": "shared"
+            }
+        },
+        {
+            "label": "View coverage report in chrome",
+            "type": "shell",
+            "command": "C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe",
+            "dependsOn": "Generate coverage report",
+            "args": [
+                "${workspaceFolder}/UnitTest/coverage/report/index.htm"
+            ],
+            "group": {
+                "kind": "test",
+                "isDefault": true
+            }
+        },
     ]
 }

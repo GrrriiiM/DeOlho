@@ -15,11 +15,6 @@ namespace DeOlho.ETL.EFCore.Destinations
             _dbContext = dbContext;
         }
 
-        public async Task<T> Execute<T>(StepValue<T> stepValue) where T : class
-        {
-            return (await _dbContext.Set<T>().AddAsync(stepValue.Value)).Entity;
-        }
-
         public async Task<IEnumerable<StepValue<T>>> Execute<T>(IEnumerable<StepValue<T>> stepIn) where T : class
         {
             foreach(var stepValue in stepIn)
