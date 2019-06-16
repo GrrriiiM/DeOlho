@@ -39,7 +39,7 @@
             "args": [
                 "test",
                 "/p:CollectCoverage=true",
-                "/p:Exclude=\"[xunit*]*,[DeOlho.ETL]*,[DeOlho.ETL.EFCore]*,[DeOlho.ETL.tse_jus_br.UnitTest]*,[DeOlho.EventBus.Services.Politicos]*,[DeOlho.ETL.tes_jus_br.Api]DeOlho.ETL.tes_jus_br.Api.Migrations.*\"",
+                "/p:Exclude=\"[xunit*]*\"",
                 "/p:CoverletOutputFormat=\"lcov,opencover\"",
                 "/p:CoverletOutput=./coverage/",
                 "${workspaceFolder}/tse_jus_br.sln"

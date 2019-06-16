@@ -25,7 +25,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Api\DeOlho.ETL.tes_jus_br.Api.csproj" />
+    <ProjectReference Include="..\Domain\DeOlho.ETL.tse_jus_br.Domain.csproj" />
   </ItemGroup>
 
 </Project>
