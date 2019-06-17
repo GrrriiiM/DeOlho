@@ -1,0 +1,21 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\Core\ETL\DeOlho.ETL.csproj" />
+    <ProjectReference Include="..\..\Core\ETL.EFCore\DeOlho.ETL.EFCore.csproj" />
+    <ProjectReference Include="..\1-Domain\DeOlho.ETL.tse_jus_br.Domain.csproj" />
+    <ProjectReference Include="..\2-Infrastructure\DeOlho.ETL.tse_jus_br.Infrastructure.csproj" />
+    <ProjectReference Include="..\..\..\EventBus\Services\Politicos\DeOlho.EventBus.Services.Politicos.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Mediatr" Version="7.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Http" Version="2.2.0" />
+    <PackageReference Include="rawrabbit.vnext" Version="1.10.4" />
+  </ItemGroup>
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+  </PropertyGroup>
+
+</Project>

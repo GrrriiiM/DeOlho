@@ -44,7 +44,7 @@ namespace DeOlho.ETL.Transforms
 
         public static StepValue<IEnumerable<dynamic>> CsvToDynamic(this StepValue<Stream> value, string delimiter)
         {
-            using (var sr = new StreamReader(value.Value))
+            using (var sr = new StreamReader(value.Value, System.Text.Encoding.GetEncoding("ISO-8859-1")))
             {
                 using (var csv = new CsvReader(sr, new Configuration
                 {

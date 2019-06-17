@@ -44,6 +44,8 @@ namespace DeOlho.Services.Politicos.Api.IntegrationEvents.Subscribes
             }
             else
             {
+                politico.Nome = message.Nome;
+                politico.Apelido = message.Apelido;
                 politico.EscolaridadeId = message.Escolaridade;
                 politico.Falecimento = message.Falecimento;
                 politico.SituacaoId = message.Situacao;

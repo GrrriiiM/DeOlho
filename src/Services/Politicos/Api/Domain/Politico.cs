@@ -30,8 +30,8 @@ namespace DeOlho.Services.Politicos.Api.Domain
         }
 
         public string CPF { get; protected set; }
-        public string Nome { get; protected set; }
-        public string Apelido { get; protected set; }
+        public string Nome { get; set; }
+        public string Apelido { get; set; }
         public DateTime Nascimento { get; protected set; }
         public DateTime? Falecimento { get; set; }
         public string NascimentoUF { get; protected set; }
