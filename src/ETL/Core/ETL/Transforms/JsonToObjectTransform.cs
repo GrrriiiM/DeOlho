@@ -30,5 +30,9 @@ namespace DeOlho.ETL.Transforms
         {
             return new JsonToDynamicTransform(value);
         }
+        public static IEnumerable<StepValue<dynamic>> TransformJsonToDynamic(this IEnumerable<StepValue<string>> value)
+        {
+            return value.Select(_ => new StepValue<dynamic>(JValue.Parse(_.Value).ToObject<dynamic>(), _));
+        }
     }
 }

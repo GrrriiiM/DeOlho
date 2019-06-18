@@ -13,11 +13,16 @@ namespace DeOlho.ETL.dadosabertos_camara_leg_br.Api.Controllers
     [Route("api/v1/[controller]/[action]")]
     public class ETLController : Controller
     {
+        readonly IMediator _mediator;
+        public ETLController(IMediator mediator)
+        {
+            _mediator = mediator;
+        }
 
         [HttpPost()]
-        public async Task<ActionResult> Legislaturas([FromServices]ILegislaturaService legislaturaService)
+        public async Task<ActionResult> DeputadosFederais([FromBody]ExecuteDeputadoFederalETLCommand command)
         {
-            await legislaturaService.ExecuteETL();
+            await _mediator.Send(command);
             return Ok();
         }
 

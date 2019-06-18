@@ -7,7 +7,10 @@ namespace DeOlho.ETL
 {
     public static class EnumerableExtensions
     {
-
+        public static IEnumerable<StepValue<TOut>> Extract<TIn, TOut>(this IEnumerable<StepValue<TIn>> value, Func<StepValue<TIn>, ISource<TOut>> extract) where TIn : class where TOut : class
+        {
+            return Enumerable.Select(value, _ => new StepValue<TOut>(extract(_).Execute().Result , _));
+        }
         public static IEnumerable<StepValue<TOut>> Transform<TIn, TOut>(this IEnumerable<StepValue<TIn>> value, Func<StepValue<TIn>, TOut> selector) where TIn : class where TOut : class
         {
             return Enumerable.Select(value, _ => new StepValue<TOut>(selector(_), _));
