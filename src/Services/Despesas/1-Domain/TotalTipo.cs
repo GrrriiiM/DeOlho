@@ -2,8 +2,10 @@
 
 namespace DeOlho.Services.Despesas.Domain
 {
-    public class TotalTipo
+    public class TotalTipo : IHasValor, IHasTipoId
     {
+        private TotalTipo() {}
+
         public TotalTipo(
             int tipoId,
             decimal valor)

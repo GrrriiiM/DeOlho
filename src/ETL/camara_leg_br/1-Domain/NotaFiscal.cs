@@ -14,12 +14,14 @@ namespace DeOlho.ETL.camara_leg_br.Domain
             CodDocumento = (long)registro.codDocumento;
             CnpjCpfFornecedor = (string)registro.cnpjCpfFornecedor;
             CodTipoDocumento = (int)registro.codTipoDocumento;
-            DataDocumento = (DateTime)registro.dataDocumento;
+            var dataDocumento = (DateTime?)registro.dataDocumento;
+            DataDocumento = dataDocumento.HasValue ? dataDocumento.Value : new DateTime(periodo.Ano, periodo.Mes, 1);
             NumDocumento = (string)registro.numDocumento;
             
             Update(registro);
+
+            AddDomainEvent(new NotaFiscalCreatedDomainEvent(this));
         }
-        public long CPF { get; private set; }
         public virtual NotaFiscalPeriodo Periodo { get; private set; }
         public long PeriodoId { get; private set; }
         public string CnpjCpfFornecedor { get; private set; }

@@ -51,7 +51,7 @@ namespace DeOlho.Services.Despesas.Infrastucture.Data
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<PoliticoMesTipo>(build => {
+            modelBuilder.Entity<PoliticoAnoMesTipo>(build => {
                 build.HasKey(_ => new { _.CPF, _.Mes, _.Ano, _.TipoId });
             });
 
@@ -71,7 +71,7 @@ namespace DeOlho.Services.Despesas.Infrastucture.Data
                 build.HasKey(_ => new { _.Ano });
             });
 
-            modelBuilder.Entity<TotalMes>(build => {
+            modelBuilder.Entity<TotalAnoMes>(build => {
                 build.HasKey(_ => new { _.Mes, _.Ano });
             });
 

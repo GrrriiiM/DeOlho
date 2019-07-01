@@ -3,7 +3,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Polly;
 using Polly.Extensions.Http;
 
-namespace DeOlho.ETL.camara_leg_br.API
+namespace DeOlho.Services.Despesas.API
 {
     public static class ServiceCollectionExtension
     {

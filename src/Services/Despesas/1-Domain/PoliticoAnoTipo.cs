@@ -2,8 +2,10 @@
 
 namespace DeOlho.Services.Despesas.Domain
 {
-    public class PoliticoAnoTipo
+    public class PoliticoAnoTipo : IHasValor, IHasCPF, IHasTipoId, IHasAno
     {
+        private PoliticoAnoTipo() {}
+
         public PoliticoAnoTipo(
             long cpf,
             int tipoId,

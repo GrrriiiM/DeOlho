@@ -29,11 +29,13 @@ namespace DeOlho.ETL.camara_leg_br.Domain
             if ((int)registro.ano != Ano) throw new DomainException("Ano do registro diferente do ano do período");
             if ((int)registro.mes != Mes) throw new DomainException("Mês do registro diferente do mês do período");
 
+            var dataDocumento = (DateTime?)registro.dataDocumento;
+
             var notafiscal = NotasFiscais.SingleOrDefault(_ => 
                 _.CodDocumento == (long)registro.codDocumento
                 && _.CnpjCpfFornecedor == (string)registro.cnpjCpfFornecedor 
                 && _.CodTipoDocumento == (int)registro.codTipoDocumento 
-                && _.DataDocumento == (DateTime)registro.dataDocumento
+                && _.DataDocumento == (dataDocumento.HasValue ? dataDocumento.Value : new DateTime(Ano, Mes, 1))
                 && _.NumDocumento == (string)registro.numDocumento);
 
             if (notafiscal != null)

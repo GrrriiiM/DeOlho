@@ -2,8 +2,10 @@
 
 namespace DeOlho.Services.Despesas.Domain
 {
-    public class TotalPolitico
+    public class TotalPolitico : IHasValor, IHasCPF
     {
+        private TotalPolitico() {}
+
         public TotalPolitico(
             long cpf,
             decimal valor)

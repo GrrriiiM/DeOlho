@@ -35,7 +35,7 @@ namespace DeOlho.ETL.camara_leg_br.Application.Commands
         public async Task<Unit> Handle(ExecuteNotaFiscalETLCommand request, CancellationToken cancellationToken)
         {
             var result = await new Process()
-                .Extract(async () => await _deputadoFederalRepository.ListAllAsync(cancellationToken))
+                .Extract(async () => (await _deputadoFederalRepository.ListAllAsync(cancellationToken)))
                 .TransformToList(_ => _.Value)
                 .AsParallel()
                 .WithDegreeOfParallelism(4)
@@ -53,8 +53,14 @@ namespace DeOlho.ETL.camara_leg_br.Application.Commands
                 })
                 .Execute();
             var deputadosFederais = result.Select(_ => _.Value).Distinct();
-            _deputadoFederalRepository.UpdateRange(deputadosFederais);
-            await _deputadoFederalRepository.UnitOfWork.SaveChangesAsync(cancellationToken);
+
+            // foreach(var deputadoFederal in deputadosFederais)
+            // {
+            //     _deputadoFederalRepository.Update(deputadoFederal);
+                await _deputadoFederalRepository.UnitOfWork.SaveChangesAsync(cancellationToken);
+            //}
+            
+            
 
             return new Unit();
         }

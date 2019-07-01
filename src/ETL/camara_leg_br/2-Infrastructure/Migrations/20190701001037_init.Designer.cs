@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DeOlho.ETL.camara_leg_br.Infrastructure.Migrations
 {
     [DbContext(typeof(DeOlhoDbContext))]
-    [Migration("20190623002239_init")]
+    [Migration("20190701001037_init")]
     partial class init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -62,8 +62,6 @@ namespace DeOlho.ETL.camara_leg_br.Infrastructure.Migrations
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<long>("CPF");
-
                     b.Property<string>("CnpjCpfFornecedor");
 
                     b.Property<long>("CodDocumento");
@@ -98,9 +96,7 @@ namespace DeOlho.ETL.camara_leg_br.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("PeriodoId");
-
-                    b.HasIndex("CodDocumento", "CnpjCpfFornecedor", "CodTipoDocumento", "DataDocumento", "NumDocumento")
+                    b.HasIndex("PeriodoId", "CodDocumento", "CnpjCpfFornecedor", "CodTipoDocumento", "DataDocumento", "NumDocumento")
                         .IsUnique();
 
                     b.ToTable("NotaFiscal");

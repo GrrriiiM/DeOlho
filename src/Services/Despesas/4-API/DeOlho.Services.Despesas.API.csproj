@@ -6,11 +6,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="aspnetcore.healthchecks.mysql" Version="2.2.0" />
-    <PackageReference Include="aspnetcore.healthchecks.rabbitmq" Version="2.2.1" />
-    <PackageReference Include="aspnetcore.healthchecks.ui" Version="2.2.31" />
-    <PackageReference Include="aspnetcore.healthchecks.ui.client" Version="2.2.4" />
-    <PackageReference Include="aspnetcore.healthchecks.uris" Version="2.2.3" />
     <PackageReference Include="mediatr" Version="7.0.0" />
     <PackageReference Include="MediatR.Extensions.Microsoft.DependencyInjection" Version="7.0.0" />
     <PackageReference Include="Microsoft.AspNetCore.App" />
@@ -24,9 +19,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\1-Domain\DeOlho.ETL.camara_leg_br.Domain.csproj" />
-    <ProjectReference Include="..\2-Infrastructure\DeOlho.ETL.camara_leg_br.Infrastructure.csproj" />
-    <ProjectReference Include="..\3-Application\DeOlho.ETL.camara_leg_br.Application.csproj" />
+    <ProjectReference Include="..\3-Application\DeOlho.Services.Despesas.Application.csproj" />
+    <ProjectReference Include="..\..\..\EventBus\Services\Despesas\DeOlho.EventBus.Services.Despesas.csproj" />
   </ItemGroup>
 
 </Project>

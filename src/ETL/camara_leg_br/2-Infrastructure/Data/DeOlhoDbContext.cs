@@ -64,7 +64,7 @@ namespace DeOlho.ETL.camara_leg_br.Infrastructure.Data
 
             modelBuilder.Entity<NotaFiscal>(build => {
                 build.HasKey(_ => _.Id);
-                build.HasIndex(_ => new { _.CodDocumento, _.CnpjCpfFornecedor, _.CodTipoDocumento, _.DataDocumento, _.NumDocumento }).IsUnique();
+                build.HasIndex(_ => new { _.PeriodoId, _.CodDocumento, _.CnpjCpfFornecedor, _.CodTipoDocumento, _.DataDocumento, _.NumDocumento }).IsUnique();
             });
 
             base.OnModelCreating(modelBuilder);

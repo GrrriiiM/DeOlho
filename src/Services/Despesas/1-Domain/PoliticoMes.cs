@@ -2,8 +2,10 @@
 
 namespace DeOlho.Services.Despesas.Domain
 {
-    public class PoliticoMes
+    public class PoliticoMes : IHasValor, IHasCPF, IHasAno, IHasMes
     {
+        private PoliticoMes() {}
+
         public PoliticoMes(
             long cpf,
             int mes,

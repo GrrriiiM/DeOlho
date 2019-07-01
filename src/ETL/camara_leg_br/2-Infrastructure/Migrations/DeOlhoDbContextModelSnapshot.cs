@@ -60,8 +60,6 @@ namespace DeOlho.ETL.camara_leg_br.Infrastructure.Migrations
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<long>("CPF");
-
                     b.Property<string>("CnpjCpfFornecedor");
 
                     b.Property<long>("CodDocumento");
@@ -96,9 +94,7 @@ namespace DeOlho.ETL.camara_leg_br.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("PeriodoId");
-
-                    b.HasIndex("CodDocumento", "CnpjCpfFornecedor", "CodTipoDocumento", "DataDocumento", "NumDocumento")
+                    b.HasIndex("PeriodoId", "CodDocumento", "CnpjCpfFornecedor", "CodTipoDocumento", "DataDocumento", "NumDocumento")
                         .IsUnique();
 
                     b.ToTable("NotaFiscal");

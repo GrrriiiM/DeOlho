@@ -58,7 +58,6 @@ namespace DeOlho.ETL.camara_leg_br.Infrastructure.Migrations
                 {
                     Id = table.Column<long>(nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    CPF = table.Column<long>(nullable: false),
                     PeriodoId = table.Column<long>(nullable: false),
                     CnpjCpfFornecedor = table.Column<string>(nullable: true),
                     CodDocumento = table.Column<long>(nullable: false),
@@ -100,14 +99,9 @@ namespace DeOlho.ETL.camara_leg_br.Infrastructure.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "IX_NotaFiscal_PeriodoId",
+                name: "IX_NotaFiscal_PeriodoId_CodDocumento_CnpjCpfFornecedor_CodTipoD~",
                 table: "NotaFiscal",
-                column: "PeriodoId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_NotaFiscal_CodDocumento_CnpjCpfFornecedor_CodTipoDocumento_D~",
-                table: "NotaFiscal",
-                columns: new[] { "CodDocumento", "CnpjCpfFornecedor", "CodTipoDocumento", "DataDocumento", "NumDocumento" },
+                columns: new[] { "PeriodoId", "CodDocumento", "CnpjCpfFornecedor", "CodTipoDocumento", "DataDocumento", "NumDocumento" },
                 unique: true);
 
             migrationBuilder.CreateIndex(

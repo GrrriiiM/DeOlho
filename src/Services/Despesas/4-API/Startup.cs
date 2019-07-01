@@ -2,10 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using DeOlho.ETL.camara_leg_br.Application;
-using DeOlho.ETL.camara_leg_br.Domain.SeedWork;
-using DeOlho.ETL.camara_leg_br.Infrastructure.Data;
-using DeOlho.ETL.camara_leg_br.Infrastructure.Repositories;
+using DeOlho.Services.Despesas.Application.Commands;
+using DeOlho.Services.Despesas.Domain.SeedWork;
+using DeOlho.Services.Despesas.Infrastucture.Data;
 using MediatR;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -18,11 +17,8 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using RawRabbit.vNext;
 using Swashbuckle.AspNetCore.Swagger;
-using DeOlho.ETL.camara_leg_br.API.Extensions;
-using HealthChecks.UI.Client;
-using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 
-namespace DeOlho.ETL.camara_leg_br.API
+namespace DeOlho.Services.Despesas.API
 {
     public class Startup
     {
@@ -38,14 +34,12 @@ namespace DeOlho.ETL.camara_leg_br.API
         {
             services.AddDbContext<DeOlhoDbContext>(options =>
             {
-                options.UseMySql(Configuration.GetConnectionString("ETL"));
+                options.UseMySql(Configuration.GetConnectionString("Despesas"));
             });
-
-            services.AddTransient<ETLConfiguration>(_ => Configuration.GetSection("ETL:Configuration").Get<ETLConfiguration>());
 
             services.AddSwaggerGen(c =>
             {
-                c.SwaggerDoc("v1", new Info { Title = "DeOlho tse_jus_br", Version = "v1" });
+                c.SwaggerDoc("v1", new Info { Title = "DeOlho Despesas", Version = "v1" });
             });
 
             services.AddRawRabbit(
@@ -53,20 +47,15 @@ namespace DeOlho.ETL.camara_leg_br.API
                 custom => { }
             );
 
-            services.AddTransient<IDeputadoFederalRepository, DeputadoFederalRepository>();
             services.AddHttpClient();
 
             services.AddMediatR(
                 typeof(Startup),
-                typeof(ETLConfiguration),
+                typeof(CreateDespesasCommand),
                 typeof(DeOlhoDbContext),
                 typeof(Entity));
 
-            services.AddCustomHealthCheck(Configuration);
-            services.AddHealthChecksUI();
-
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
-
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -91,15 +80,7 @@ namespace DeOlho.ETL.camara_leg_br.API
             });
 
             app.UseMigrate();
-
-            app.UseHealthChecks("/HealthChecks", new HealthCheckOptions()
-            {
-                Predicate = _ => true,
-                ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
-            });
-
-            app.UseHealthChecksUI(config=> config.UIPath = "/HealthChecks-ui");
-
+            app.UseEventBus();
             app.UseHttpsRedirection();
             app.UseMvc();
         }

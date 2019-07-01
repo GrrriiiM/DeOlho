@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace DeOlho.ETL.camara_leg_br.API
+namespace DeOlho.ETL.camara_leg_br.API.Extensions
 {
     public static class ApplicationBuilderExtension
     {
