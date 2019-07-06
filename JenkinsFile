@@ -2,6 +2,11 @@ pipeline {
     agent any
 
     stages {
+        stage('Checkout') {
+            steps {
+                git branch: 'teste', url: 'https://github.com/GrrriiiM/DeOlho.git'
+            }
+        }
         stage('Build') {
             steps {
                 echo 'Building..'
