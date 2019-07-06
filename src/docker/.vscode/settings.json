@@ -1,0 +1,4 @@
+{
+    "jenkins.pipeline.linter.connector.user": "deolho",
+    "jenkins.pipeline.linter.connector.pass": "deolho"
+}
